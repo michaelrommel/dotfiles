@@ -22,6 +22,8 @@ ln -s ../.dotfiles/bin/terminal.sh .
 ln -s ../.dotfiles/bin/truecolortest.sh .
 
 echo "Configuring tmux plugins"
+cd "${HOME}" || exit
+ln -s .dotfiles/.tmux.conf .
 mkdir -p "${HOME}/.tmux/plugins"; cd "${HOME}/.tmux" || exit
 git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm"
 cd plugins || exit
