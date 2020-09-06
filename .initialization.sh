@@ -5,8 +5,6 @@ export DEBUG=false
 echo -n "Initializing "
 
 export PATH="${HOME}/bin":/usr/local/bin/:$PATH
-export http_proxy=http://de.coia.siemens.net:9400/
-export https_proxy=http://de.coia.siemens.net:9400/
 export LANG="en_US.UTF-8"
 export LC_COLLATE="C"
 export LC_CTYPE="C"
