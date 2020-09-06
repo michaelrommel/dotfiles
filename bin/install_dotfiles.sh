@@ -1,7 +1,11 @@
 #! /bin/bash
 
 echo "Installing apt packages"
-sudo apt install curl tmux git vim neovim neofetch zsh golang ncurses-bin socat apt-file sysstat net-tools dnsutils || exit
+sudo apt update
+sudo apt install -y build-essential autoconf automake pkg-config \
+    libevent-dev libncurses5-dev bison byacc curl tmux git vim \
+    neovim neofetch zsh golang ncurses-bin socat apt-file \
+    sysstat net-tools dnsutils || exit
 
 echo "Installing zsh with theme p10k / bash fallback aliases"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -29,6 +33,15 @@ echo "Configuring ssh"
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
 ln -sf ../.dotfiles/.ssh/config .
 
+echo "compiling and installing a current tmux version"
+mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
+git clone https://github.com/tmux/tmux.git
+cd "${HOME}/software/tmux" || exit
+git checkout 3.1b
+sh autogen.sh
+./configure && make
+sudo make install
+
 echo "Configuring tmux plugins"
 cd "${HOME}" || exit
 ln -s .dotfiles/.tmux.conf .
@@ -46,6 +59,11 @@ export NVM_DIR="$HOME/.nvm"
 # shellcheck source=/dev/null
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install 'lts/*' --latest-npm
+
+echo "Installing yarn"
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt update && sudo apt install yarn
 
 echo "Installing vim configurations"
 cd "${HOME}" || exit
