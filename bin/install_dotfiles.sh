@@ -9,7 +9,8 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
 cd "${HOME}" || exit
-ln -s .dotfiles/.zshrc .
+# need -f to overwrite the installed .zshrc file
+ln -sf .dotfiles/.zshrc .
 ln -s .dotfiles/.p10k.zsh .
 ln -s .dotfiles/.initialization.sh .
 ln -s .dotfiles/.initialization.sh .bash_aliases
@@ -23,7 +24,7 @@ ln -s ../.dotfiles/bin/truecolortest.sh .
 
 echo "Configuring ssh"
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
-ln -s ../.dotfiles/.ssh/config .
+ln -sf ../.dotfiles/.ssh/config .
 
 echo "Configuring tmux plugins"
 cd "${HOME}" || exit
@@ -61,5 +62,6 @@ ln -s ../../.dotfiles/.vimrc init.vim
 
 echo "REMEMBER: You must still run ':PlugInstall' within vim and nvim"
 
+cd "${HOME}/.vim" || exit
 exec /usr/bin/zsh
 
