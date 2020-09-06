@@ -2,6 +2,8 @@
 
 export DEBUG=false
 
+echo -n "Initializing "
+
 export PATH="${HOME}/bin":/usr/local/bin/:$PATH
 export http_proxy=http://de.coia.siemens.net:9400/
 export https_proxy=http://de.coia.siemens.net:9400/
@@ -26,7 +28,7 @@ export MANPAGER='less -r -s -M +Gg'
 # shellcheck source=./.less_colors
 [[ -f "$HOME/.less_colors" ]] && \. "$HOME/.less_colors"
 
-echo -n "Initializing nvm"
+echo -n ", nvm"
 export NVM_DIR="$HOME/.nvm"
 # shellcheck source=./.nvm/nvm.sh
 [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
