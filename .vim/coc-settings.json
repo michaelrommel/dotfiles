@@ -1,0 +1,17 @@
+{
+  "http.proxy": "coia.hcvpc.io:9400",
+  "tsserver.log": "verbose",
+  "eslint.filetypes": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "javascriptreact",
+    "typescript.tsx"
+  ],
+  "diagnostic-languageserver.enable": true,
+  "diagnostic-languageserver.filetypes": {
+    "sh": "shellcheck"
+  },
+  "eslint.autoFixOnSave": true,
+  "diagnostic.displayByAle": true
+}
