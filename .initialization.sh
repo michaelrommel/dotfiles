@@ -6,9 +6,9 @@ echo -n "Initializing "
 
 export PATH="${HOME}/bin":/usr/local/bin/:$PATH
 export LANG="C.UTF-8"
-export LC_COLLATE="C"
-export LC_CTYPE="C"
-export LC_TIME="C"
+export LC_CTYPE="C.UTF-8"
+export LC_COLLATE="C.UTF-8"
+export LC_TIME="C.UTF-8"
 export EDITOR=vim
 export MOSH_ESCAPE_KEY='~'
 
