@@ -57,3 +57,5 @@ ln -s ../../.dotfiles/.vimrc init.vim
 
 echo "REMEMBER: You must still run ':PlugInstall' within vim and nvim"
 
+exec /usr/bin/zsh
+
