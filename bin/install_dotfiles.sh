@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "Installing apt packages"
-sudo apt install curl tmux git vim neovim neofetch zsh golang socat apt-file sysstat net-tools dnsutils || exit
+sudo apt install curl tmux git vim neovim neofetch zsh golang ncurses-bin socat apt-file sysstat net-tools dnsutils || exit
 
 echo "Installing zsh with theme p10k / bash fallback aliases"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -21,6 +21,9 @@ ln -s ../.dotfiles/bin/ansi-vte52.sh .
 ln -s ../.dotfiles/bin/set_gruvbox_colors.sh .
 ln -s ../.dotfiles/bin/terminal.sh .
 ln -s ../.dotfiles/bin/truecolortest.sh .
+
+echo "Creating current terminfo files"
+/usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
 
 echo "Configuring ssh"
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
@@ -42,7 +45,7 @@ echo "Installing Node Version Manager (nvm) and node"
 export NVM_DIR="$HOME/.nvm"
 # shellcheck source=/dev/null
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm install --lts=Erbium --latest-npm
+nvm install 'lts/*' --latest-npm
 
 echo "Installing vim configurations"
 cd "${HOME}" || exit
@@ -62,6 +65,6 @@ ln -s ../../.dotfiles/.vimrc init.vim
 
 echo "REMEMBER: You must still run ':PlugInstall' within vim and nvim"
 
-cd "${HOME}/.vim" || exit
+cd "${HOME}" || exit
 exec /usr/bin/zsh
 
