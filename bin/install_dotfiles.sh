@@ -21,6 +21,10 @@ ln -s ../.dotfiles/bin/set_gruvbox_colors.sh .
 ln -s ../.dotfiles/bin/terminal.sh .
 ln -s ../.dotfiles/bin/truecolortest.sh .
 
+echo "Configuring ssh"
+mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
+ln -s ../.dotfiles/.ssh/config .
+
 echo "Configuring tmux plugins"
 cd "${HOME}" || exit
 ln -s .dotfiles/.tmux.conf .
