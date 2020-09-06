@@ -1,7 +1,7 @@
 #! /bin/bash
 
 echo "Installing apt packages"
-sudo apt install curl tmux git vim neovim neofetch zsh golang socat apt-file sysstat net-tools bind9-dnsutils
+sudo apt install curl tmux git vim neovim neofetch zsh golang socat apt-file sysstat net-tools dnsutils || exit
 
 echo "Installing zsh with theme p10k / bash fallback aliases"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -32,6 +32,9 @@ cd "${HOME}" || exit
 
 echo "Installing Node Version Manager (nvm) and node"
 /bin/bash -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh)"
+export NVM_DIR="$HOME/.nvm"
+# shellcheck source=/dev/null
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install --lts=Erbium --latest-npm
 
 echo "Installing vim configurations"
