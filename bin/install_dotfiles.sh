@@ -43,14 +43,14 @@ echo "Installing vim configurations"
 cd "${HOME}" || exit
 mkdir -p "${HOME}/.vim/plugins";
 ln -s .dotfiles/.vimrc .
-curl -fLo "${HOME}/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+curl -fLo "${HOME}/.vim/autoload/plug.vim" --create-dirs \
+    "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 cd "${HOME}/.vim" || exit
 ln -s ../.dotfiles/.vim/coc-settings .
 
 echo "Installing neovim configurations"
-curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
+    "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
 ln -s ../../.dotfiles/.vim/coc-settings.json .
 ln -s ../../.dotfiles/.vimrc init.vim
