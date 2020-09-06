@@ -51,6 +51,8 @@ cd plugins || exit
 ln -s ../../.dotfiles/.tmux/plugins/tmux-network-bandwidth .
 ln -s ../../.dotfiles/.tmux/plugins/tmux-plugin-cpu .
 "${HOME}/.tmux/plugins/tpm/bin/install_plugins"
+cd tmux.gruvbox || exit
+ln -s ../../../.dotfiles/.tmux/plugins/tmux-gruvbox/tmux-gruvbox-dark.conf .
 cd "${HOME}" || exit
 
 echo "Installing Node Version Manager (nvm) and node"
