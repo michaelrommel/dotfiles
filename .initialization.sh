@@ -5,7 +5,7 @@ export DEBUG=false
 echo -n "Initializing "
 
 export PATH="${HOME}/bin":/usr/local/bin/:$PATH
-export LANG="en_US.UTF-8"
+export LANG="C.UTF-8"
 export LC_COLLATE="C"
 export LC_CTYPE="C"
 export LC_TIME="C"

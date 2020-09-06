@@ -102,6 +102,7 @@ au FileType javascript let g:ale_linters = { 'javascript': glob('.eslintrc*', '.
 " -----------------------------------------------------------------------------
 " Completion Engine
 " -----------------------------------------------------------------------------
+let g:coc_disable_startup_warning = 1
 
 set hidden
 
