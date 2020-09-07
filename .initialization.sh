@@ -70,6 +70,7 @@ if [[ $RC == 1 || $RC == 2 ]]; then
   # there are no keys available or no agent running
   [[ ${DEBUG} == true ]] && echo " (none)"
   OSNAME=$( "${UNAME}" -s )
+  OSRELEASE=$( "${UNAME}" -r )
   if [[ "${OSNAME}" == "Darwin" ]]; then
     # on macOS: keychain has support to get the passphrase from the OS Keyring
     ssh-add -AK ~/.ssh/id_ecdsa
