@@ -27,7 +27,8 @@ cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file
 ln -sf .dotfiles/.zshrc .
 ln -sf .dotfiles/.p10k.zsh .
-ln -sf .dotfiles/.less_colors .
+ln -sf .dotfiles/.less_colors.sh .
+ln -sf .dotfiles/.dir_colors.sh .
 ln -sf .dotfiles/.initialization.sh .
 ln -sf .dotfiles/.initialization.sh .bash_aliases
 

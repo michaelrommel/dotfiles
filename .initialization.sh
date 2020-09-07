@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export DEBUG=true
+export DEBUG=false
 
 echo -n "Initializing:"
 
@@ -26,8 +26,10 @@ unset TERMINAL
 
 # color for less and man
 export MANPAGER='less -r -s -M +Gg'
-# shellcheck source=./.less_colors
-[[ -f "$HOME/.less_colors" ]] && \. "$HOME/.less_colors"
+# shellcheck source=./.less_colors.sh
+[[ -f "$HOME/.less_colors.sh" ]] && \. "$HOME/.less_colors".sh
+# shellcheck source=./.dir_colors.sh
+[[ -f "$HOME/.dir_colors.sh" ]] && \. "$HOME/.dir_colors.sh"
 
 echo -n " • nvm"
 export NVM_DIR="$HOME/.nvm"
