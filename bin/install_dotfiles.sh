@@ -4,8 +4,14 @@ echo "Installing apt packages"
 sudo apt update
 sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
-    neofetch zsh golang ncurses-bin socat apt-file \
+    neofetch zsh ncurses-bin apt-file \
     sysstat net-tools dnsutils shellcheck || exit
+
+OSRELEASE=$( "/usr/bin/uname" -r )
+if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
+  # on WSL2 install golang to be able to compile npiperelay
+  sudo apt install golang socat
+fi
 
 echo "Installing zsh with theme p10k / bash fallback aliases"
 sh -c "$(curl -fsSL \
