@@ -93,8 +93,9 @@ if [[ $RC == 1 || $RC == 2 ]]; then
     fi
     # inherit identities or start new ssh-agent
     [[ ${DEBUG} == false ]] && FLAG="--quiet"
+    # shellcheck disable=SC2086
     eval "$( keychain ${FLAG} --eval --ignore-missing \
-        --agents ssh --inherit any-once "${IDENTITIES}" )"
+        --agents ssh --inherit any-once ${IDENTITIES} )"
   else
     echo "Unknown Operating System: ${OSNAME}"
   fi
