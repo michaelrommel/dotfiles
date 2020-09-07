@@ -4,7 +4,7 @@ export DEBUG=false
 
 echo -n "Initializing:"
 
-export PATH="${HOME}/bin":/usr/local/bin/:$PATH
+export PATH="${HOME}/bin":/usr/local/bin:$PATH
 export LANG="C.UTF-8"
 export LC_CTYPE="C.UTF-8"
 export LC_COLLATE="C.UTF-8"
@@ -112,7 +112,7 @@ if [[ $RC == 1 || $RC == 2 ]]; then
   else
     # default on other Linux systems
     # inherit identities or start new ssh-agent
-    eval "$( keychain --eval --agents ssh --inherit any id_ecdsa )"
+    eval "$( keychain --eval --agents ssh --inherit any id_ed25519 id_ecdsa id_rsa)"
   fi
   [[ ${DEBUG} == true ]] && echo -n "Re-checking for ssh keys"
   ssh-add -l >/dev/null 2>&1
@@ -121,7 +121,7 @@ if [[ $RC == 1 || $RC == 2 ]]; then
     [[ ${DEBUG} == true ]] && echo " (none)"
     # keys are still missing, though
     [[ ${DEBUG} == true ]] && echo "Adding default ssh keys.."
-    ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_rsa
+    ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_ecdsa ~/.ssh/id_rsa
   else
     [[ ${DEBUG} == true ]] && echo " (found)"
   fi

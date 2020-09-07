@@ -4,7 +4,7 @@ echo "Installing apt packages"
 sudo apt update
 sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
-    neofetch zsh ncurses-bin apt-file \
+    mosh keychain neofetch zsh ncurses-bin apt-file \
     sysstat net-tools dnsutils shellcheck || exit
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
