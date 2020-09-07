@@ -78,8 +78,8 @@ ln -sf ../.dotfiles/.vim/coc-settings .
 vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
 echo "Updating neovim"
-sudo add-apt-repository ppa:neovim-ppa/stable
-sudo apt install neovim
+sudo add-apt-repository -y ppa:neovim-ppa/stable
+sudo apt install -y neovim
 
 echo "Installing neovim configurations"
 curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
