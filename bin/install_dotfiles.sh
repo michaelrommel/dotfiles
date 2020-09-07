@@ -27,6 +27,7 @@ cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file
 ln -sf .dotfiles/.zshrc .
 ln -sf .dotfiles/.p10k.zsh .
+ln -sf .dotfiles/.less_colors .
 ln -sf .dotfiles/.initialization.sh .
 ln -sf .dotfiles/.initialization.sh .bash_aliases
 
@@ -36,6 +37,8 @@ ln -sf ../.dotfiles/bin/ansi-vte52.sh .
 ln -sf ../.dotfiles/bin/set_gruvbox_colors.sh .
 ln -sf ../.dotfiles/bin/terminal.sh .
 ln -sf ../.dotfiles/bin/truecolortest.sh .
+ln -sf ../.dotfiles/bin/terminal-colors.py .
+ln -sf ../.dotfiles/bin/emoji.js .
 
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install a shell script with npiperelay as ssh-agent
