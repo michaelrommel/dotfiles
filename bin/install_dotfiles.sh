@@ -26,16 +26,16 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
 cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file
 ln -sf .dotfiles/.zshrc .
-ln -s .dotfiles/.p10k.zsh .
-ln -s .dotfiles/.initialization.sh .
-ln -s .dotfiles/.initialization.sh .bash_aliases
+ln -sf .dotfiles/.p10k.zsh .
+ln -sf .dotfiles/.initialization.sh .
+ln -sf .dotfiles/.initialization.sh .bash_aliases
 
 echo "Installing scripts into ~/bin"
 mkdir -p "${HOME}/bin"; cd "${HOME}/bin" || exit
-ln -s ../.dotfiles/bin/ansi-vte52.sh .
-ln -s ../.dotfiles/bin/set_gruvbox_colors.sh .
-ln -s ../.dotfiles/bin/terminal.sh .
-ln -s ../.dotfiles/bin/truecolortest.sh .
+ln -sf ../.dotfiles/bin/ansi-vte52.sh .
+ln -sf ../.dotfiles/bin/set_gruvbox_colors.sh .
+ln -sf ../.dotfiles/bin/terminal.sh .
+ln -sf ../.dotfiles/bin/truecolortest.sh .
 
 echo "Creating current terminfo files"
 sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
