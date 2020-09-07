@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export DEBUG=false
+export DEBUG=true
 
 echo -n "Initializing:"
 
@@ -61,61 +61,40 @@ if [ "${FATHER}" = "mosh-server" ]; then
 fi
 
 echo -n " • ssh-agent"
-[[ ${DEBUG} == true ]] && echo -n "\nChecking for ssh keys"
+[[ ${DEBUG} == true ]] && echo -e -n "\nChecking for ssh keys"
 ssh-add -l >/dev/null 2>&1
 RC=$?
 if [[ $RC == 1 || $RC == 2 ]]; then
   # there are no keys available or no agent running
   [[ ${DEBUG} == true ]] && echo " (none)"
-
   OSNAME=$( "${UNAME}" -s )
-  OSRELEASE=$( "${UNAME}" -r )
-
   if [[ "${OSNAME}" == "Darwin" ]]; then
     # on macOS: keychain has support to get the passphrase from the OS Keyring
     ssh-add -AK ~/.ssh/id_ecdsa
-    eval "$( keychain --eval --agents ssh --inherit any id_ecdsa )"
+    eval "$( keychain --eval --agents ssh --inherit any-once id_ecdsa )"
   elif [[ "${OSNAME}" == "Linux" ]]; then
-    # first try to find an existing authentication socket
-    # shellcheck disable=SC2207
-    AGENTS=( $( /usr/bin/find /tmp/ssh-*/ -name "agent.*" \
-      -user "${USER}" 2>/dev/null |tr 2>/dev/null "\n" " " ) )
-    FOUND=0
-    for AGENT in "${AGENTS[@]}"; do
-      if [ $FOUND -eq 0 ]; then
-        # shellcheck disable=SC2012
-        OWNER=$(ls -l "$AGENT" |awk '{print $3}')
-        if [[ "$OWNER" == "$USER" ]]; then
-          [[ ${DEBUG} == true ]] && echo "Trying agent $AGENT"
-          export SSH_AUTH_SOCK=$AGENT
-          if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
-            # stale agent socket
-            [[ ${DEBUG} == true ]] && echo "Removing stale agent $AGENT"
-            rm -f "${AGENT}" "${AGENT}.log"
-            unset SSH_AUTH_SOCK
-          else
-            FOUND=1
-          fi
-        fi
-      fi
-    done
-    if [ -z "$SSH_AUTH_SOCK" ]; then
-      if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
-        # on WSL2
-        # we need a new npiperelay
-        [[ ${DEBUG} == true ]] && echo "Launching ssh-agent relay"
-        export SSH_AUTH_SOCK=/tmp/ssh-$$/agent.$$
-        rm -f $SSH_AUTH_SOCK
-        ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,umask=007,fork \
-                       EXEC:"/mnt/d/ProgramFiles/npiperelay/npiperelay.exe -ei -s \
-                       -v //./pipe/openssh-ssh-agent",nofork &
-        ) >${SSH_AUTH_SOCK}.log 2>&1
-      else
-        # default on other Linux systems
-        # inherit identities or start new ssh-agent
-        eval "$( keychain --eval --agents ssh --inherit any id_ed25519 id_ecdsa id_rsa)"
-      fi
+    if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
+      # we are on WSL2
+      # There is obviously no AUTH_SOCK available. Now keychain has its own
+      # way of remembering an previously started agent in its .keychain
+      # directory. It will therefore only start a wsl-relay once per
+      # session.
+      # Unfortunately keychain does not understand that the Windows OpenSSH
+      # Agent already provides the identities and always thinks, if it started
+      # the agent, it should ask to add keys, so we have to branch here and 
+      # not ask for identies to add.
+      # Agent needs to be named "ssh-agent" because keychain refuses
+      # to start anything other than ssh-agent and gpg-agent. :-(
+      [[ ${DEBUG} == true ]] && echo "Launching ssh-agent relay"
+      unset IDENTITIES
+    else
+      # per default add identities on other Linux systems
+      IDENTITIES="id_ed25519 id_ecdsa id_rsa"
     fi
+    # inherit identities or start new ssh-agent
+    [[ ${DEBUG} == false ]] && FLAG="--quiet"
+    eval "$( keychain ${FLAG} --eval --ignore-missing \
+        --agents ssh --inherit any-once "${IDENTITIES}" )"
   else
     echo "Unknown Operating System: ${OSNAME}"
   fi
@@ -127,7 +106,7 @@ umask 022
 set -o vi
 
 # global aliases
-echo -n " •  aliases"
+echo -n " • aliases"
 alias sha="shasum -a 256"
 alias icat="kitty +kitten icat"
 

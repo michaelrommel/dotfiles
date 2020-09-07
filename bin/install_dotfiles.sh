@@ -37,6 +37,11 @@ ln -sf ../.dotfiles/bin/set_gruvbox_colors.sh .
 ln -sf ../.dotfiles/bin/terminal.sh .
 ln -sf ../.dotfiles/bin/truecolortest.sh .
 
+if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
+  # on WSL2 install a shell script with npiperelay as ssh-agent
+  ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
+fi
+
 echo "Creating current terminfo files"
 sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
 
