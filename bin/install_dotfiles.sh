@@ -4,7 +4,7 @@ echo "Installing apt packages"
 sudo apt update
 sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
-    neovim neofetch zsh golang ncurses-bin socat apt-file \
+    neofetch zsh golang ncurses-bin socat apt-file \
     sysstat net-tools dnsutils shellcheck || exit
 
 echo "Installing zsh with theme p10k / bash fallback aliases"
@@ -76,6 +76,10 @@ curl -fLo "${HOME}/.vim/autoload/plug.vim" --create-dirs \
 cd "${HOME}/.vim" || exit
 ln -sf ../.dotfiles/.vim/coc-settings .
 vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
+
+echo "Updating neovim"
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt install neovim
 
 echo "Installing neovim configurations"
 curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
