@@ -1,7 +1,7 @@
 set nocompatible
 
 if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+  silent! curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
@@ -34,7 +34,7 @@ call plug#end()
 " -----------------------------------------------------------------------------
 " Color settings
 " -----------------------------------------------------------------------------
-colorscheme gruvbox
+silent! colorscheme gruvbox
 " For Gruvbox to look correct in terminal Vim you'll want to source a palette
 " script that comes with the Gruvbox plugin.
 "
@@ -103,6 +103,8 @@ au FileType javascript let g:ale_linters = { 'javascript': glob('.eslintrc*', '.
 " Completion Engine
 " -----------------------------------------------------------------------------
 let g:coc_disable_startup_warning = 1
+
+if !empty(glob("${HOME}/.vim/plugged/coc.nvim"))
 
 set hidden
 
@@ -227,4 +229,6 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+endif
 

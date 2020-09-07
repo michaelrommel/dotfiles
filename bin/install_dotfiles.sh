@@ -5,7 +5,7 @@ sudo apt update
 sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
     neovim neofetch zsh golang ncurses-bin socat apt-file \
-    sysstat net-tools dnsutils || exit
+    sysstat net-tools dnsutils shellcheck || exit
 
 echo "Installing zsh with theme p10k / bash fallback aliases"
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -44,7 +44,7 @@ sudo make install
 
 echo "Configuring tmux plugins"
 cd "${HOME}" || exit
-ln -s .dotfiles/.tmux.conf .
+ln -sf .dotfiles/.tmux.conf .
 mkdir -p "${HOME}/.tmux/plugins"; cd "${HOME}/.tmux" || exit
 git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm"
 cd plugins || exit
@@ -65,23 +65,23 @@ nvm install 'lts/*' --latest-npm
 echo "Installing yarn"
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt update && sudo apt install yarn
+sudo apt update && sudo apt install -y yarn
 
 echo "Installing vim configurations"
 cd "${HOME}" || exit
 mkdir -p "${HOME}/.vim/plugins";
-ln -s .dotfiles/.vimrc .
+ln -sf .dotfiles/.vimrc .
 curl -fLo "${HOME}/.vim/autoload/plug.vim" --create-dirs \
     "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 cd "${HOME}/.vim" || exit
-ln -s ../.dotfiles/.vim/coc-settings .
+ln -sf ../.dotfiles/.vim/coc-settings .
 
 echo "Installing neovim configurations"
 curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
     "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
-ln -s ../../.dotfiles/.vim/coc-settings.json .
-ln -s ../../.dotfiles/.vimrc init.vim
+ln -sf ../../.dotfiles/.vim/coc-settings.json .
+ln -sf ../../.dotfiles/.vimrc init.vim
 
 echo "REMEMBER: You must still run ':PlugInstall' within vim and nvim"
 
