@@ -65,8 +65,9 @@ echo -n " • ssh-agent"
 ssh-add -l >/dev/null 2>&1
 RC=$?
 if [[ $RC == 1 || $RC == 2 ]]; then
-  [[ ${DEBUG} == true ]] && echo " (none)"
   # there are no keys available or no agent running
+  [[ ${DEBUG} == true ]] && echo " (none)"
+
   OSNAME=$( "${UNAME}" -s )
   OSRELEASE=$( "${UNAME}" -r )
 
@@ -74,12 +75,11 @@ if [[ $RC == 1 || $RC == 2 ]]; then
     # on macOS: keychain has support to get the passphrase from the OS Keyring
     ssh-add -AK ~/.ssh/id_ecdsa
     eval "$( keychain --eval --agents ssh --inherit any id_ecdsa )"
-  elif [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
-    # on WSL2
-    # new version using npiperelay
+  elif [[ "${OSNAME}" == "Linux" ]]; then
+    # first try to find an existing authentication socket
     # shellcheck disable=SC2207
-    #AGENTS=( $( /bin/ls -1 2>/dev/null /tmp/ssh-agent-*.sock |tr 2>/dev/null "\n" " " ))
-    AGENTS=( $( /usr/bin/find /tmp/ -name "ssh-agent-*.sock" |tr "\n" " " 2>/dev/null ) )
+    AGENTS=( $( /usr/bin/find /tmp/ssh-*/ -name "agent.*" \
+      -user "${USER}" 2>/dev/null |tr 2>/dev/null "\n" " " ) )
     FOUND=0
     for AGENT in "${AGENTS[@]}"; do
       if [ $FOUND -eq 0 ]; then
@@ -100,30 +100,24 @@ if [[ $RC == 1 || $RC == 2 ]]; then
       fi
     done
     if [ -z "$SSH_AUTH_SOCK" ]; then
-      # we need a new relay
-      [[ ${DEBUG} == true ]] && echo "Launching ssh-agent relay"
-      export SSH_AUTH_SOCK=/tmp/ssh-agent-$$.sock
-      rm -f $SSH_AUTH_SOCK
-      ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,umask=007,fork \
-                     EXEC:"/mnt/d/ProgramFiles/npiperelay/npiperelay.exe -ei -s \
-                     -v //./pipe/openssh-ssh-agent",nofork &
-      ) >${SSH_AUTH_SOCK}.log 2>&1
+      if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
+        # on WSL2
+        # we need a new npiperelay
+        [[ ${DEBUG} == true ]] && echo "Launching ssh-agent relay"
+        export SSH_AUTH_SOCK=/tmp/ssh-$$/agent.$$
+        rm -f $SSH_AUTH_SOCK
+        ( setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,umask=007,fork \
+                       EXEC:"/mnt/d/ProgramFiles/npiperelay/npiperelay.exe -ei -s \
+                       -v //./pipe/openssh-ssh-agent",nofork &
+        ) >${SSH_AUTH_SOCK}.log 2>&1
+      else
+        # default on other Linux systems
+        # inherit identities or start new ssh-agent
+        eval "$( keychain --eval --agents ssh --inherit any id_ed25519 id_ecdsa id_rsa)"
+      fi
     fi
   else
-    # default on other Linux systems
-    # inherit identities or start new ssh-agent
-    eval "$( keychain --eval --agents ssh --inherit any id_ed25519 id_ecdsa id_rsa)"
-  fi
-  [[ ${DEBUG} == true ]] && echo -n "Re-checking for ssh keys"
-  ssh-add -l >/dev/null 2>&1
-  RC=$?
-  if [ $RC = 1 ]; then
-    [[ ${DEBUG} == true ]] && echo " (none)"
-    # keys are still missing, though
-    [[ ${DEBUG} == true ]] && echo "Adding default ssh keys.."
-    ssh-add ~/.ssh/id_ed25519 ~/.ssh/id_ecdsa ~/.ssh/id_rsa
-  else
-    [[ ${DEBUG} == true ]] && echo " (found)"
+    echo "Unknown Operating System: ${OSNAME}"
   fi
 else
   [[ ${DEBUG} == true ]] && echo " (found)"
