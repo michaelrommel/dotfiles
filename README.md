@@ -13,6 +13,6 @@ Easiest installation:
 - `bash "${HOME}/.dotfiles/bin/install_dotfiles.sh"`
 
 Example that shows how my typical environment looks like:
-- `tmux -c "cd ${HOME}/.dotfiles/software/node-example/;
+- `tmux new-session "cd ${HOME}/.dotfiles/software/node-example/;
    [[ ! -d "./node_modules" ]] && npm install; nvim HappyBirthday.js"`
 
