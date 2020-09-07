@@ -75,6 +75,7 @@ curl -fLo "${HOME}/.vim/autoload/plug.vim" --create-dirs \
     "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 cd "${HOME}/.vim" || exit
 ln -sf ../.dotfiles/.vim/coc-settings .
+vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
 echo "Installing neovim configurations"
 curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
@@ -82,8 +83,7 @@ curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
 mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
 ln -sf ../../.dotfiles/.vim/coc-settings.json .
 ln -sf ../../.dotfiles/.vimrc init.vim
-
-echo "REMEMBER: You must still run ':PlugInstall' within vim and nvim"
+nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
 
 cd "${HOME}" || exit
 exec /usr/bin/zsh
