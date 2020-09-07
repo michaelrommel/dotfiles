@@ -40,6 +40,7 @@ ln -sf ../.dotfiles/bin/terminal.sh .
 ln -sf ../.dotfiles/bin/truecolortest.sh .
 ln -sf ../.dotfiles/bin/terminal-colors.py .
 ln -sf ../.dotfiles/bin/emoji.js .
+ln -sf ../.dotfiles/bin/remove_stale_agents.sh .
 
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install a shell script with npiperelay as ssh-agent
