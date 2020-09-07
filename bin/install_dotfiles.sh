@@ -8,7 +8,9 @@ sudo apt install -y build-essential autoconf automake pkg-config \
     sysstat net-tools dnsutils shellcheck || exit
 
 echo "Installing zsh with theme p10k / bash fallback aliases"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fsSL \
+    https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh \
+    --unattended)"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 
