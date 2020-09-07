@@ -7,7 +7,10 @@ sudo apt install -y build-essential autoconf automake pkg-config \
     neofetch zsh ncurses-bin apt-file \
     sysstat net-tools dnsutils shellcheck || exit
 
-OSRELEASE=$( "/usr/bin/uname" -r )
+[[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
+[[ -x "/bin/uname" ]] && UNAME="/bin/uname"
+
+OSRELEASE=$( "${UNAME}" -r )
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install golang to be able to compile npiperelay
   sudo apt install golang socat

@@ -2,7 +2,7 @@
 
 export DEBUG=false
 
-echo -n "Initializing "
+echo -n "Initializing:"
 
 export PATH="${HOME}/bin":/usr/local/bin/:$PATH
 export LANG="C.UTF-8"
@@ -11,6 +11,9 @@ export LC_COLLATE="C.UTF-8"
 export LC_TIME="C.UTF-8"
 export EDITOR=vim
 export MOSH_ESCAPE_KEY='~'
+
+[[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
+[[ -x "/bin/uname" ]] && UNAME="/bin/uname"
 
 # load authenticattion tokens
 # shellcheck source=./.gh_credentials.sh
@@ -26,14 +29,14 @@ export MANPAGER='less -r -s -M +Gg'
 # shellcheck source=./.less_colors
 [[ -f "$HOME/.less_colors" ]] && \. "$HOME/.less_colors"
 
-echo -n ", nvm"
+echo -n " • nvm"
 export NVM_DIR="$HOME/.nvm"
 # shellcheck source=./.nvm/nvm.sh
 [[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 # shellcheck source=./.nvm/bash_completion
 [[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-echo -n ", fzf"
+echo -n " • fzf"
 if [ "$(basename "${SHELL}")" = "zsh" ]; then
   [[ ${DEBUG} == true ]] && echo -n " (zsh)"
   # suppress error messages, when a glob pattern returns no matches
@@ -46,7 +49,7 @@ else
   [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 fi
 
-echo -n ", mosh"
+echo -n " • mosh"
 FATHER=$(ps -p $PPID -o comm=)
 if [ "${FATHER}" = "mosh-server" ]; then
   echo -n " (true)"
@@ -57,15 +60,15 @@ if [ "${FATHER}" = "mosh-server" ]; then
   unset FATHER
 fi
 
-echo -n ", ssh-agent"
+echo -n " • ssh-agent"
 [[ ${DEBUG} == true ]] && echo -n "\nChecking for ssh keys"
 ssh-add -l >/dev/null 2>&1
 RC=$?
 if [[ $RC == 1 || $RC == 2 ]]; then
   [[ ${DEBUG} == true ]] && echo " (none)"
   # there are no keys available or no agent running
-  OSNAME=$( "/usr/bin/uname" -s )
-  OSRELEASE=$( "/usr/bin/uname" -r )
+  OSNAME=$( "${UNAME}" -s )
+  OSRELEASE=$( "${UNAME}" -r )
 
   if [[ "${OSNAME}" == "Darwin" ]]; then
     # on macOS: keychain has support to get the passphrase from the OS Keyring
@@ -130,7 +133,7 @@ umask 022
 set -o vi
 
 # global aliases
-echo -n ", aliases"
+echo -n " •  aliases"
 alias sha="shasum -a 256"
 alias icat="kitty +kitten icat"
 
