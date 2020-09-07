@@ -89,13 +89,13 @@ if [[ $RC == 1 || $RC == 2 ]]; then
       unset IDENTITIES
     else
       # per default add identities on other Linux systems
-      IDENTITIES="id_ed25519 id_ecdsa id_rsa"
+      declare -a IDENTITIES=(id_ed25519 id_ecdsa id_rsa)
     fi
     # inherit identities or start new ssh-agent
     [[ ${DEBUG} == false ]] && FLAG="--quiet"
-    # shellcheck disable=SC2086
+    # shellcheck disable=SC2068
     eval "$( keychain ${FLAG} --eval --ignore-missing \
-        --agents ssh --inherit any-once ${IDENTITIES} )"
+        --agents ssh --inherit any-once ${IDENTITIES[@]} )"
   else
     echo "Unknown Operating System: ${OSNAME}"
   fi
