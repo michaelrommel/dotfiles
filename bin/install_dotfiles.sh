@@ -29,7 +29,7 @@ ln -s ../.dotfiles/bin/terminal.sh .
 ln -s ../.dotfiles/bin/truecolortest.sh .
 
 echo "Creating current terminfo files"
-/usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
+sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
 
 echo "Configuring ssh"
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
