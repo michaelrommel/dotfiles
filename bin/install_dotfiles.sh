@@ -31,6 +31,7 @@ ln -sf .dotfiles/.less_colors.sh .
 ln -sf .dotfiles/.dir_colors.sh .
 ln -sf .dotfiles/.initialization.sh .
 ln -sf .dotfiles/.initialization.sh .bash_aliases
+touch .hushlogin
 
 echo "Installing scripts into ~/bin"
 mkdir -p "${HOME}/bin"; cd "${HOME}/bin" || exit

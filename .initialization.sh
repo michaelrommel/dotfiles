@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export DEBUG=true
+export DEBUG=false
 
 echo -n "Initializing:"
 

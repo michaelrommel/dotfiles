@@ -13,14 +13,16 @@ Plug 'gruvbox-community/gruvbox'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
-Plug 'tpope/vim-sleuth'
+"Plug 'tpope/vim-sleuth'
 " Dim paragraphs above and below the active paragraph.
 Plug 'junegunn/limelight.vim'
 " Distraction free writing by removing UI elements and centering everything.
 Plug 'junegunn/goyo.vim'
 " File Types and Languages
-Plug 'elzr/vim-json'
-Plug 'pangloss/vim-javascript'
+" Syntax Highlighting etc for many languates
+Plug 'sheerun/vim-polyglot'
+"Plug 'pangloss/vim-javascript'
+"Plug 'elzr/vim-json'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
