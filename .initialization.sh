@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export DEBUG=false
+export DEBUG=true
 
 echo -n "Initializing:"
 
@@ -22,6 +22,7 @@ export MOSH_ESCAPE_KEY='~'
 # check for mintty to override TERM variable
 TERMINAL=$( "${HOME}/bin/terminal.sh" -n )
 [[ "${TERMINAL}" == "mintty" ]] && export TERM=mintty
+[[ "${TERMINAL}" == "linux" ]] && "${HOME}/bin/set_gruvbox_colors.sh"
 unset TERMINAL
 
 # color for less and man

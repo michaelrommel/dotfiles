@@ -28,6 +28,15 @@ query () {
 
 terminaltype () {
 
+if [[ "$( tty )" =~ "tty" ]]; then
+  # this is a linux console
+  tt=0
+  t=linux
+  v=0
+  pc=0
+  return
+fi
+
 case "$BASH" in
 ?*)  # try simplified query as suggested by Brian Inglis:
   # https://github.com/mintty/mintty/issues/776#issuecomment-475761566
