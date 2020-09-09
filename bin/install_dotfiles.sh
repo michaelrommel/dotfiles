@@ -94,7 +94,7 @@ cd "${HOME}" || exit
 mkdir -p "${HOME}/.config/coc/extensions"
 cd "${HOME}/.config/coc/extensions" || exit
 ln -sf ../../../.dotfiles/.config/coc/extensions/package.json .
-npm install coc-snippets --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod 
+npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod 
 if [[ -d "./node_modules/coc-svelte" ]]; then
   cd "./node_modules/coc-svelte"
   npm install --save-dev typescript
