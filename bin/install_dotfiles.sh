@@ -89,6 +89,13 @@ curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt update && sudo apt install -y yarn
 
+echo "Preparing coc"
+cd "${HOME}" || exit
+mkdir -p "${HOME}/.config/coc/extensions"
+cd "${HOME}/.config/coc/extensions" || exit
+ln -sf ../../../.dotfiles/.config/coc/extensions/package.json .
+npm install coc-snippets --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod 
+
 echo "Installing vim configurations"
 cd "${HOME}" || exit
 mkdir -p "${HOME}/.vim/plugins";
@@ -96,7 +103,7 @@ ln -sf .dotfiles/.vimrc .
 curl -fLo "${HOME}/.vim/autoload/plug.vim" --create-dirs \
     "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 cd "${HOME}/.vim" || exit
-ln -sf ../.dotfiles/.vim/coc-settings .
+ln -sf ../.dotfiles/.vim/coc-settings.json .
 vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
 echo "Updating neovim"
