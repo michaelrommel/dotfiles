@@ -10,7 +10,7 @@ call plug#begin('~/.vim/plugged')
 " Gruvbox theme.
 Plug 'gruvbox-community/gruvbox'
 " Integrate fzf with Vim.
-Plug '~/.fzf/bin/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-rooter'
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
