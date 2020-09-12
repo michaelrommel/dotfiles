@@ -16,7 +16,21 @@ if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   sudo apt install golang socat
 fi
 
+echo "Installing fd from github"
+# provides faster find version, not available for Ubuntu 18.04
+cd "${HOME}" || exit
+mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
+curl -OL https://github.com/sharkdp/fd/releases/download/v8.1.1/fd_8.1.1_amd64.deb
+sudo dpkg -i "${HOME}/software/archives/fd_8.1.1_amd64.deb"
+
+echo "Installing fzf from github"
+# needs to come before zsh, as we are sourceing completion & keybindings there
+cd "${HOME}" || exit
+git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
+"${HOME}/.fzf/install" --no-key-bindings --no-completion --no-update-rc --no-bash --no-zsh --no-fish
+
 echo "Installing zsh with theme p10k / bash fallback aliases"
+cd "${HOME}" || exit
 sh -c "$(curl -fsSL \
   https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) \
   --unattended"

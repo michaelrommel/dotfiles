@@ -39,14 +39,8 @@ export NVM_DIR="$HOME/.nvm"
 # shellcheck source=./.nvm/bash_completion
 [[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-echo -n " • fzf"
-if [ "$(basename "${SHELL}")" = "zsh" ]; then
-  [[ ${DEBUG} == true ]] && echo -n " (zsh)"
-  # suppress error messages, when a glob pattern returns no matches
-  setopt +o nomatch
-  # shellcheck source=/dev/null
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-else
+if [ "$(basename "${SHELL}")" = "bash" ]; then
+  echo -n " • fzf"
   [[ ${DEBUG} == true ]] && echo -n " (bash)"
   # shellcheck source=./.fzf.bash
   [ -f ~/.fzf.bash ] && source ~/.fzf.bash
@@ -70,6 +64,10 @@ RC=$?
 if [[ $RC == 1 || $RC == 2 ]]; then
   # there are no keys available or no agent running
   [[ ${DEBUG} == true ]] && echo " (none)"
+  if [ "$(basename "${SHELL}")" = "zsh" ]; then
+    # suppress error messages, when a glob pattern returns no matches
+    setopt +o nomatch
+  fi
   OSNAME=$( "${UNAME}" -s )
   OSRELEASE=$( "${UNAME}" -r )
   if [[ "${OSNAME}" == "Darwin" ]]; then
