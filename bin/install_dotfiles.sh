@@ -7,6 +7,15 @@ sudo apt install -y build-essential autoconf automake pkg-config \
     mosh keychain neofetch zsh ncurses-bin apt-file \
     sysstat net-tools dnsutils shellcheck || exit
 
+source /etc/lsb-release
+if [[ "${DISTRIB_CODENAME}" == "focal" ]]; then
+  # we do have newer packages
+  sudo apt install universal-ctags ripgrep
+else
+  # need to keep older version
+  sudo apt install exuberant-ctags
+fi
+
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
 
@@ -104,6 +113,11 @@ echo "Installing yarn"
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt update && sudo apt install -y yarn
+
+echo "Configuring git"
+cd "${HOME}" || exit
+ln -sf .dotfiles/.git_template .
+ln -sf .dotfiles/.gitconfig .
 
 echo "Preparing coc"
 cd "${HOME}" || exit

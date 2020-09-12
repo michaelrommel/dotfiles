@@ -10,8 +10,9 @@ call plug#begin('~/.vim/plugged')
 " Gruvbox theme.
 Plug 'gruvbox-community/gruvbox'
 " Integrate fzf with Vim.
-Plug '/usr/local/opt/fzf'
+Plug '~/.fzf/bin/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'airblade/vim-rooter'
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
 "Plug 'tpope/vim-sleuth'
 " Dim paragraphs above and below the active paragraph.
@@ -99,7 +100,7 @@ filetype plugin on
 
 let g:ale_disable_lsp = 1
 au Filetype javascript set dictionary+=~/.vim/dict/node.dict
-au FileType javascript let g:ale_linters = { 'javascript': glob('.eslintrc*', '.;') != '' ? [ 'eslint', 'flow' ] : [ 'semistandard', 'standard', 'flow' ] }
+" au FileType javascript let g:ale_linters = { 'javascript': glob('.eslintrc*', '.;') != '' ? [ 'eslint', 'flow' ] : [ 'semistandard', 'standard', 'flow' ] }
 
 " -----------------------------------------------------------------------------
 " Completion Engine
