@@ -40,6 +40,8 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
 cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file
 ln -sf .dotfiles/.zshrc .
+ln -sf .dotfiles/.fzf.bash .
+ln -sf .dotfiles/.fzf.zsh .
 ln -sf .dotfiles/.p10k.zsh .
 ln -sf .dotfiles/.less_colors.sh .
 ln -sf .dotfiles/.dir_colors.sh .
