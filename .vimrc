@@ -94,6 +94,10 @@ filetype plugin indent on
 filetype indent on
 filetype plugin on
 
+let mapleader="\\"
+nnoremap <leader>f :Files<CR>
+nnoremap <leader>t :Tags<CR>
+
 " -----------------------------------------------------------------------------
 " Linting Engine
 " -----------------------------------------------------------------------------

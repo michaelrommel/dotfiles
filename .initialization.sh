@@ -32,12 +32,9 @@ export MANPAGER='less -r -s -M +Gg'
 # shellcheck source=./.dir_colors.sh
 [[ -f "$HOME/.dir_colors.sh" ]] && \. "$HOME/.dir_colors.sh"
 
-echo -n " • nvm"
-export NVM_DIR="$HOME/.nvm"
+echo -n " • fnm"
 # shellcheck source=./.nvm/nvm.sh
-[[ -s "$NVM_DIR/nvm.sh" ]] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# shellcheck source=./.nvm/bash_completion
-[[ -s "$NVM_DIR/bash_completion" ]] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[[ -s "$HOME/.fnm.sh" ]] && \. "$HOME/.fnm.sh"  # This loads fnm
 
 if [ "$(basename "${SHELL}")" = "bash" ]; then
   echo -n " • fzf"

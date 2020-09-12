@@ -1,8 +1,10 @@
 #! /bin/bash
 
-rm -rf .bash_aliases .config/nvim/ .initialization.sh .npm .nvm \
-  .oh-my-zsh .p10k.zsh .tmux .vim .vimrc .tmux.conf .zsh* \
-  .fzf .terminfo .shell.pre-oh-my-zsh \
-  bin/ansi-vte52.sh bin/set_gruvbox_colors.sh bin/terminal.sh \
-  bin/truecolortest.sh
+rm -rf .bash_aliases .config/nvim/ .config/coc/ .config/yarn/ \
+  .initialization.sh .npm .nvm .fnm .fnm.sh .yarn \
+  .oh-my-zsh .p10k.zsh .tmux .vim .vimrc .tmux/ .tmux.conf .zsh* \
+  .fzf .fzf.bash .fzf.zsh .git_template .gitconfig \
+  .dircolor.sh .less_colors.sh .terminfo .shell.pre-oh-my-zsh \
+  bin/ansi-vte52.sh bin/emoji.js bin/set_gruvbox_colors.sh bin/terminal.sh \
+  bin/truecolortest.sh bin/terminal-colors.py
 

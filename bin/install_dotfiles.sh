@@ -5,7 +5,7 @@ sudo apt update
 sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
     mosh keychain neofetch zsh ncurses-bin apt-file \
-    sysstat net-tools dnsutils shellcheck || exit
+    unzip sysstat net-tools dnsutils shellcheck || exit
 
 source /etc/lsb-release
 if [[ "${DISTRIB_CODENAME}" == "focal" ]]; then
@@ -100,16 +100,25 @@ ln -s ../../.dotfiles/.tmux/plugins/tmux-plugin-cpu .
 "${HOME}/.tmux/plugins/tpm/bin/install_plugins"
 cd tmux-gruvbox || exit
 ln -sf ../../../.dotfiles/.tmux/plugins/tmux-gruvbox/tmux-gruvbox-dark.conf .
-cd "${HOME}" || exit
 
-echo "Installing Node Version Manager (nvm) and node"
-/bin/bash -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh)"
-export NVM_DIR="$HOME/.nvm"
-# shellcheck source=/dev/null
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm install 'lts/*' --latest-npm
+# echo "Installing Node Version Manager (nvm) and node"
+# cd "${HOME}" || exit
+# /bin/bash -c "$(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh)"
+# export NVM_DIR="$HOME/.nvm"
+# # shellcheck source=/dev/null
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# nvm install 'lts/*' --latest-npm
+
+echo "Installing the fast Node Manager (fnm) and node"
+cd "${HOME}" || exit
+curl -fsSL https://github.com/Schniz/fnm/raw/master/.ci/install.sh | bash -s -- --skip-shell
+ln -sf .dotfiles/.fnm.sh .
+source .fnm.sh
+fnm install 'lts/*'
+fnm default latest-erbium
 
 echo "Installing yarn"
+cd "${HOME}" || exit
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 sudo apt update && sudo apt install -y yarn
