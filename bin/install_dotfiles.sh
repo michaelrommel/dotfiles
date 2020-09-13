@@ -32,6 +32,13 @@ mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
 curl -OL https://github.com/sharkdp/fd/releases/download/v8.1.1/fd_8.1.1_amd64.deb
 sudo dpkg -i "${HOME}/software/archives/fd_8.1.1_amd64.deb"
 
+echo "Installing bat from github"
+# provides syntax highlighting pager
+cd "${HOME}" || exit
+mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
+curl -OL https://github.com/sharkdp/bat/releases/download/v0.15.4/bat_0.15.4_amd64.deb
+sudo dpkg -i "${HOME}/software/archives/bat_0.15.4_amd64.deb"
+
 echo "Installing fzf from github"
 # needs to come before zsh, as we are sourceing completion & keybindings there
 cd "${HOME}" || exit

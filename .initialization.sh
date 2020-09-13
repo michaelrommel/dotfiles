@@ -106,10 +106,15 @@ fi
 umask 022
 set -o vi
 
-# global aliases
+# global aliases and functions
 echo -n " • aliases"
 alias sha="shasum -a 256"
 alias icat="kitty +kitten icat"
+alias ff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+
+logtail () {
+  tail -f "$@" | bat --paging=never -l log
+}
 
 # load company / work specific aliases
 # shellcheck source=./.company_aliases.sh
