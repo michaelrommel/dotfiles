@@ -2,7 +2,7 @@
 
 export DEBUG=false
 
-echo -n "Initializing:"
+echo -n "Initializing"
 
 export PATH="${HOME}/bin":/usr/local/bin:$PATH
 export LANG="C.UTF-8"
@@ -111,7 +111,10 @@ echo -n " • aliases"
 alias sha="shasum -a 256"
 alias icat="kitty +kitten icat"
 alias ff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+# shellcheck disable=SC2139
 alias vff="${HOME}/bin/vff.sh"
+# shellcheck disable=SC2139
+alias bgr="${HOME}/.bat/src/batgrep.sh"
 
 logtail () {
   tail -f "$@" | bat --paging=never -l log

@@ -39,6 +39,10 @@ mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
 curl -OL https://github.com/sharkdp/bat/releases/download/v0.15.4/bat_0.15.4_amd64.deb
 sudo dpkg -i "${HOME}/software/archives/bat_0.15.4_amd64.deb"
 
+echo "Installing bat-extras from github"
+cd "${HOME}" || exit
+git clone --depth 1 https://github.com/eth-p/bat-extras.git" ${HOME}/.bat"
+
 echo "Installing fzf from github"
 # needs to come before zsh, as we are sourceing completion & keybindings there
 cd "${HOME}" || exit
