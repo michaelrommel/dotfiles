@@ -50,7 +50,8 @@ if [ "${FATHER}" = "mosh-server" ]; then
   unset SSH_AUTH_SOCK
   unset SSH_CLIENT
   unset SSH_CONNECTION
-  unset SSH_TTY
+  # leave TTY set, powerlevel10k uses it to determine context
+  #unset SSH_TTY
   unset FATHER
 fi
 
