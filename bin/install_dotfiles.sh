@@ -14,6 +14,14 @@ if [[ "${DISTRIB_CODENAME}" == "focal" ]]; then
 else
   # need to keep older version
   sudo apt install exuberant-ctags
+
+  # manually install ripgrep here
+  echo "Installing ripgrep from github"
+  # provides faster grep version, not available for Ubuntu 18.04
+  cd "${HOME}" || exit
+  mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
+  curl -OL https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
+  sudo dpkg -i "${HOME}/software/archives/ripgrep_12.1.1_amd64.deb"
 fi
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
