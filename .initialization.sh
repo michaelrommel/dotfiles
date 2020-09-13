@@ -22,6 +22,7 @@ export MOSH_ESCAPE_KEY='~'
 # check for mintty to override TERM variable
 TERMINAL=$( "${HOME}/bin/terminal.sh" -n )
 [[ "${TERMINAL}" == "mintty" ]] && export TERM=mintty
+[[ "${TERMINAL}" == "kitty" ]] && export TERM=xterm-kitty
 [[ "${TERMINAL}" == "linux" ]] && "${HOME}/bin/set_gruvbox_colors.sh"
 unset TERMINAL
 

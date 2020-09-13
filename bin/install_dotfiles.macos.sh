@@ -4,7 +4,7 @@ echo "Installing brew packages"
 brew install autoconf automake pkg-config \
     curl tmux vim neovim fzf ripgrep bat fd \
     mosh keychain neofetch zsh ncurses \
-    unzip sysstat shellcheck yarn || exit
+    unzip shellcheck yarn || exit
 
 echo "Installing bat-extras from github"
 cd "${HOME}" || exit
@@ -21,8 +21,8 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
 cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file
 ln -sf .dotfiles/.zshrc .
-ln -sf .dotfiles/.fzf.bash .
-ln -sf .dotfiles/.fzf.zsh .
+#ln -sf .dotfiles/.fzf.bash .
+#ln -sf .dotfiles/.fzf.zsh .
 ln -sf .dotfiles/.p10k.zsh .
 ln -sf .dotfiles/.less_colors.sh .
 ln -sf .dotfiles/.dir_colors.sh .
@@ -40,6 +40,9 @@ ln -sf ../.dotfiles/bin/terminal-colors.py .
 ln -sf ../.dotfiles/bin/emoji.js .
 ln -sf ../.dotfiles/bin/remove_stale_agents.sh .
 ln -sf ../.dotfiles/bin/vff.sh .
+
+echo "Configuring fzf"
+/usr/local/Cellar/fzf/0.22.0/install --no-update-rc --key-bindings --completion --no-fish
 
 echo "Creating current terminfo files"
 sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
@@ -62,7 +65,7 @@ ln -sf ../../../.dotfiles/.tmux/plugins/tmux-gruvbox/tmux-gruvbox-dark.conf .
 
 echo "Installing the fast Node Manager (fnm) and node"
 cd "${HOME}" || exit
-curl -fsSL https://github.com/Schniz/fnm/raw/master/.ci/install.sh | bash -s -- --skip-shell
+brew install Schniz/tap/fnm
 ln -sf .dotfiles/.fnm.sh .
 source .fnm.sh
 fnm install 'lts/*'
@@ -78,7 +81,7 @@ cd "${HOME}" || exit
 mkdir -p "${HOME}/.config/coc/extensions"
 cd "${HOME}/.config/coc/extensions" || exit
 ln -sf ../../../.dotfiles/.config/coc/extensions/package.json .
-npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod 
+npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 if [[ -d "./node_modules/coc-svelte" ]]; then
   cd "./node_modules/coc-svelte"
   npm install --save-dev typescript
