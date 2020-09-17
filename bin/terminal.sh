@@ -28,7 +28,7 @@ query () {
 
 terminaltype () {
 
-if [[ "$( tty )" =~ "tty" ]]; then
+if [[ "$( tty )" =~ "tty[0-9]" ]]; then
   # this is a linux console
   tt=0
   t=linux
