@@ -94,19 +94,15 @@ filetype plugin indent on
 filetype indent on
 filetype plugin on
 
-<<<<<<< HEAD
 let mapleader=","
-=======
-let mapleader="\\"
 if has("unix")
   let s:uname = system("uname -s")
   if s:uname =~ "Darwin"
     " override only on macos
-    let mapleader="¿"
+    let mapleader=","
   endif
 endif
 
->>>>>>> 9a8f0b7fac6d414b56ba984f94e2c8721c7b4562
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>t :Tags<CR>
 
