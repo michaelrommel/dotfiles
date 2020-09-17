@@ -94,9 +94,14 @@ filetype plugin indent on
 filetype indent on
 filetype plugin on
 
-let mapleader="\\"
+let mapleader=","
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>t :Tags<CR>
+
+" -----------------------------------------------------------------------------
+" disable sleuth-like polyglot extension, seems to revert expandtab too often
+" -----------------------------------------------------------------------------
+let g:polyglot_disabled = ['autoindent']
 
 " -----------------------------------------------------------------------------
 " Finding project root directories
