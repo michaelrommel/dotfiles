@@ -6,6 +6,11 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+" -----------------------------------------------------------------------------
+" disable sleuth-like polyglot extension, seems to revert expandtab too often
+" -----------------------------------------------------------------------------
+let g:polyglot_disabled = ['autoindent']
+
 call plug#begin('~/.vim/plugged')
 " Gruvbox theme.
 Plug 'gruvbox-community/gruvbox'
@@ -105,11 +110,6 @@ endif
 
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>t :Tags<CR>
-
-" -----------------------------------------------------------------------------
-" disable sleuth-like polyglot extension, seems to revert expandtab too often
-" -----------------------------------------------------------------------------
-let g:polyglot_disabled = ['autoindent']
 
 " -----------------------------------------------------------------------------
 " Finding project root directories
