@@ -100,14 +100,15 @@ echo "Configuring ssh"
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
 ln -sf ../.dotfiles/.ssh/config .
 
-echo "compiling and installing a current tmux version"
-mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
-git clone https://github.com/tmux/tmux.git
-cd "${HOME}/software/tmux" || exit
-git checkout 3.1b
-sh autogen.sh
-./configure && make
-sudo make install
+TMUX_VERSION=$(tmux -V)
+if [[ "${TMUX_VERSION}" != "tmux 3.1b" ]]; then
+  git clone https://github.com/tmux/tmux.git
+  cd "${HOME}/software/tmux" || exit
+  git checkout 3.1b
+  sh autogen.sh
+  ./configure && make
+  sudo make install
+fi
 
 echo "Configuring tmux plugins"
 cd "${HOME}" || exit

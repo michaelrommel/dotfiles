@@ -32,6 +32,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
+Plug 'habamax/vim-asciidoctor'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 " Linters
 Plug 'w0rp/ale'
@@ -117,10 +118,19 @@ nnoremap <leader>t :Tags<CR>
 let g:rooter_patterns = ['.git', 'package.json']
 
 " -----------------------------------------------------------------------------
+" Markdown / Asciidoc plugin configs
+" -----------------------------------------------------------------------------
+let g:vim_markdown_folding_disabled = 1
+
+" -----------------------------------------------------------------------------
 " Linting Engine
 " -----------------------------------------------------------------------------
 
+" let the languageserver be run by coc
 let g:ale_disable_lsp = 1
+" leave the gutter always open to avoid the flicker
+let g:ale_sign_column_always = 1
+
 au Filetype javascript set dictionary+=~/.vim/dict/node.dict
 " au FileType javascript let g:ale_linters = { 'javascript': glob('.eslintrc*', '.;') != '' ? [ 'eslint', 'flow' ] : [ 'semistandard', 'standard', 'flow' ] }
 
