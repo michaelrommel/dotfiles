@@ -32,6 +32,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tmux-plugins/vim-tmux'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
+Plug 'gyim/vim-boxdraw'
 Plug 'habamax/vim-asciidoctor'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 " Linters
@@ -87,6 +88,7 @@ set splitbelow
 set modeline
 set modelines=3
 set clipboard=unnamed
+set virtualedit=all
 
 highlight Comment cterm=italic
 
@@ -121,6 +123,9 @@ let g:rooter_patterns = ['.git', 'package.json']
 " Markdown / Asciidoc plugin configs
 " -----------------------------------------------------------------------------
 let g:vim_markdown_folding_disabled = 1
+let g:asciidoctor_extensions = ['asciidoctor-diagram']
+let g:asciidoctor_pdf_extensions = ['asciidoctor-diagram']
+let g:asciidoctor_fenced_languages = ['python', 'c', 'javascript']
 
 " -----------------------------------------------------------------------------
 " Linting Engine

@@ -4,7 +4,7 @@ export DEBUG=false
 
 echo -n "Initializing"
 
-export PATH="${HOME}/bin":/usr/local/bin:$PATH
+export PATH="${HOME}/bin":"${HOME}/go/bin":"$HOME/.cargo/bin:$PATH":/usr/local/bin:$PATH 
 export LANG="C.UTF-8"
 export LC_CTYPE="C.UTF-8"
 export LC_COLLATE="C.UTF-8"
