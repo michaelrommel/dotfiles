@@ -4,8 +4,9 @@ echo "Installing apt packages"
 sudo apt update
 sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
-    mosh keychain neofetch zsh ncurses-bin apt-file \
-    unzip sysstat net-tools dnsutils shellcheck || exit
+    mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
+    unzip sysstat net-tools dnsutils shellcheck asciidoctor python-is-python3 \
+    python3-pip || exit
 
 source /etc/lsb-release
 if [[ "${DISTRIB_CODENAME}" == "focal" ]]; then
@@ -14,7 +15,6 @@ if [[ "${DISTRIB_CODENAME}" == "focal" ]]; then
 else
   # need to keep older version
   sudo apt install exuberant-ctags
-
   # manually install ripgrep here
   echo "Installing ripgrep from github"
   # provides faster grep version, not available for Ubuntu 18.04
@@ -87,10 +87,11 @@ ln -sf ../.dotfiles/bin/terminal-colors.py .
 ln -sf ../.dotfiles/bin/emoji.js .
 ln -sf ../.dotfiles/bin/remove_stale_agents.sh .
 ln -sf ../.dotfiles/bin/vff.sh .
-
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install a shell script with npiperelay as ssh-agent
   ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
+  # install the wsltty configuration
+  cp ../.dotfiles/.wsltty.conf "/mnt/c/Users/${USER}/AppData/Roaming/wsltty/config"
 fi
 
 echo "Creating current terminfo files"
@@ -181,6 +182,14 @@ mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
 ln -sf ../../.dotfiles/.vim/coc-settings.json .
 ln -sf ../../.dotfiles/.vimrc init.vim
 nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+
+echo "Installing asciidoctor extensions"
+# for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
+sudo gem install asciidoctor-diagram
+sudo gem install asciidoctor-pdf
+curl https://sh.rustup.rs -sSf | sh
+export PATH="${HOME}/.cargo/bin:${PATH}"
+cargo install --version 0.4.2 svgbob_cli
 
 cd "${HOME}" || exit
 exec /usr/bin/zsh
