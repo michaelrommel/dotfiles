@@ -4,7 +4,8 @@ echo "Installing brew packages"
 brew install autoconf automake pkg-config \
     curl tmux vim neovim fzf ripgrep bat fd \
     mosh keychain neofetch zsh ncurses \
-    unzip shellcheck yarn || exit
+    coreutils unzip shellcheck yarn || exit
+brew cask install kitty
 
 echo "Installing bat-extras from github"
 cd "${HOME}" || exit
@@ -21,8 +22,6 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
 cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file
 ln -sf .dotfiles/.zshrc .
-#ln -sf .dotfiles/.fzf.bash .
-#ln -sf .dotfiles/.fzf.zsh .
 ln -sf .dotfiles/.p10k.zsh .
 ln -sf .dotfiles/.less_colors.sh .
 ln -sf .dotfiles/.dir_colors.sh .
@@ -42,7 +41,7 @@ ln -sf ../.dotfiles/bin/remove_stale_agents.sh .
 ln -sf ../.dotfiles/bin/vff.sh .
 
 echo "Configuring fzf"
-/usr/local/Cellar/fzf/0.22.0/install --no-update-rc --key-bindings --completion --no-fish
+/usr/local/Cellar/fzf/*/install --no-update-rc --key-bindings --completion --no-fish
 
 echo "Creating current terminfo files"
 sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
@@ -68,8 +67,8 @@ cd "${HOME}" || exit
 brew install Schniz/tap/fnm
 ln -sf .dotfiles/.fnm.sh .
 source .fnm.sh
-fnm install 'lts/*'
-fnm default latest-erbium
+fnm install 'v12.18.3'
+fnm default 'v12.18.3'
 
 echo "Configuring git"
 cd "${HOME}" || exit
@@ -106,5 +105,5 @@ ln -sf ../../.dotfiles/.vimrc init.vim
 nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
 
 cd "${HOME}" || exit
-exec /usr/bin/zsh
+exec /bin/zsh
 
