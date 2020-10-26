@@ -71,7 +71,7 @@ if [[ $RC == 1 || $RC == 2 ]]; then
   OSRELEASE=$( "${UNAME}" -r )
   if [[ "${OSNAME}" == "Darwin" ]]; then
     # on macOS: keychain has support to get the passphrase from the OS Keyring
-    ssh-add -AK ~/.ssh/id_ecdsa
+    ssh-add -q -AK ~/.ssh/id_ecdsa
     eval "$( keychain --eval --agents ssh --inherit any-once id_ecdsa )"
   elif [[ "${OSNAME}" == "Linux" ]]; then
     if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
