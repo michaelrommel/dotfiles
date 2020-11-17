@@ -12,4 +12,4 @@ if [[ "${OSNAME}" != "Darwin" ]]; then
   fi
 fi
 
-eval "$(fnm env --multi)"
+eval "$(fnm env)"

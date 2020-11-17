@@ -5,13 +5,13 @@ sudo apt update
 sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
     mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
-    unzip sysstat net-tools dnsutils shellcheck asciidoctor python-is-python3 \
+    unzip sysstat net-tools dnsutils shellcheck asciidoctor \
     python3-pip || exit
 
 source /etc/lsb-release
 if [[ "${DISTRIB_CODENAME}" == "focal" ]]; then
   # we do have newer packages
-  sudo apt install universal-ctags ripgrep
+  sudo apt install universal-ctags ripgrep python-is-python3
 else
   # need to keep older version
   sudo apt install exuberant-ctags
@@ -103,6 +103,7 @@ ln -sf ../.dotfiles/.ssh/config .
 
 TMUX_VERSION=$(tmux -V)
 if [[ "${TMUX_VERSION}" != "tmux 3.1b" ]]; then
+  cd "${HOME}" || exit
   git clone https://github.com/tmux/tmux.git
   cd "${HOME}/software/tmux" || exit
   git checkout 3.1b
@@ -137,7 +138,7 @@ curl -fsSL https://github.com/Schniz/fnm/raw/master/.ci/install.sh | bash -s -- 
 ln -sf .dotfiles/.fnm.sh .
 source .fnm.sh
 fnm install 'lts/*'
-fnm default latest-erbium
+fnm default lts-latest
 
 echo "Installing yarn"
 cd "${HOME}" || exit
