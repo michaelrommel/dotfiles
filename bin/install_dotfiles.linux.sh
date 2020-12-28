@@ -44,8 +44,8 @@ echo "Installing bat from github"
 # provides syntax highlighting pager
 cd "${HOME}" || exit
 mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
-curl -OL https://github.com/sharkdp/bat/releases/download/v0.15.4/bat_0.15.4_amd64.deb
-sudo dpkg -i "${HOME}/software/archives/bat_0.15.4_amd64.deb"
+curl -OL https://github.com/sharkdp/bat/releases/download/v0.17.1/bat_0.17.1_amd64.deb
+sudo dpkg -i "${HOME}/software/archives/bat_0.17.1_amd64.deb"
 
 echo "Installing bat-extras from github"
 cd "${HOME}" || exit

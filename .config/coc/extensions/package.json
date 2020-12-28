@@ -7,6 +7,6 @@
     "coc-snippets": ">=2.2.1",
     "coc-svelte": ">=0.1.1",
     "coc-tailwindcss": ">=0.7.0",
-    "coc-tsserver": ">=1.5.7"
+    "coc-tsserver": ">=1.5.8"
   }
 }
