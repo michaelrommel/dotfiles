@@ -24,6 +24,8 @@ Plug 'airblade/vim-rooter'
 Plug 'junegunn/limelight.vim'
 " Distraction free writing by removing UI elements and centering everything.
 Plug 'junegunn/goyo.vim'
+Plug 'reedes/vim-pencil'
+Plug 'bling/vim-airline'
 " File Types and Languages
 " Syntax Highlighting etc for many languates
 Plug 'sheerun/vim-polyglot'
@@ -65,9 +67,15 @@ if exists('+termguicolors')
   " set termguicolors
 endif
 
+let g:limelight_conceal_ctermfg = 'DarkGray'
+
 " -----------------------------------------------------------------------------
 " Misc settings
 " -----------------------------------------------------------------------------
+filetype plugin indent on
+filetype indent on
+filetype plugin on
+
 exec "set listchars=tab:\uBB\uBB,trail:\uB7,nbsp:~"
 set list
 set laststatus=2
@@ -98,10 +106,6 @@ highlight Comment cterm=italic
 "syntax match lteq "<=" conceal cchar=≤
 "setlocal conceallevel=1
 
-filetype plugin indent on
-filetype indent on
-filetype plugin on
-
 let mapleader=","
 if has("unix")
   let s:uname = system("uname -s")
@@ -120,12 +124,39 @@ nnoremap <leader>t :Tags<CR>
 let g:rooter_patterns = ['.git', 'package.json']
 
 " -----------------------------------------------------------------------------
-" Markdown / Asciidoc plugin configs
+" Markdown / Asciidoc / Writing plugin configs
 " -----------------------------------------------------------------------------
 let g:vim_markdown_folding_disabled = 1
 let g:asciidoctor_extensions = ['asciidoctor-diagram']
 let g:asciidoctor_pdf_extensions = ['asciidoctor-diagram']
 let g:asciidoctor_fenced_languages = ['python', 'c', 'javascript']
+
+let g:goyo_width = '85'
+let g:goyo_height = '90%'
+let g:limelight_paragraph_span = 1
+
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.maxlinenr = ''
+let g:airline_skip_empty_sections = 1
+call airline#parts#define_function('pencil', 'PencilMode')
+let g:airline_section_x = airline#section#create(['filetype', 'ale_error_count', ' ', 'pencil'])
+
+function! Prose()
+  call pencil#init({'wrap': 'hard'})
+  set list
+endfunction
+
+augroup pencil
+  autocmd!
+  autocmd FileType markdown,mkd,asciidoc,asciidoctor call Prose()
+  autocmd FileType text                              call Prose()
+augroup END
+
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
 
 " -----------------------------------------------------------------------------
 " Linting Engine
@@ -135,6 +166,17 @@ let g:asciidoctor_fenced_languages = ['python', 'c', 'javascript']
 let g:ale_disable_lsp = 1
 " leave the gutter always open to avoid the flicker
 let g:ale_sign_column_always = 1
+" on WSL always running the linter is too slow
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+" set to 0 to do not run linters on opening a file
+let g:ale_lint_on_enter = 0
+" set alex to run as globally installed command
+" let g:ale_alex_use_global = 1
+" let g:ale_alex_executable = '/tmp/fnm-shell-4391500/bin/alex'
+" let g:ale_use_global_executables = 1
+" au FileType asciidoctor let g:ale_linters = { 'asciidoctor': [ 'alex' ] }
+" au FileType asciidoc let g:ale_linters = { 'asciidoctor': [ 'alex' ] }
 
 au Filetype javascript set dictionary+=~/.vim/dict/node.dict
 " au FileType javascript let g:ale_linters = { 'javascript': glob('.eslintrc*', '.;') != '' ? [ 'eslint', 'flow' ] : [ 'semistandard', 'standard', 'flow' ] }
