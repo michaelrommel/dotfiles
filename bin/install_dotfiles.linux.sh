@@ -103,7 +103,7 @@ ln -sf ../.dotfiles/.ssh/config .
 
 TMUX_VERSION=$(tmux -V)
 if [[ "${TMUX_VERSION}" != "tmux 3.1b" ]]; then
-  cd "${HOME}" || exit
+  mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
   git clone https://github.com/tmux/tmux.git
   cd "${HOME}/software/tmux" || exit
   git checkout 3.1b
