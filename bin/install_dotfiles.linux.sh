@@ -6,7 +6,7 @@ sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
     mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
     unzip sysstat net-tools dnsutils shellcheck asciidoctor \
-    python3-pip || exit
+    python3-pip software-properties-common || exit
 
 source /etc/lsb-release
 if [[ "${DISTRIB_CODENAME}" == "focal" ]]; then
@@ -188,7 +188,7 @@ echo "Installing asciidoctor extensions"
 # for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
 sudo gem install asciidoctor-diagram
 sudo gem install asciidoctor-pdf
-curl https://sh.rustup.rs -sSf | sh
+curl https://sh.rustup.rs -sSf | sh -s -- -y
 export PATH="${HOME}/.cargo/bin:${PATH}"
 cargo install --version 0.4.2 svgbob_cli
 
