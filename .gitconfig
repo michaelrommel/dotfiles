@@ -45,4 +45,4 @@
 [init]
         templatedir = ~/.git_template
 [gitflow "branch"]
-	master = main
+        master = main
