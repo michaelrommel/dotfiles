@@ -3,7 +3,7 @@
 echo "Installing apt packages"
 sudo apt update
 sudo apt install -y build-essential autoconf automake pkg-config \
-    libevent-dev libncurses5-dev bison byacc curl tmux git vim \
+    libevent-dev libncurses5-dev bison byacc curl tmux git git-flow vim \
     mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
     unzip sysstat net-tools dnsutils shellcheck asciidoctor \
     python3-pip software-properties-common || exit
@@ -62,8 +62,12 @@ cd "${HOME}" || exit
 sh -c "$(curl -fsSL \
   https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) \
   --unattended"
+echo "Installing powerlevel10k for zsh"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+echo "Installing git-completion for zsh"
+git clone https://github.com/bobthecow/git-flow-completion \
+    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/git-flow-completion"
 
 cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file

@@ -4,7 +4,7 @@ echo "Installing brew packages"
 brew install autoconf automake pkg-config \
     curl tmux vim neovim fzf ripgrep bat fd \
     mosh keychain neofetch zsh ncurses \
-    coreutils unzip shellcheck yarn || exit
+    coreutils unzip shellcheck git-flow yarn || exit
 brew cask install kitty
 
 echo "Installing bat-extras from github"
@@ -16,8 +16,12 @@ cd "${HOME}" || exit
 sh -c "$(curl -fsSL \
   https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) \
   --unattended"
+echo "Installing powerlevel10k for zsh"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+echo "Installing git-completion for zsh"
+git clone https://github.com/bobthecow/git-flow-completion \
+    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/git-flow-completion"
 
 cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file
