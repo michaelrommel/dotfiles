@@ -112,6 +112,7 @@ echo -n " • aliases"
 alias sha="shasum -a 256"
 alias icat="kitty +kitten icat"
 alias ff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+alias lr='ls -lahtr'
 # shellcheck disable=SC2139
 alias vff="${HOME}/bin/vff.sh"
 # shellcheck disable=SC2139
