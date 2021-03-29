@@ -74,7 +74,8 @@ case "$1" in
   96)  t=mlterm;;
   304)  t=VT241/VT382;;
   1115)  t=gnome-terminal;;
-  4000)  t=kitty;;
+  #4000)  t=kitty;;
+  4000)  t=xterm-256color;;
   esac
   ;;
 2)  t=VT240;;
