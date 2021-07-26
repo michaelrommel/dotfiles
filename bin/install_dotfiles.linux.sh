@@ -6,7 +6,9 @@ sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git git-flow vim \
     mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
     unzip sysstat net-tools dnsutils shellcheck asciidoctor \
-    python3-pip universal-ctags software-properties-common || exit
+    python3-pip universal-ctags software-properties-common \
+    bc dh-autoreconf libcurl4-gnutls-dev libexpat1-dev \
+    gettext libz-dev libssl-dev install-info  || exit
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
@@ -88,13 +90,13 @@ if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # install the wsltty configuration
   cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
   cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
-  cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/
-  mkdir -p emoji/.git/info; cd emoji
+  cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/ || exit
+  mkdir -p emojis/.git/info; cd emojis || exit
   git init
   git remote add origin https://github.com/iamcal/emoji-data.git
   git config core.sparsecheckout true
   echo img-apple-64 >>.git/info/sparse-checkout
-  git pull origin master
+  git pull --depth=1 origin master
   mv img-apple-64 apple
 fi
 
@@ -107,8 +109,31 @@ cd "${HOME}" || exit
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
 ln -sf ../.dotfiles/.ssh/config .
 
+GIT_VERSION=$(git --version |sed -e 's/git version \([0-9]*\.[0-9]*\)\..*/\1/')
+if (( $(echo "${GIT_VERSION} < 2.26" | bc -l) )); then
+  # echo "Building git"
+  # cd "${HOME}" || exit
+  # mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
+  # git clone git://git.kernel.org/pub/scm/git/git.git
+  # sudo apt remove -y git
+  # cd git || exit
+  # make configure
+  # ./configure --prefix=/usr
+  # make all info
+  # sudo make install install-info
+  source /etc/os-release
+  if [[ ${VERSION_CODENAME} == "buster" ]]; then
+    echo "Adding buster backports"
+    echo "deb http://deb.debian.org/debian buster-backports main" \
+      | sudo tee /etc/apt/sources.list.d/buster-backports.list
+    sudo apt update
+    sudo apt install -y -t buster-backports git
+  fi
+fi
+
 TMUX_VERSION=$(tmux -V)
 if [[ "${TMUX_VERSION}" != "tmux 3.1b" ]]; then
+  echo "Building tmux"
   mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
   git clone https://github.com/tmux/tmux.git
   cd "${HOME}/software/tmux" || exit
@@ -163,9 +188,9 @@ cd "${HOME}" || exit
 mkdir -p "${HOME}/.config/coc/extensions"
 cd "${HOME}/.config/coc/extensions" || exit
 ln -sf ../../../.dotfiles/.config/coc/extensions/package.json .
-npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod 
+npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 if [[ -d "./node_modules/coc-svelte" ]]; then
-  cd "./node_modules/coc-svelte"
+  cd "./node_modules/coc-svelte" || exit
   npm install --save-dev typescript
 fi
 

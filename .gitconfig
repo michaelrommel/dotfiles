@@ -15,7 +15,7 @@
         wtf     = !$ZSH/bin/git-wtf
         rank-contributors = !$ZSH/bin/git-rank-contributors
         count   = !git shortlog -sn
-	ctags = !.git/hooks/ctags
+        ctags = !.git/hooks/ctags
 [color]
         diff = auto
         status = auto
