@@ -16,7 +16,7 @@ rm -f $SSH_AUTH_SOCK
 # the spawned command, otherwise calling this script in a subshell
 # will hang the calling process
 setsid socat UNIX-LISTEN:$SSH_AUTH_SOCK,umask=007,fork \
-    EXEC:"/mnt/d/ProgramFiles/npiperelay/npiperelay.exe -ei -s \
+    EXEC:"/mnt/c/ProgramFiles/npiperelay/npiperelay.exe -ei -s \
     -v //./pipe/openssh-ssh-agent",nofork >/dev/null 2>&1 &
 SSH_AGENT_PID=$!
 

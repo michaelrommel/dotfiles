@@ -6,23 +6,7 @@ sudo apt install -y build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git git-flow vim \
     mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
     unzip sysstat net-tools dnsutils shellcheck asciidoctor \
-    python3-pip software-properties-common || exit
-
-source /etc/lsb-release
-if [[ "${DISTRIB_CODENAME}" == "focal" ]]; then
-  # we do have newer packages
-  sudo apt install universal-ctags ripgrep python-is-python3
-else
-  # need to keep older version
-  sudo apt install exuberant-ctags
-  # manually install ripgrep here
-  echo "Installing ripgrep from github"
-  # provides faster grep version, not available for Ubuntu 18.04
-  cd "${HOME}" || exit
-  mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
-  curl -OL https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
-  sudo dpkg -i "${HOME}/software/archives/ripgrep_12.1.1_amd64.deb"
-fi
+    python3-pip universal-ctags software-properties-common || exit
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
@@ -32,6 +16,12 @@ if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install golang to be able to compile npiperelay
   sudo apt install golang socat
 fi
+
+echo "Installing ripgrep from github"
+cd "${HOME}" || exit
+mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
+curl -OL https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
+sudo dpkg -i "${HOME}/software/archives/ripgrep_12.1.1_amd64.deb"
 
 echo "Installing fd from github"
 # provides faster find version, not available for Ubuntu 18.04
@@ -96,13 +86,24 @@ if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install a shell script with npiperelay as ssh-agent
   ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
   # install the wsltty configuration
-  cp ../.dotfiles/.wsltty.conf "/mnt/c/Users/${USER}/AppData/Roaming/wsltty/config"
+  cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
+  cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
+  cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/
+  mkdir -p emoji/.git/info; cd emoji
+  git init
+  git remote add origin https://github.com/iamcal/emoji-data.git
+  git config core.sparsecheckout true
+  echo img-apple-64 >>.git/info/sparse-checkout
+  git pull origin master
+  mv img-apple-64 apple
 fi
 
 echo "Creating current terminfo files"
+cd "${HOME}" || exit
 sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
 
 echo "Configuring ssh"
+cd "${HOME}" || exit
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
 ln -sf ../.dotfiles/.ssh/config .
 
@@ -147,9 +148,10 @@ fnm default lts-latest
 
 echo "Installing yarn"
 cd "${HOME}" || exit
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt update && sudo apt install -y yarn
+npm install --global yarn
+# curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+# echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+# sudo apt update && sudo apt install -y yarn
 
 echo "Configuring git"
 cd "${HOME}" || exit
@@ -177,17 +179,17 @@ cd "${HOME}/.vim" || exit
 ln -sf ../.dotfiles/.vim/coc-settings.json .
 vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
-echo "Updating neovim"
-sudo add-apt-repository -y ppa:neovim-ppa/stable
-sudo apt install -y neovim
-
-echo "Installing neovim configurations"
-curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
-    "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
-ln -sf ../../.dotfiles/.vim/coc-settings.json .
-ln -sf ../../.dotfiles/.vimrc init.vim
-nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+# echo "Updating neovim"
+# sudo add-apt-repository -y ppa:neovim-ppa/stable
+# sudo apt install -y neovim
+#
+# echo "Installing neovim configurations"
+# curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
+#     "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+# mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
+# ln -sf ../../.dotfiles/.vim/coc-settings.json .
+# ln -sf ../../.dotfiles/.vimrc init.vim
+# nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
 
 echo "Installing asciidoctor extensions"
 # for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
@@ -198,5 +200,6 @@ export PATH="${HOME}/.cargo/bin:${PATH}"
 cargo install --version 0.4.2 svgbob_cli
 
 cd "${HOME}" || exit
+chsh -s /usr/bin/zsh
 exec /usr/bin/zsh
 
