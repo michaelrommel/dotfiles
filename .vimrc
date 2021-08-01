@@ -17,15 +17,18 @@ Plug 'gruvbox-community/gruvbox'
 " Integrate fzf with Vim.
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'jesseleite/vim-agriculture'
 Plug 'airblade/vim-rooter'
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
 "Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
 " Dim paragraphs above and below the active paragraph.
 Plug 'junegunn/limelight.vim'
 " Distraction free writing by removing UI elements and centering everything.
 Plug 'junegunn/goyo.vim'
 Plug 'reedes/vim-pencil'
 Plug 'bling/vim-airline'
+Plug 'vim-ctrlspace/vim-ctrlspace'
 " File Types and Languages
 " Syntax Highlighting etc for many languates
 Plug 'sheerun/vim-polyglot'
@@ -41,6 +44,8 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 Plug 'w0rp/ale'
 " Completion Engine, release branch
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'takac/vim-hardtime'
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 " -----------------------------------------------------------------------------
@@ -86,8 +91,13 @@ set autoindent
 set cindent
 set backspace=indent,eol,start
 set showmatch
+set number
+set relativenumber
+set hlsearch
 set expandtab
 set smarttab
+set hidden
+set showtabline=0
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
@@ -97,6 +107,7 @@ set modeline
 set modelines=3
 set clipboard=unnamed
 set virtualedit=all
+set foldmethod=marker
 
 highlight Comment cterm=italic
 
@@ -131,28 +142,43 @@ let g:asciidoctor_extensions = ['asciidoctor-diagram']
 let g:asciidoctor_pdf_extensions = ['asciidoctor-diagram']
 let g:asciidoctor_fenced_languages = ['python', 'c', 'javascript']
 
+let g:mkdp_auto_close = 0
+let g:mkdp_open_to_the_world = 1
+" let g:mkdp_open_ip = '192.168.140.18'
+let g:mkdp_port = '5001'
+let g:mkdp_markdown_css = ''
+let g:mkdp_highlight_css = ''
+let g:mkdp_page_title = ' '
+
 let g:goyo_width = '85'
 let g:goyo_height = '90%'
 let g:limelight_paragraph_span = 1
+
+let g:hardtime_default_on = 1
+let g:hardtime_showmsg = 1
+let g:hardtime_ignore_buffer_patterns = [ "NERD.*" ]
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
+let g:hardtime_maxcount = 2
 
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
 endif
+" let g:airline#extensions#tabline#enabled = 1
 let g:airline_symbols.maxlinenr = ''
 let g:airline_skip_empty_sections = 1
 call airline#parts#define_function('pencil', 'PencilMode')
 let g:airline_section_x = airline#section#create(['filetype', 'ale_error_count', ' ', 'pencil'])
 
 function! Prose()
-  call pencil#init({'wrap': 'hard'})
+  call pencil#init({'wrap': 'hard', 'autoformat': 1})
   set list
 endfunction
 
 augroup pencil
   autocmd!
   autocmd FileType markdown,mkd,asciidoc,asciidoctor call Prose()
-  autocmd FileType text                              call Prose()
 augroup END
 
 autocmd! User GoyoEnter Limelight
