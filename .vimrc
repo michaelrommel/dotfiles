@@ -148,7 +148,11 @@ let g:mkdp_open_to_the_world = 1
 let g:mkdp_port = '5001'
 let g:mkdp_markdown_css = ''
 let g:mkdp_highlight_css = ''
-let g:mkdp_page_title = ' '
+let g:mkdp_page_title = '-'
+function! g:OpenBrowser(url)
+  silent exe '!lemonade open 'a:url
+endfunction
+let g:mkdp_browserfunc = 'g:OpenBrowser'
 
 let g:goyo_width = '85'
 let g:goyo_height = '90%'
