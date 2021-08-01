@@ -19,6 +19,7 @@ export LC_COLLATE="C.UTF-8"
 export LC_TIME="C.UTF-8"
 export EDITOR=vim
 export MOSH_ESCAPE_KEY='~'
+export GPG_TTY=$(tty)
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
@@ -125,6 +126,7 @@ alias lr='ls -lahtr'
 alias vff="${HOME}/bin/vff.sh"
 # shellcheck disable=SC2139
 alias bgr="${HOME}/.bat/src/batgrep.sh"
+alias gll='git log --graph --pretty=oneline --abbrev-commit'
 
 logtail () {
   tail -f "$@" | bat --paging=never -l log
@@ -136,4 +138,3 @@ logtail () {
 
 # reset initialization lines (formatting and clear line, cursor to 1st col
 echo -n -e '\e[1G\e[2K\e[0m'
-
