@@ -218,13 +218,16 @@ vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
 echo "Installing asciidoctor extensions"
 # for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
-sudo gem install asciidoctor-diagram
-sudo gem install asciidoctor-pdf
+if [[ "${http_proxy}" !== "" ]]; then
+  OPTS=" --http-proxy ${http_proxy}"
+fi
+sudo gem install ${OPTS} asciidoctor-diagram
+sudo gem install ${OPTS} asciidoctor-pdf
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 export PATH="${HOME}/.cargo/bin:${PATH}"
 cargo install --version 0.4.2 svgbob_cli
 
 cd "${HOME}" || exit
-chsh -s /usr/bin/zsh
+sudo chsh -s /usr/bin/zsh rommel
 exec /usr/bin/zsh
 
