@@ -138,9 +138,11 @@ let g:rooter_patterns = ['.git', 'package.json']
 " Markdown / Asciidoc / Writing plugin configs
 " -----------------------------------------------------------------------------
 let g:vim_markdown_folding_disabled = 1
-let g:asciidoctor_extensions = ['asciidoctor-diagram']
-let g:asciidoctor_pdf_extensions = ['asciidoctor-diagram']
+"let g:asciidoctor_extensions = ['asciidoctor-diagram']
+"let g:asciidoctor_pdf_extensions = ['asciidoctor-diagram']
 let g:asciidoctor_fenced_languages = ['python', 'c', 'javascript']
+nmap <F9> :Asciidoctor2HTML<CR><CR>
+imap <F9> :Asciidoctor2HTML<CR><CR>
 
 let g:mkdp_auto_close = 0
 let g:mkdp_open_to_the_world = 1
@@ -150,7 +152,7 @@ let g:mkdp_markdown_css = ''
 let g:mkdp_highlight_css = ''
 " let g:mkdp_page_title = '-'
 function! g:OpenBrowser(url)
-  silent exe '!lemonade open 'a:url
+  silent exe '!lemonade open 'a:url | redraw!
 endfunction
 let g:mkdp_browserfunc = 'g:OpenBrowser'
 " let g:mkdp_filetypes = ['markdown', 'asciidoc', 'asciidoctor']
