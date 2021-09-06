@@ -8,7 +8,7 @@ sudo apt install -y build-essential autoconf automake pkg-config \
     unzip sysstat net-tools dnsutils shellcheck asciidoctor \
     python3-pip universal-ctags software-properties-common \
     bc dh-autoreconf libcurl4-gnutls-dev libexpat1-dev \
-    gettext libz-dev libssl-dev install-info  || exit
+    gawk gettext libz-dev libssl-dev install-info  || exit
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
