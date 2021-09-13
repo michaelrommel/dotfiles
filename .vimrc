@@ -174,7 +174,17 @@ if system('uname -a | egrep "[Mm]icrosoft"') != ''
     autocmd TextYankPost * if v:event.operator == 'y' | let g:miroyankbuffer = deepcopy(v:event.regcontents) | call YankDebounced() | let g:lastyank='y' | else | let g:lastyank='' | endif
 
     function! Yank(timer)
-      call system('echo '.shellescape(join(g:miroyankbuffer, "\<CR>")).' | /mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf')
+      if system('uname -a | egrep "[Mm]icrosoft"') != ''
+        " only do this on Windows
+        if exists('$DISPLAY') && executable('xclip')
+          call system('echo '.shellescape(join(g:miroyankbuffer, "\<CR>")).' | xclip -i -selection clipboard')
+        else
+          call system('echo '.shellescape(join(g:miroyankbuffer, "\<CR>")).' | /mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf')
+        endif
+      else
+        " on Linux
+        call system('echo '.shellescape(join(g:miroyankbuffer, "\<CR>")).' | xclip -i -selection clipboard')
+      endif
       redraw!
     endfunction
 
@@ -192,7 +202,7 @@ if system('uname -a | egrep "[Mm]icrosoft"') != ''
   augroup END
   function! Paste(mode)
      if g:lastyank == 'y'
-       let @" = system('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -o --lf')
+       let @" = system('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -o ')
      endif
      return a:mode
   endfunction
