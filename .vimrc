@@ -171,19 +171,21 @@ if system('uname -a | egrep "[Mm]icrosoft"') != ''
     autocmd!
     " This function copies the yanked text into the system clipboard on
     " Windows
-    autocmd TextYankPost * if v:event.operator == 'y' | let g:miroyankbuffer = deepcopy(v:event.regcontents) | call YankDebounced() | let g:lastyank='' | else | let g:lastyank='' | endif
+    autocmd TextYankPost * if v:event.operator == 'y' | let g:systemyankbuffer = deepcopy(v:event.regcontents) | call YankDebounced() | let g:lastyank='' | else | let g:lastyank='' | endif
 
     function! Yank(timer)
       if system('uname -a | egrep "[Mm]icrosoft"') != ''
         " only do this on Windows
         if exists('$DISPLAY') && executable('xclip')
-          call system('echo '.shellescape(join(g:miroyankbuffer, "\<CR>")).' | xclip -i -selection clipboard')
+          call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | xclip -i -selection clipboard')
+        elseif (! exists('$DISPLAY')) && executable('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe')
+          call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | /mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf')
         else
-          call system('echo '.shellescape(join(g:miroyankbuffer, "\<CR>")).' | /mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf')
+          call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | /mnt/c/Windows/System32/clip.exe')
         endif
       else
         " on Linux
-        call system('echo '.shellescape(join(g:miroyankbuffer, "\<CR>")).' | xclip -i -selection clipboard')
+        call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | xclip -i -selection clipboard')
       endif
       let g:lastyank='y'
       redraw!
@@ -205,8 +207,10 @@ if system('uname -a | egrep "[Mm]icrosoft"') != ''
      if g:lastyank == 'y'
         if exists('$DISPLAY') && executable('xclip')
           let @" = system('xclip -o -selection clipboard')
-        else
+        elseif (! exists('$DISPLAY')) && executable('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe')
           let @" = system('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -o --lf')
+        else
+          let @" = system("powershell.exe Get-Clipboard | sed -e 's/\r$//'")
         endif
      endif
      return a:mode
