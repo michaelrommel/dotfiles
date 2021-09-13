@@ -11,6 +11,7 @@ endif
 " -----------------------------------------------------------------------------
 let g:polyglot_disabled = ['autoindent']
 
+" Gruvbox theme.
 call plug#begin('~/.vim/plugged')
 " Gruvbox theme.
 Plug 'gruvbox-community/gruvbox'
@@ -29,6 +30,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'reedes/vim-pencil'
 Plug 'bling/vim-airline'
 Plug 'vim-ctrlspace/vim-ctrlspace'
+Plug 'preservim/vim-wheel'
 " File Types and Languages
 " Syntax Highlighting etc for many languates
 Plug 'sheerun/vim-polyglot'
@@ -128,6 +130,83 @@ endif
 
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>t :Tags<CR>
+
+" -----------------------------------------------------------------------------
+" EXPERIMENTS
+" -----------------------------------------------------------------------------
+set mouse=n
+
+" WSL yank support
+" let s:clip = '/mnt/c/Windows/System32/clip.exe'
+" if executable(s:clip)
+"   augroup WSLYank
+"     autocmd!
+"     autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
+"   augroup END
+" endif
+
+" set clipboard+=unnamedplus
+" let g:clipboard = {
+"           \   'name': 'win32yank-wsl',
+"           \   'copy': {
+"           \      '+': '/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf',
+"           \      '*': '/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf',
+"           \    },
+"           \   'paste': {
+"           \      '+': '/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -o --lf',
+"           \      '*': '/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -o --lf',
+"           \   },
+"           \   'cache_enabled': 0,
+"           \ }
+
+"set clipboard=unnamedplus
+"autocmd TextYankPost * call system('echo '.shellescape(join(v:event.regcontents, "\<CR>")).' | /mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf')
+
+set clipboard=unnamedplus
+if system('uname -a | egrep "[Mm]icrosoft"') != ''
+  " only do this on Windows
+  let g:lastyank = 'y'
+  augroup myYank
+    " remove all other autommands in this group, allow for multiple loadings
+    autocmd!
+    " This function copies the yanked text into the system clipboard on
+    " Windows
+    autocmd TextYankPost * if v:event.operator == 'y' | let g:miroyankbuffer = deepcopy(v:event.regcontents) | call YankDebounced() | let g:lastyank='y' | else | let g:lastyank='' | endif
+
+    function! Yank(timer)
+      call system('echo '.shellescape(join(g:miroyankbuffer, "\<CR>")).' | /mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf')
+      redraw!
+    endfunction
+
+    " set the time, after which only the last yank will be put in the
+    " clipboard, since this is an expensive call
+    let g:yank_debounce_time_ms = 1000
+    let g:yank_debounce_timer_id = -1
+
+    function! YankDebounced()
+      let l:now = localtime()
+      call timer_stop(g:yank_debounce_timer_id)
+      let g:yank_debounce_timer_id = timer_start(g:yank_debounce_time_ms, 'Yank')
+    endfunction
+
+  augroup END
+  function! Paste(mode)
+     if g:lastyank == 'y'
+       let @" = system('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -o --lf')
+     endif
+     return a:mode
+  endfunction
+  map <expr> p Paste('p')
+  map <expr> P Paste('P')
+  " map Ctrl-c and Ctrl-x as expected
+  " func! GetSelectedText()
+  "   normal gv"xy
+  "   let result = getreg("x")
+  "   return result
+  " endfunc
+  " noremap <C-c> :call system(g:copy, GetSelectedText())<CR>
+  " noremap <C-x> :call system(g:copy, GetSelectedText())<CR>gvx
+endif
 
 " -----------------------------------------------------------------------------
 " Finding project root directories
