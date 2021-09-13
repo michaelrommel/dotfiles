@@ -162,7 +162,7 @@ set mouse=n
 "set clipboard=unnamedplus
 "autocmd TextYankPost * call system('echo '.shellescape(join(v:event.regcontents, "\<CR>")).' | /mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf')
 
-set clipboard=unnamedplus
+"set clipboard=unnamedplus
 if system('uname -a | egrep "[Mm]icrosoft"') != ''
   " only do this on Windows
   let g:lastyank = 'y'
@@ -211,8 +211,8 @@ if system('uname -a | egrep "[Mm]icrosoft"') != ''
      endif
      return a:mode
   endfunction
-  map <expr> p Paste('p')
-  map <expr> P Paste('P')
+  "map <expr> p Paste('p')
+  map <expr> <C-p> Paste('P')
   " map Ctrl-c and Ctrl-x as expected
   " func! GetSelectedText()
   "   normal gv"xy
