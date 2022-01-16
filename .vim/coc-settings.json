@@ -13,5 +13,6 @@
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck"
   },
-  "diagnostic.displayByAle": true
+  "diagnostic.displayByAle": true,
+  "svelte.enable-ts-plugin": true
 }
