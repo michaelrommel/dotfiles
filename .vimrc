@@ -15,10 +15,12 @@ let g:polyglot_disabled = ['autoindent']
 call plug#begin('~/.vim/plugged')
 " Gruvbox theme.
 Plug 'gruvbox-community/gruvbox'
-" Integrate fzf with Vim.
+Plug 'guns/xterm-color-table.vim'
+" Project tree management
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'jesseleite/vim-agriculture'
+Plug 'lambdalisue/fern.vim'
 Plug 'airblade/vim-rooter'
 " Automatically set 'shiftwidth' + 'expandtab' (indention) based on file type.
 "Plug 'tpope/vim-sleuth'
@@ -30,7 +32,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'reedes/vim-pencil'
 Plug 'bling/vim-airline'
 Plug 'vim-ctrlspace/vim-ctrlspace'
-Plug 'preservim/vim-wheel'
+" Plug 'preservim/vim-wheel'
 " File Types and Languages
 " Syntax Highlighting etc for many languates
 Plug 'sheerun/vim-polyglot'
@@ -43,7 +45,7 @@ Plug 'gyim/vim-boxdraw'
 Plug 'habamax/vim-asciidoctor'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 " Linters
-Plug 'w0rp/ale'
+Plug 'dense-analysis/ale'
 " Completion Engine, release branch
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'takac/vim-hardtime'
@@ -63,6 +65,7 @@ silent! colorscheme gruvbox
 set background=dark
 " Gruvbox has 'hard', 'medium' (default) and 'soft' contrast options.
 let g:gruvbox_contrast_light='medium'
+let g:gruvbox_contrast_dark='hard'
 " This needs to come last, otherwise the colors aren't correct.
 syntax on
 
@@ -176,8 +179,8 @@ if system('uname -a | egrep "[Mm]icrosoft"') != ''
     function! Yank(timer)
       if system('uname -a | egrep "[Mm]icrosoft"') != ''
         " only do this on Windows
-        if exists('$DISPLAY') && executable('xclip')
-          call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | xclip -i -selection clipboard')
+        if exists('$DISPLAY') && executable('xsel')
+          call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | xsel -bi')
         elseif (! exists('$DISPLAY')) && executable('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe')
           call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | /mnt/c/ProgramFiles/Win32Yank/win32yank.exe -i --crlf')
         else
@@ -185,7 +188,7 @@ if system('uname -a | egrep "[Mm]icrosoft"') != ''
         endif
       else
         " on Linux
-        call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | xclip -i -selection clipboard')
+        call system('echo '.shellescape(join(g:systemyankbuffer, "\<CR>")).' | xsel -bi')
       endif
       let g:lastyank='y'
       redraw!
@@ -205,8 +208,8 @@ if system('uname -a | egrep "[Mm]icrosoft"') != ''
   augroup END
   function! Paste(mode)
      if g:lastyank == 'y'
-        if exists('$DISPLAY') && executable('xclip')
-          let @" = system('xclip -o -selection clipboard')
+        if exists('$DISPLAY') && executable('xsel')
+          let @" = system('xsel -bo')
         elseif (! exists('$DISPLAY')) && executable('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe')
           let @" = system('/mnt/c/ProgramFiles/Win32Yank/win32yank.exe -o --lf')
         else
@@ -315,15 +318,15 @@ call airline#parts#define_function('pencil', 'PencilMode')
 let g:airline_section_x = airline#section#create(['filetype', 'ale_error_count', ' ', 'pencil'])
 let g:pencil#mode_indicators = {'hard': 'H', 'auto': 'A', 'soft': 'S', 'off': '',}
 
-function! Prose()
-  call pencil#init({'wrap': 'hard', 'autoformat': 1})
-  set list
-endfunction
-
-augroup pencil
-  autocmd!
-  autocmd FileType markdown,mkd,asciidoc,asciidoctor call Prose()
-augroup END
+" function! Prose()
+"   call pencil#init({'wrap': 'hard', 'autoformat': 1})
+"   set list
+" endfunction
+" 
+" augroup pencil
+"   autocmd!
+"   autocmd FileType markdown,mkd,asciidoc,asciidoctor call Prose()
+" augroup END
 
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
@@ -341,12 +344,11 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
 " set to 0 to do not run linters on opening a file
 let g:ale_lint_on_enter = 0
-" set alex to run as globally installed command
-" let g:ale_alex_use_global = 1
-" let g:ale_alex_executable = '/tmp/fnm-shell-4391500/bin/alex'
-" let g:ale_use_global_executables = 1
-" au FileType asciidoctor let g:ale_linters = { 'asciidoctor': [ 'alex' ] }
-" au FileType asciidoc let g:ale_linters = { 'asciidoctor': [ 'alex' ] }
+" let g:ale_linters_explicit = 1
+" configure prettier for selected file types
+let g:ale_fixers = { 'javascript': ['prettier'], 'css': ['prettier'], 'svelte': ['prettier'] }
+" run prettier on save
+let g:ale_fix_on_save = 1
 
 au Filetype javascript set dictionary+=~/.vim/dict/node.dict
 " au FileType javascript let g:ale_linters = { 'javascript': glob('.eslintrc*', '.;') != '' ? [ 'eslint', 'flow' ] : [ 'semistandard', 'standard', 'flow' ] }

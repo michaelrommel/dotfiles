@@ -35,6 +35,15 @@ TERMINAL=$( "${HOME}/bin/terminal.sh" -n )
 [[ "${TERMINAL}" == "linux" ]] && "${HOME}/bin/set_gruvbox_colors.sh"
 unset TERMINAL
 
+# adjust gruvbos colors
+if [[ "${OSNAME}" == "Darwin" ]]; then
+  [[ -s "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh" ]] && \
+    \. "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh"
+else
+  [[ -s "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette.sh" ]] && \
+    \. "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette.sh"
+fi
+
 # color for less and man
 export MANPAGER='less -r -s -M +Gg'
 # shellcheck source=./.less_colors.sh
@@ -43,7 +52,7 @@ export MANPAGER='less -r -s -M +Gg'
 [[ -f "$HOME/.dir_colors.sh" ]] && \. "$HOME/.dir_colors.sh"
 
 echo -n " • fnm"
-# shellcheck source=./.nvm/nvm.sh
+# shellcheck source=./.fnm.sh
 [[ -s "$HOME/.fnm.sh" ]] && \. "$HOME/.fnm.sh"  # This loads fnm
 
 if [ "$(basename "${SHELL}")" = "bash" ]; then

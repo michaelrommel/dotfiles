@@ -2,8 +2,7 @@
 // Author: Michael Rommel
 // Date: 2020-04-18
 
-
-const person = process.argv.slice(2).join(' ')
+const person = process.argv.slice(2).join(' ');
 
 const delay = (s) => {
   return new Promise(resolve => setTimeout(resolve, s * 1000));
