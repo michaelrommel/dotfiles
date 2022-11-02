@@ -141,6 +141,17 @@ logtail () {
   tail -f "$@" | bat --paging=never -l log
 }
 
+dnotify () {
+  local title=$1
+  shift 1
+  local body=$@
+  if [[ -z "${TMUX}" ]]; then
+    printf "\x1b]99;i=1:d=0;${title}\x1b\\";printf "\x1b]99;i=1:d=1:p=body;${body}\x1b\\"
+  else
+    printf "\x1bPtmux;\x1b\x1b]99;i=1:d=0;${title}\x1b\x1b\\";printf "\x1b\x1b]99;i=1:d=1:p=body;${body}\x1b\x1b\\"
+  fi
+}
+
 # load company / work specific aliases
 # shellcheck source=./.company_aliases.sh
 [[ -s "${HOME}/.company_aliases.sh" ]] && \. "${HOME}/.company_aliases.sh"
