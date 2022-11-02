@@ -2,14 +2,16 @@
 
 echo "Installing brew packages"
 brew install autoconf automake pkg-config \
-    curl tmux vim neovim fzf ripgrep bat fd \
-    mosh keychain neofetch zsh ncurses \
-    coreutils unzip shellcheck git-flow yarn || exit
-brew cask install kitty
+    tmux vim fzf ripgrep bat fd \
+    jq mosh keychain neofetch ncurses yarn \
+    coreutils shellcheck eth-p/software/bat-extras || exit
+# from older versions
+# brew install curl git zsh unzip neovim 
+# brew cask install kitty
 
-echo "Installing bat-extras from github"
-cd "${HOME}" || exit
-git clone --depth 1 https://github.com/eth-p/bat-extras.git "${HOME}/.bat"
+# echo "Installing bat-extras from github"
+# cd "${HOME}" || exit
+# git clone --depth 1 https://github.com/eth-p/bat-extras.git "${HOME}/.bat"
 
 echo "Installing zsh with theme p10k / bash fallback aliases"
 cd "${HOME}" || exit
@@ -19,9 +21,9 @@ sh -c "$(curl -fsSL \
 echo "Installing powerlevel10k for zsh"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
-echo "Installing git-completion for zsh"
-git clone https://github.com/bobthecow/git-flow-completion \
-    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/git-flow-completion"
+# echo "Installing git-completion for zsh"
+# git clone https://github.com/bobthecow/git-flow-completion \
+#     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/git-flow-completion"
 
 cd "${HOME}" || exit
 # need -f to overwrite the installed .zshrc file
@@ -46,10 +48,11 @@ ln -sf ../.dotfiles/bin/remove_stale_agents.sh .
 ln -sf ../.dotfiles/bin/vff.sh .
 
 echo "Configuring fzf"
-/usr/local/Cellar/fzf/*/install --no-update-rc --key-bindings --completion --no-fish
+/opt/homebrew/opt/fzf/install --no-update-rc --key-bindings --completion --no-fish
 
 echo "Creating current terminfo files"
-sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
+# sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
+sudo /usr/bin/tic -xe tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
 
 echo "Configuring ssh"
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
@@ -69,11 +72,11 @@ ln -sf ../../../.dotfiles/.tmux/plugins/tmux-gruvbox/tmux-gruvbox-dark.conf .
 
 echo "Installing the fast Node Manager (fnm) and node"
 cd "${HOME}" || exit
-brew install Schniz/tap/fnm
+brew install fnm
 ln -sf .dotfiles/.fnm.sh .
 source .fnm.sh
-fnm install 'v12.18.3'
-fnm default 'v12.18.3'
+fnm install 'v18'
+fnm default 'v18'
 
 echo "Configuring git"
 cd "${HOME}" || exit
@@ -85,11 +88,11 @@ cd "${HOME}" || exit
 mkdir -p "${HOME}/.config/coc/extensions"
 cd "${HOME}/.config/coc/extensions" || exit
 ln -sf ../../../.dotfiles/.config/coc/extensions/package.json .
-npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
-if [[ -d "./node_modules/coc-svelte" ]]; then
-  cd "./node_modules/coc-svelte"
-  npm install --save-dev typescript
-fi
+npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --omit=dev
+# if [[ -d "./node_modules/coc-svelte" ]]; then
+#   cd "./node_modules/coc-svelte"
+#   npm install --save-dev typescript
+# fi
 
 echo "Installing vim configurations"
 cd "${HOME}" || exit
@@ -101,13 +104,13 @@ cd "${HOME}/.vim" || exit
 ln -sf ../.dotfiles/.vim/coc-settings.json .
 vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
-echo "Installing neovim configurations"
-curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
-    "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
-ln -sf ../../.dotfiles/.vim/coc-settings.json .
-ln -sf ../../.dotfiles/.vimrc init.vim
-nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+# echo "Installing neovim configurations"
+# curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
+#     "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+# mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
+# ln -sf ../../.dotfiles/.vim/coc-settings.json .
+# ln -sf ../../.dotfiles/.vimrc init.vim
+# nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
 
 cd "${HOME}" || exit
 exec /bin/zsh
