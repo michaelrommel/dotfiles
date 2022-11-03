@@ -4,7 +4,7 @@ if [[ -n "$WSL_DISTRO_NAME" ]]; then
 fi
 
 # user specific initialization
-[[ -f "${HOME}/.initialization.sh" ]] && source "${HOME}/.initialization.sh"
+[[ -f "${HOME}/.preinitialization.sh" ]] && source "${HOME}/.preinitialization.sh"
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -114,6 +114,9 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# post oh-my-zsh user specific initialization
+[[ -f "${HOME}/.postinitialization.sh" ]] && source "${HOME}/.postinitialization.sh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f "${HOME}/.p10k.zsh" ]] || source "${HOME}/.p10k.zsh"

@@ -4,7 +4,8 @@ echo "Installing brew packages"
 brew install autoconf automake pkg-config \
     tmux vim fzf ripgrep bat fd \
     jq mosh keychain neofetch ncurses yarn \
-    coreutils shellcheck eth-p/software/bat-extras || exit
+    coreutils shellcheck imagemagick \
+    eth-p/software/bat-extras || exit
 # from older versions
 # brew install curl git zsh unzip neovim 
 # brew cask install kitty
@@ -32,8 +33,9 @@ ln -sf .dotfiles/.p10k.zsh .
 ln -sf .dotfiles/.less_colors.sh .
 ln -sf .dotfiles/.dir_colors.sh .
 ln -sf .dotfiles/.gitignore .
-ln -sf .dotfiles/.initialization.sh .
-ln -sf .dotfiles/.initialization.sh .bash_aliases
+ln -sf .dotfiles/.preinitialization.sh .
+ln -sf .dotfiles/.postinitialization.sh .
+ln -sf .dotfiles/.preinitialization.sh .bash_aliases
 touch .hushlogin
 
 echo "Installing scripts into ~/bin"
@@ -111,6 +113,12 @@ vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 # ln -sf ../../.dotfiles/.vim/coc-settings.json .
 # ln -sf ../../.dotfiles/.vimrc init.vim
 # nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+
+echo "Configuring kitty"
+cd "${HOME}" || exit
+mkdir -p "${HOME}/.config"
+cd "${HOME}/.config" || exit
+ln -sf ../.dotfiles/.config/kitty .
 
 cd "${HOME}" || exit
 exec /bin/zsh
