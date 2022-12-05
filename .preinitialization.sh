@@ -139,7 +139,7 @@ if [[ "${OSNAME}" == "Darwin" ]]; then
 else
   LEAVEDATE=$(date -d "2026-10-01" +"%s")
   BEGINOFDAYSTRING=$(date +"%Y-%m-%d 00:00:00")
-  BEGINOFDAY=$(date -d ${BEGINOFDAYSTRING} ="%s")
+  BEGINOFDAY=$(date -d ${BEGINOFDAYSTRING} +"%s")
   NOW=$(date +"%s")
 fi
 [[ -f ${HOME}/.motd_shown ]] && MOTDSHOWN=$(<${HOME}/.motd_shown)
