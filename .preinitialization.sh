@@ -27,18 +27,6 @@ export GPG_TTY=$(tty)
 OSNAME=$( "${UNAME}" -s )
 OSRELEASE=$( "${UNAME}" -r )
 
-# Count down the days of working for others
-if [[ "${OSNAME}" == "Darwin" ]]; then
-  LEAVEDATE=$(date -j -f "%Y-%m-%d %H:%M:%S" "2026-10-01 00:00:00" +%s)
-  NOW=$(date -j +%s)
-else
-  LEAVEDATE=$(date -d "2026-10-01" +"%s")
-  NOW=$(date +"%s")
-fi
-WEEKSLEFT=$(( (LEAVEDATE - NOW) / (7*24*3600) ))
-export ZSH_MOTD_CUSTOM="Weeks to work: \e[94m${WEEKSLEFT}\e[0m"
-#export ZSH_MOTD_ALWAYS
-
 # load authenticattion tokens
 # shellcheck source=./.gh_credentials.sh
 [[ -s "${HOME}/.gh_credentials.sh" ]] && \. "${HOME}/.gh_credentials.sh"
@@ -142,3 +130,27 @@ set -o vi
 
 # reset initialization lines (formatting and clear line, cursor to 1st col
 echo -n -e '\e[1G\e[2K\e[0m'
+
+# show MOTD once per day
+if [[ "${OSNAME}" == "Darwin" ]]; then
+  LEAVEDATE=$(date -j -f "%Y-%m-%d %H:%M:%S" "2026-10-01 00:00:00" +%s)
+  BEGINOFDAY=$(date -j -v0H -v0M -v0S +%s)
+  NOW=$(date -j +%s)
+else
+  LEAVEDATE=$(date -d "2026-10-01" +"%s")
+  BEGINOFDAYSTRING=$(date +"%Y-%m-%d 00:00:00")
+  BEGINOFDAY=$(date -d ${BEGINOFDAYSTRING} ="%s")
+  NOW=$(date +"%s")
+fi
+[[ -f ${HOME}/.motd_shown ]] && MOTDSHOWN=$(<${HOME}/.motd_shown)
+MOTDSHOWN=${MOTDSHOWN:-0}
+DIFF=$((NOW - MOTDSHOWN))
+if [[ ${DIFF} -gt 86400 ]]; then
+  # calculat
+  echo ${BEGINOFDAY} >${HOME}/.motd_shown
+  # Count down the days of working for others
+  WEEKSLEFT=$(( (LEAVEDATE - NOW) / (7*24*3600) ))
+  echo -e "Weeks to work: \e[94m${WEEKSLEFT}\e[0m"
+fi
+
+
