@@ -57,6 +57,9 @@ sh -c "$(curl -fsSL \
 echo "Installing powerlevel10k for zsh"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+echo "Installing motd for zsh"
+git clone --depth=1 https://github.com/Kallahan23/zsh-motd \
+    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-motd"
 # echo "Installing git-completion for zsh"
 # git clone https://github.com/bobthecow/git-flow-completion \
 #     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/git-flow-completion"

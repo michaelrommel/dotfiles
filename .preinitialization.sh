@@ -24,6 +24,21 @@ export GPG_TTY=$(tty)
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
 
+OSNAME=$( "${UNAME}" -s )
+OSRELEASE=$( "${UNAME}" -r )
+
+# Count down the days of working for others
+if [[ "${OSNAME}" == "Darwin" ]]; then
+  LEAVEDATE=$(date -j -f "%Y-%m-%d %H:%M:%S" "2026-10-01 00:00:00" +%s)
+  NOW=$(date -j +%s)
+else
+  LEAVEDATE=$(date -d "2026-10-01" +"%s")
+  NOW=$(date +"%s")
+fi
+WEEKSLEFT=$(( (LEAVEDATE - NOW) / (7*24*3600) ))
+export ZSH_MOTD_CUSTOM="Weeks to work: \e[94m${WEEKSLEFT}\e[0m"
+#export ZSH_MOTD_ALWAYS
+
 # load authenticattion tokens
 # shellcheck source=./.gh_credentials.sh
 [[ -s "${HOME}/.gh_credentials.sh" ]] && \. "${HOME}/.gh_credentials.sh"
@@ -85,8 +100,6 @@ if [[ $RC == 1 || $RC == 2 ]]; then
     # suppress error messages, when a glob pattern returns no matches
     setopt +o nomatch
   fi
-  OSNAME=$( "${UNAME}" -s )
-  OSRELEASE=$( "${UNAME}" -r )
   if [[ "${OSNAME}" == "Darwin" ]]; then
     # on macOS: keychain has support to get the passphrase from the OS Keyring
     ssh-add -q --apple-use-keychain --apple-load-keychain ~/.ssh/id_ecdsa
