@@ -5,8 +5,8 @@ export DEBUG=false
 echo -n "Initializing"
 
 export PATH="${HOME}/bin:${HOME}/go/bin:$HOME/.cargo/bin:$PATH:\
-  $HOME/.local/bin:$PATH:/usr/local/bin:\
-  /usr/local/opt/avr-gcc@8/bin:/usr/local/opt/arm-gcc-bin@8/bin:${PATH}"
+$HOME/.local/bin:$PATH:/usr/local/bin:\
+/usr/local/opt/avr-gcc@8/bin:/usr/local/opt/arm-gcc-bin@8/bin:${PATH}"
 
 # pyenv installation on macos
 if command -v pyenv 1>/dev/null 2>&1; then
