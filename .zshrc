@@ -1,7 +1,7 @@
 # work around https://github.com/mintty/wsltty/issues/197
-if [[ -n "$WSL_DISTRO_NAME" ]]; then
-  command -v cmd.exe >/dev/null || exit
-fi
+#if [[ -n "$WSL_DISTRO_NAME" ]]; then
+#  command -v cmd.exe >/dev/null || exit
+#fi
 
 # user specific initialization
 [[ -f "${HOME}/.preinitialization.sh" ]] && source "${HOME}/.preinitialization.sh"

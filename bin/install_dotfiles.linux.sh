@@ -89,16 +89,16 @@ if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install a shell script with npiperelay as ssh-agent
   ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
   # install the wsltty configuration
-  cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
-  cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
-  cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/ || exit
-  mkdir -p emojis/.git/info; cd emojis || exit
-  git init
-  git remote add origin https://github.com/iamcal/emoji-data.git
-  git config core.sparsecheckout true
-  echo img-apple-64 >>.git/info/sparse-checkout
-  git pull --depth=1 origin master
-  mv img-apple-64 apple
+  #cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
+  #cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
+  #cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/ || exit
+  #mkdir -p emojis/.git/info; cd emojis || exit
+  #git init
+  #git remote add origin https://github.com/iamcal/emoji-data.git
+  #git config core.sparsecheckout true
+  #echo img-apple-64 >>.git/info/sparse-checkout
+  #git pull --depth=1 origin master
+  #mv img-apple-64 apple
 fi
 
 echo "Creating current terminfo files"
