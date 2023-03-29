@@ -1,8 +1,8 @@
 #! /bin/bash
 
 echo "Installing apt packages"
-sudo apt update
-sudo apt install -y build-essential autoconf automake pkg-config \
+sudo apt-get -y  update
+sudo apt-get -y install build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
     mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
     unzip sysstat net-tools dnsutils shellcheck asciidoctor \
