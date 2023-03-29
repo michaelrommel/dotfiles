@@ -16,7 +16,7 @@ sudo apt-get -y install build-essential autoconf automake pkg-config \
 OSRELEASE=$( "${UNAME}" -r )
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install golang to be able to compile npiperelay
-  sudo apt install golang socat
+  sudo apt-get -y install golang socat
 fi
 
 echo "Installing ripgrep from github"
@@ -230,6 +230,6 @@ export PATH="${HOME}/.cargo/bin:${PATH}"
 # cargo install --version 0.4.2 svgbob_cli
 
 cd "${HOME}" || exit
-sudo chsh -s /usr/bin/zsh rommel
+sudo chsh -s /usr/bin/zsh $(whoami)
 exec /usr/bin/zsh
 
