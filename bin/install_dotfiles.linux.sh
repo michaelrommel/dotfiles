@@ -191,10 +191,10 @@ cd "${HOME}/.config/coc/extensions" || exit
 for p in coc-css coc-diagnostic coc-eslint coc-json coc-snippets coc-svelte coc-tailwindcss coc-tsserver; do
   npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --omit=dev $p
 done
-if [[ -d "./node_modules/coc-svelte" ]]; then
-  cd "./node_modules/coc-svelte" || exit
-  npm install --save-dev typescript
-fi
+# if [[ -d "./node_modules/coc-svelte" ]]; then
+#   cd "./node_modules/coc-svelte" || exit
+#   npm install --save-dev typescript
+# fi
 
 echo "Installing vim configurations"
 cd "${HOME}" || exit
