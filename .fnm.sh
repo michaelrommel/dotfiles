@@ -7,8 +7,8 @@ OSNAME=$( "${UNAME}" -s )
 
 # on macos, brew installed it already in /usr/local/bin
 if [[ "${OSNAME}" != "Darwin" ]]; then
-  if [[ ! "$PATH" == *${HOME}/.fnm* ]]; then
-    export PATH="${PATH:+${PATH}:}${HOME}/.fnm"
+  if [[ ! "$PATH" == *${HOME}/.local/share/fnm* ]]; then
+    export PATH="${PATH:+${PATH}:}${HOME}/.local/share/fnm"
   fi
 fi
 

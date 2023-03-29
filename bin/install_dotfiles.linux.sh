@@ -132,17 +132,17 @@ if (( $(echo "${GIT_VERSION} < 2.26" | bc -l) )); then
   fi
 fi
 
-TMUX_VERSION=$(tmux -V)
-if [[ "${TMUX_VERSION}" != "tmux 3.1b" ]]; then
-  echo "Building tmux"
-  mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
-  git clone https://github.com/tmux/tmux.git
-  cd "${HOME}/software/tmux" || exit
-  git checkout 3.1b
-  sh autogen.sh
-  ./configure && make
-  sudo make install
-fi
+# TMUX_VERSION=$(tmux -V)
+# if [[ "${TMUX_VERSION}" != "tmux 3.1b" ]]; then
+#   echo "Building tmux"
+#   mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
+#   git clone https://github.com/tmux/tmux.git
+#   cd "${HOME}/software/tmux" || exit
+#   git checkout 3.1b
+#   sh autogen.sh
+#   ./configure && make
+#   sudo make install
+# fi
 
 echo "Configuring tmux plugins"
 cd "${HOME}" || exit
@@ -188,8 +188,9 @@ echo "Preparing coc"
 cd "${HOME}" || exit
 mkdir -p "${HOME}/.config/coc/extensions"
 cd "${HOME}/.config/coc/extensions" || exit
-ln -sf ../../../.dotfiles/.config/coc/extensions/package.json .
-npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
+for p in coc-css coc-diagnostic coc-eslint coc-json coc-snippets coc-svelte coc-tailwindcss coc-tsserver; do
+  npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --omit=dev $p
+done
 if [[ -d "./node_modules/coc-svelte" ]]; then
   cd "./node_modules/coc-svelte" || exit
   npm install --save-dev typescript
@@ -219,14 +220,14 @@ vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
 echo "Installing asciidoctor extensions"
 # for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
-if [[ "${http_proxy}" !== "" ]]; then
+if [[ "${http_proxy}" != "" ]]; then
   OPTS=" --http-proxy ${http_proxy}"
 fi
 sudo gem install ${OPTS} asciidoctor-diagram
 sudo gem install ${OPTS} asciidoctor-pdf
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 export PATH="${HOME}/.cargo/bin:${PATH}"
-cargo install --version 0.4.2 svgbob_cli
+# cargo install --version 0.4.2 svgbob_cli
 
 cd "${HOME}" || exit
 sudo chsh -s /usr/bin/zsh rommel
