@@ -1,8 +1,8 @@
 #! /bin/bash
 
 echo "Installing apt packages"
-sudo apt update
-sudo apt install -y build-essential autoconf automake pkg-config \
+sudo apt-get -y  update
+sudo apt-get -y install build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
     mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
     unzip sysstat net-tools dnsutils shellcheck asciidoctor \
@@ -16,7 +16,7 @@ sudo apt install -y build-essential autoconf automake pkg-config \
 OSRELEASE=$( "${UNAME}" -r )
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install golang to be able to compile npiperelay
-  sudo apt install golang socat
+  sudo apt-get -y install golang socat
 fi
 
 echo "Installing ripgrep from github"
@@ -89,16 +89,16 @@ if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
   # on WSL2 install a shell script with npiperelay as ssh-agent
   ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
   # install the wsltty configuration
-  cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
-  cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
-  cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/ || exit
-  mkdir -p emojis/.git/info; cd emojis || exit
-  git init
-  git remote add origin https://github.com/iamcal/emoji-data.git
-  git config core.sparsecheckout true
-  echo img-apple-64 >>.git/info/sparse-checkout
-  git pull --depth=1 origin master
-  mv img-apple-64 apple
+  #cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
+  #cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
+  #cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/ || exit
+  #mkdir -p emojis/.git/info; cd emojis || exit
+  #git init
+  #git remote add origin https://github.com/iamcal/emoji-data.git
+  #git config core.sparsecheckout true
+  #echo img-apple-64 >>.git/info/sparse-checkout
+  #git pull --depth=1 origin master
+  #mv img-apple-64 apple
 fi
 
 echo "Creating current terminfo files"
@@ -132,17 +132,17 @@ if (( $(echo "${GIT_VERSION} < 2.26" | bc -l) )); then
   fi
 fi
 
-TMUX_VERSION=$(tmux -V)
-if [[ "${TMUX_VERSION}" != "tmux 3.1b" ]]; then
-  echo "Building tmux"
-  mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
-  git clone https://github.com/tmux/tmux.git
-  cd "${HOME}/software/tmux" || exit
-  git checkout 3.1b
-  sh autogen.sh
-  ./configure && make
-  sudo make install
-fi
+# TMUX_VERSION=$(tmux -V)
+# if [[ "${TMUX_VERSION}" != "tmux 3.1b" ]]; then
+#   echo "Building tmux"
+#   mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
+#   git clone https://github.com/tmux/tmux.git
+#   cd "${HOME}/software/tmux" || exit
+#   git checkout 3.1b
+#   sh autogen.sh
+#   ./configure && make
+#   sudo make install
+# fi
 
 echo "Configuring tmux plugins"
 cd "${HOME}" || exit
@@ -188,12 +188,13 @@ echo "Preparing coc"
 cd "${HOME}" || exit
 mkdir -p "${HOME}/.config/coc/extensions"
 cd "${HOME}/.config/coc/extensions" || exit
-ln -sf ../../../.dotfiles/.config/coc/extensions/package.json .
-npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
-if [[ -d "./node_modules/coc-svelte" ]]; then
-  cd "./node_modules/coc-svelte" || exit
-  npm install --save-dev typescript
-fi
+for p in coc-css coc-diagnostic coc-eslint coc-json coc-snippets coc-svelte coc-tailwindcss coc-tsserver; do
+  npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --omit=dev $p
+done
+# if [[ -d "./node_modules/coc-svelte" ]]; then
+#   cd "./node_modules/coc-svelte" || exit
+#   npm install --save-dev typescript
+# fi
 
 echo "Installing vim configurations"
 cd "${HOME}" || exit
@@ -219,16 +220,16 @@ vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
 echo "Installing asciidoctor extensions"
 # for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
-if [[ "${http_proxy}" !== "" ]]; then
+if [[ "${http_proxy}" != "" ]]; then
   OPTS=" --http-proxy ${http_proxy}"
 fi
 sudo gem install ${OPTS} asciidoctor-diagram
 sudo gem install ${OPTS} asciidoctor-pdf
 curl https://sh.rustup.rs -sSf | sh -s -- -y
 export PATH="${HOME}/.cargo/bin:${PATH}"
-cargo install --version 0.4.2 svgbob_cli
+# cargo install --version 0.4.2 svgbob_cli
 
 cd "${HOME}" || exit
-sudo chsh -s /usr/bin/zsh rommel
-exec /usr/bin/zsh
+sudo chsh -s /usr/bin/zsh $(whoami)
+# exec /usr/bin/zsh
 

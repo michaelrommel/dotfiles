@@ -7,9 +7,8 @@ echo -n "Initializing"
 # Go location
 export GOPATH=$(readlink -f ${HOME}/Software)/go
 
-PATH=$PATH:
-export PATH="${HOME}/bin:$HOME/.cargo/bin:$(go env GOPATH)/bin:\
-$HOME/.local/bin:/usr/local/bin:\
+export PATH="${HOME}/bin:${HOME}/.cargo/bin:$(go env GOPATH)/bin:\
+${HOME}/.fnm:${HOME}/.local/bin:/usr/local/bin:\
 /usr/local/opt/avr-gcc@8/bin:/usr/local/opt/arm-gcc-bin@8/bin:${PATH}"
 
 # pyenv installation on macos
