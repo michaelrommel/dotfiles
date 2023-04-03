@@ -231,5 +231,5 @@ export PATH="${HOME}/.cargo/bin:${PATH}"
 
 cd "${HOME}" || exit
 sudo chsh -s /usr/bin/zsh $(whoami)
-exec /usr/bin/zsh
+# exec /usr/bin/zsh
 
