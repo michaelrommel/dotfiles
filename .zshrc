@@ -123,3 +123,6 @@ source $ZSH/oh-my-zsh.sh
 
 # initialize fzf key bindings - must be after oh-my-zsh initialization
 [[ -f "${HOME}/.fzf.zsh" ]] && source "${HOME}/.fzf.zsh"
+
+# check if docker is installed
+[[ -f "${HOME}/.docker/init-zsh.sh" ]] && source "${HOME}/.docker/init-zsh.sh"

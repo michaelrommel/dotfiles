@@ -6,6 +6,13 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+function! PlugLoaded(name)
+  return (
+    \ has_key(g:plugs, a:name) &&
+    \ isdirectory(g:plugs[a:name].dir) &&
+    \ stridx(&rtp, g:plugs[a:name].dir) >= 0)
+endfunction
+
 " -----------------------------------------------------------------------------
 " disable sleuth-like polyglot extension, seems to revert expandtab too often
 " -----------------------------------------------------------------------------
@@ -55,10 +62,8 @@ call plug#end()
 " -----------------------------------------------------------------------------
 " Color settings
 " -----------------------------------------------------------------------------
-silent! colorscheme gruvbox
 " For Gruvbox to look correct in terminal Vim you'll want to source a palette
 " script that comes with the Gruvbox plugin.
-"
 " Add this to your ~/.profile file:
 "   source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
 " Gruvbox comes with both a dark and light theme.
@@ -67,14 +72,19 @@ set background=dark
 let g:gruvbox_contrast_light='medium'
 let g:gruvbox_contrast_dark='hard'
 " This needs to come last, otherwise the colors aren't correct.
+silent! colorscheme gruvbox
 syntax on
 
 " Enable true color
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  " setting this, disables italics in neovim!
-  " set termguicolors
+
+  if (has("termguicolors"))
+    " setting this, disables cterm italics in neovim, it uses gui colors
+    " instead! Seee highlight setting below
+    set termguicolors
+  endif
 endif
 
 let g:limelight_conceal_ctermfg = 'DarkGray'
@@ -115,6 +125,7 @@ set virtualedit=all
 set foldmethod=marker
 
 highlight Comment cterm=italic
+highlight Comment gui=italic
 
 "syntax match eq "==" conceal cchar=≣
 "syntax match neq "!=" conceal cchar=≠
@@ -271,52 +282,54 @@ let g:hardtime_ignore_quickfix = 1
 let g:hardtime_allow_different_key = 1
 let g:hardtime_maxcount = 2
 
-let g:airline_powerline_fonts = 0
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
+if PlugLoaded('airline')
+  let g:airline_powerline_fonts = 0
+  if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+
+  " unicode symbols
+  "let g:airline_left_sep = '»'
+  "let g:airline_left_sep = '▶'
+  "let g:airline_right_sep = '«'
+  "let g:airline_right_sep = '◀'
+  "let g:airline_symbols.colnr = ' ㏇:'
+  "let g:airline_symbols.colnr = ' ℅:'
+  "let g:airline_symbols.crypt = '🔒'
+  "let g:airline_symbols.linenr = '☰'
+  "let g:airline_symbols.linenr = ' ␊:'
+  "let g:airline_symbols.linenr = ' ␤:'
+  "let g:airline_symbols.linenr = '¶'
+  "let g:airline_symbols.maxlinenr = ''
+  "let g:airline_symbols.maxlinenr = '㏑'
+  ""let g:airline_symbols.branch = '⎇'
+  "let g:airline_symbols.paste = 'ρ'
+  "let g:airline_symbols.paste = 'Þ'
+  "let g:airline_symbols.paste = '∥'
+  "let g:airline_symbols.spell = 'Ꞩ'
+  let g:airline_symbols.notexists = 'Ɇ'
+  let g:airline_symbols.whitespace = 'Ξ'
+
+  " powerline symbols
+  let g:airline_left_sep = ''
+  let g:airline_left_alt_sep = ''
+  let g:airline_right_sep = ''
+  let g:airline_right_alt_sep = ''
+  let g:airline_symbols.branch = ''
+  "let g:airline_symbols.colnr = ' :'
+  let g:airline_symbols.colnr = ' |'
+  let g:airline_symbols.readonly = ''
+  "let g:airline_symbols.linenr = ' :'
+  let g:airline_symbols.linenr = ' '
+  "let g:airline_symbols.maxlinenr = '☰ '
+  let g:airline_symbols.maxlinenr = ''
+  let g:airline_symbols.dirty='⚡'
+  let g:airline_skip_empty_sections = 1
+
+  call airline#parts#define_function('pencil', 'PencilMode')
+  let g:airline_section_x = airline#section#create(['filetype', 'ale_error_count', ' ', 'pencil'])
+  let g:pencil#mode_indicators = {'hard': 'H', 'auto': 'A', 'soft': 'S', 'off': '',}
 endif
-
-" unicode symbols
-"let g:airline_left_sep = '»'
-"let g:airline_left_sep = '▶'
-"let g:airline_right_sep = '«'
-"let g:airline_right_sep = '◀'
-"let g:airline_symbols.colnr = ' ㏇:'
-"let g:airline_symbols.colnr = ' ℅:'
-"let g:airline_symbols.crypt = '🔒'
-"let g:airline_symbols.linenr = '☰'
-"let g:airline_symbols.linenr = ' ␊:'
-"let g:airline_symbols.linenr = ' ␤:'
-"let g:airline_symbols.linenr = '¶'
-"let g:airline_symbols.maxlinenr = ''
-"let g:airline_symbols.maxlinenr = '㏑'
-""let g:airline_symbols.branch = '⎇'
-"let g:airline_symbols.paste = 'ρ'
-"let g:airline_symbols.paste = 'Þ'
-"let g:airline_symbols.paste = '∥'
-"let g:airline_symbols.spell = 'Ꞩ'
-let g:airline_symbols.notexists = 'Ɇ'
-let g:airline_symbols.whitespace = 'Ξ'
-
-" powerline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-"let g:airline_symbols.colnr = ' :'
-let g:airline_symbols.colnr = ' |'
-let g:airline_symbols.readonly = ''
-"let g:airline_symbols.linenr = ' :'
-let g:airline_symbols.linenr = ' '
-"let g:airline_symbols.maxlinenr = '☰ '
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.dirty='⚡'
-let g:airline_skip_empty_sections = 1
-
-call airline#parts#define_function('pencil', 'PencilMode')
-let g:airline_section_x = airline#section#create(['filetype', 'ale_error_count', ' ', 'pencil'])
-let g:pencil#mode_indicators = {'hard': 'H', 'auto': 'A', 'soft': 'S', 'off': '',}
 
 " function! Prose()
 "   call pencil#init({'wrap': 'hard', 'autoformat': 1})

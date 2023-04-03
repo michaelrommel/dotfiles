@@ -4,19 +4,28 @@ export DEBUG=false
 
 echo -n "Initializing"
 
-export PATH="${HOME}/bin:${HOME}/go/bin:$HOME/.cargo/bin:$PATH:\
-  $HOME/.local/bin:$PATH:/usr/local/bin:\
-  /usr/local/opt/avr-gcc@8/bin:/usr/local/opt/arm-gcc-bin@8/bin:${PATH}"
+# Go location
+export GOPATH=$(readlink -f ${HOME}/Software)/go
+
+PATH=$PATH:
+export PATH="${HOME}/bin:$HOME/.cargo/bin:$(go env GOPATH)/bin:\
+$HOME/.local/bin:/usr/local/bin:\
+/usr/local/opt/avr-gcc@8/bin:/usr/local/opt/arm-gcc-bin@8/bin:${PATH}"
 
 # pyenv installation on macos
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-export LANG="C.UTF-8"
-export LC_CTYPE="C.UTF-8"
-export LC_COLLATE="C.UTF-8"
-export LC_TIME="C.UTF-8"
+# export LANG="C.UTF-8"
+# export LC_CTYPE="C.UTF-8"
+# export LC_COLLATE="C.UTF-8"
+# export LC_TIME="C.UTF-8"
+# export LANG="C.UTF-8"
+export LC_CTYPE="C"
+export LC_COLLATE="C"
+export LC_TIME="C"
+export LC_ALL="C"
 export EDITOR=vim
 export MOSH_ESCAPE_KEY='~'
 export GPG_TTY=$(tty)
@@ -152,5 +161,4 @@ if [[ ${DIFF} -gt 86400 ]]; then
   WEEKSLEFT=$(( (LEAVEDATE - NOW) / (7*24*3600) ))
   echo -e "Weeks to work: \e[94m${WEEKSLEFT}\e[0m"
 fi
-
 
