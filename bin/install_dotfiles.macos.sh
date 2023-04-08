@@ -56,7 +56,7 @@ echo "Configuring fzf"
 
 echo "Creating current terminfo files"
 # sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
-sudo /usr/bin/tic -xe tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
+sudo /usr/bin/tic -x "${HOME}/.dotfiles/terminfo/tmux.terminfo"
 
 echo "Configuring ssh"
 mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
