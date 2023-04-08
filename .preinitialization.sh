@@ -16,15 +16,9 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-# export LANG="C.UTF-8"
-# export LC_CTYPE="C.UTF-8"
-# export LC_COLLATE="C.UTF-8"
-# export LC_TIME="C.UTF-8"
-# export LANG="C.UTF-8"
-export LC_CTYPE="C"
-export LC_COLLATE="C"
-export LC_TIME="C"
-export LC_ALL="C"
+# LC_ALL would override all settings, do not set that
+# LC_LANG is setting the default. It is set in /etc/default/locale
+export LC_COLLATE="C.UTF-8"
 export EDITOR=vim
 export MOSH_ESCAPE_KEY='~'
 export GPG_TTY=$(tty)
