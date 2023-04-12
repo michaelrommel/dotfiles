@@ -106,6 +106,7 @@ cd "${HOME}" || exit
 #sudo /usr/bin/tic -xe mintty,tmux-256color "${HOME}/.dotfiles/terminfo/terminfo.src"
 sudo /usr/bin/tic -x "${HOME}/.dotfiles/terminfo/mintty.terminfo"
 sudo /usr/bin/tic -x "${HOME}/.dotfiles/terminfo/tmux.terminfo"
+sudo /usr/bin/tic -x "${HOME}/.dotfiles/terminfo/xterm-kitty.terminfo"
 
 echo "Configuring ssh"
 cd "${HOME}" || exit
