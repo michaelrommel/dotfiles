@@ -16,12 +16,10 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-# LC_ALL would override all settings, do not set that
-# LC_LANG is setting the default. It is set in /etc/default/locale
-export LC_COLLATE="C.UTF-8"
 export EDITOR=vim
 export MOSH_ESCAPE_KEY='~'
 export GPG_TTY=$(tty)
+export BAT_THEME=gruvbox-dark
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
@@ -29,6 +27,13 @@ export GPG_TTY=$(tty)
 OSNAME=$( "${UNAME}" -s )
 OSRELEASE=$( "${UNAME}" -r )
 
+# LC_ALL would override all settings, do not set that
+# LC_LANG is setting the default. It is set in /etc/default/locale
+if [[ "${OSNAME}" != "Darwin" ]]; then
+  export LC_COLLATE="C.UTF-8"
+fi
+
+#
 # load authenticattion tokens
 # shellcheck source=./.gh_credentials.sh
 [[ -s "${HOME}/.gh_credentials.sh" ]] && \. "${HOME}/.gh_credentials.sh"

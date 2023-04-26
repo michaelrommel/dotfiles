@@ -116,6 +116,9 @@ vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 # ln -sf ../../.dotfiles/.vim/coc-settings.json .
 # ln -sf ../../.dotfiles/.vimrc init.vim
 # nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+echo "Installing neovim configurations"
+mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
+ln -sf ../../.dotfiles/.config/nvim/init.lua .
 
 echo "Configuring kitty"
 cd "${HOME}" || exit
