@@ -11,6 +11,7 @@ alias vff="${HOME}/bin/vff.sh"
 # shellcheck disable=SC2139
 alias bgr="${HOME}/.bat/src/batgrep.sh"
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
+alias v='NVIM_APPNAME=miro nvim'
 
 unalias 'l'
 alias l='gls --color -lah --hyperlink=auto'
