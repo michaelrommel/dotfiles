@@ -111,7 +111,8 @@ ln -sf ../.dotfiles/.vim/coc-settings.json .
 vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
 echo "Installing rust"
-curl https://sh.rustup.rs -sSf | sh -s -- -y
+# curl https://sh.rustup.rs -sSf | sh -s -- -y
+brew install rust
 export PATH="${HOME}/.cargo/bin:${PATH}"
 
 echo "Installing tree-sitter cli"
@@ -123,10 +124,10 @@ ln -sf ../../.dotfiles/.config/nvim/init.lua .
 
 echo "Installing asciidoctor extensions"
 # cargo install --version 0.4.2 svgbob_cli
-# for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
 if [[ "${http_proxy}" != "" ]]; then
   OPTS=" --http-proxy ${http_proxy}"
 fi
+# for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
 sudo gem install ${OPTS} asciidoctor-diagram
 sudo gem install ${OPTS} asciidoctor-pdf
 
