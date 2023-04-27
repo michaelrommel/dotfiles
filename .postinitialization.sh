@@ -12,6 +12,8 @@ alias vff="${HOME}/bin/vff.sh"
 alias bgr="${HOME}/.bat/src/batgrep.sh"
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias v='NVIM_APPNAME=miro nvim'
+alias vim='NVIM_APPNAME=miro nvim'
+alias vimdiff='NVIM_APPNAME=miro nvim -d'
 
 unalias 'l'
 alias l='gls --color -lah --hyperlink=auto'

@@ -1,0 +1,41 @@
+local utf8 = require("core.utils").utf8
+
+local opt = vim.opt
+local g = vim.g
+
+-- This enables 24 bit aka Truecolor. Also switches to using guifg
+-- attributes instead of cterm attributes:
+opt.termguicolors = true
+-- show the linenumbers to the left of the source code
+opt.number = true
+-- and show relativenumbers above/below the current line
+opt.relativenumber = true
+-- always show the signcolumn for git status and errors
+opt.signcolumn = "yes:1"
+-- display certain invisible characters
+opt.listchars = { tab = utf8(0xBB) .. ' ', trail = utf8(0xB7), nbsp = '~' }
+opt.list = true
+-- disable showing the vim mode in the statusline
+opt.showmode = false
+-- do not expand tabs to spaces and configure tabs
+opt.expandtab = false
+opt.shiftwidth = 4
+opt.tabstop = 4
+-- set mouse to auto
+opt.mouse = "a"
+-- no standard ruler, the statusline takes care of that
+opt.ruler = false
+-- new windows appear on the right and below the current window
+opt.splitright = true
+opt.splitbelow = true
+-- use the clipboard instead of registers
+opt.clipboard = "unnamedplus"
+-- keep an undo file
+opt.undofile = true
+
+-- disable some default providers
+for _, provider in ipairs { "node", "perl", "ruby" } do
+	g["loaded_" .. provider .. "_provider"] = 0
+end
+
+-- vim: sw=4:ts=4

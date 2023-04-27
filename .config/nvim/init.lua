@@ -1,60 +1,22 @@
+require "core"
+local utf8 = require("core.utils").utf8
+
+-- initialize lazy loader
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
 		"clone",
 		"--filter=blob:none",
-		"https://github.com/folke/lazy.nvim.git",
 		"--branch=stable", -- latest stable release
+		"https://github.com/folke/lazy.nvim.git",
 		lazypath,
 	})
 end
 vim.opt.rtp:prepend(lazypath)
 
-local function utf8(decimal)
-	local bytemarkers = { { 0x7FF, 192 }, { 0xFFFF, 224 }, { 0x1FFFFF, 240 } }
-	if decimal < 128 then return string.char(decimal) end
-	local charbytes = {}
-	for bytes, vals in ipairs(bytemarkers) do
-		if decimal <= vals[1] then
-			for b = bytes + 1, 2, -1 do
-				local mod = decimal % 64
-				decimal = (decimal - mod) / 64
-				charbytes[b] = string.char(128 + mod)
-			end
-			charbytes[1] = string.char(vals[2] + decimal)
-			break
-		end
-	end
-	return table.concat(charbytes)
-end
-
 -- this is the standard leader for neovim in many configurations
 vim.g.mapleader = " "
-
--- This enables 24 bit aka Truecolor. Also switches to using guifg
--- attributes instead of cterm attributes:
-vim.opt.termguicolors = true
-vim.opt.number = true
-vim.opt.relativenumber = true
-vim.opt.signcolumn = "yes:1"
-
-vim.opt.listchars = { tab = utf8(0xBB) .. ' ', trail = utf8(0xB7), nbsp = '~' }
-vim.opt.list = true
-vim.opt.showmode = false
-vim.opt.expandtab = false
-vim.opt.shiftwidth = 4
-vim.opt.tabstop = 4
-vim.opt.mouse = "a"
-vim.opt.ruler = false
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-vim.opt.cursorline = false
-
--- disable some default providers
-for _, provider in ipairs { "node", "perl", "ruby" } do
-	vim.g["loaded_" .. provider .. "_provider"] = 0
-end
 
 local function gruvbox_setup()
 	-- setup must be called before loading the colorscheme
@@ -738,5 +700,40 @@ require("lazy").setup({
 			}
 		end,
 	}
+}, {
+	performance = {
+		rtp = {
+			disabled_plugins = {
+				"2html_plugin",
+				"tohtml",
+				"getscript",
+				"getscriptPlugin",
+				"gzip",
+				"logipat",
+				"netrw",
+				"netrwPlugin",
+				"netrwSettings",
+				"netrwFileHandlers",
+				"matchit",
+				"tar",
+				"tarPlugin",
+				"rrhelper",
+				"spellfile_plugin",
+				"vimball",
+				"vimballPlugin",
+				"zip",
+				"zipPlugin",
+				"tutor",
+				"rplugin",
+				"syntax",
+				"synmenu",
+				"optwin",
+				"compiler",
+				"bugreport",
+				"ftplugin",
+			},
+		},
+	},
 })
+
 -- vim: sw=4:ts=4
