@@ -5,7 +5,7 @@ sudo apt-get -y  update
 sudo apt-get -y install build-essential autoconf automake pkg-config \
     libevent-dev libncurses5-dev bison byacc curl tmux git vim \
     mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
-    unzip sysstat net-tools dnsutils shellcheck asciidoctor \
+    unzip sysstat net-tools dnsutils asciidoctor \
     python3-pip universal-ctags software-properties-common \
     bc dh-autoreconf libcurl4-gnutls-dev libexpat1-dev \
     gawk gettext libz-dev libssl-dev install-info  || exit
@@ -220,22 +220,32 @@ vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 # ln -sf ../../.dotfiles/.vim/coc-settings.json .
 # ln -sf ../../.dotfiles/.vimrc init.vim
 # nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+
+echo "Installing rust"
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+export PATH="${HOME}/.cargo/bin:${PATH}"
+
+echo "Installing tree-sitter cli"
+cargo install tree-sitter-cli
+
+echo "Installing shellcheck"
+mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
+scversion="stable" # or "v0.4.7", or "latest"
+curl -sL "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJ
+sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
+
 echo "Installing neovim configurations"
 mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
 ln -sf ../../.dotfiles/.config/nvim/init.lua .
 
 echo "Installing asciidoctor extensions"
+# cargo install --version 0.4.2 svgbob_cli
 # for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
 if [[ "${http_proxy}" != "" ]]; then
   OPTS=" --http-proxy ${http_proxy}"
 fi
 sudo gem install ${OPTS} asciidoctor-diagram
 sudo gem install ${OPTS} asciidoctor-pdf
-curl https://sh.rustup.rs -sSf | sh -s -- -y
-export PATH="${HOME}/.cargo/bin:${PATH}"
-# cargo install --version 0.4.2 svgbob_cli
 
 cd "${HOME}" || exit
 sudo chsh -s /usr/bin/zsh $(whoami)
-# exec /usr/bin/zsh
-

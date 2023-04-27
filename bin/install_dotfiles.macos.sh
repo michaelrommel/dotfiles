@@ -92,8 +92,9 @@ echo "Preparing coc"
 cd "${HOME}" || exit
 mkdir -p "${HOME}/.config/coc/extensions"
 cd "${HOME}/.config/coc/extensions" || exit
-ln -sf ../../../.dotfiles/.config/coc/extensions/package.json .
-npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --omit=dev
+for p in coc-css coc-diagnostic coc-eslint coc-json coc-snippets coc-svelte coc-tailwindcss coc-tsserver; do
+  npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --omit=dev $p
+done
 # if [[ -d "./node_modules/coc-svelte" ]]; then
 #   cd "./node_modules/coc-svelte"
 #   npm install --save-dev typescript
@@ -109,16 +110,25 @@ cd "${HOME}/.vim" || exit
 ln -sf ../.dotfiles/.vim/coc-settings.json .
 vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
-# echo "Installing neovim configurations"
-# curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
-#     "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-# mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
-# ln -sf ../../.dotfiles/.vim/coc-settings.json .
-# ln -sf ../../.dotfiles/.vimrc init.vim
-# nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+echo "Installing rust"
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+export PATH="${HOME}/.cargo/bin:${PATH}"
+
+echo "Installing tree-sitter cli"
+cargo install tree-sitter-cli
+
 echo "Installing neovim configurations"
 mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
 ln -sf ../../.dotfiles/.config/nvim/init.lua .
+
+echo "Installing asciidoctor extensions"
+# cargo install --version 0.4.2 svgbob_cli
+# for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
+if [[ "${http_proxy}" != "" ]]; then
+  OPTS=" --http-proxy ${http_proxy}"
+fi
+sudo gem install ${OPTS} asciidoctor-diagram
+sudo gem install ${OPTS} asciidoctor-pdf
 
 echo "Configuring kitty"
 cd "${HOME}" || exit
@@ -127,5 +137,4 @@ cd "${HOME}/.config" || exit
 ln -sf ../.dotfiles/.config/kitty .
 
 cd "${HOME}" || exit
-exec /bin/zsh
 
