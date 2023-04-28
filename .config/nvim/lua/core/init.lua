@@ -15,6 +15,8 @@ opt.signcolumn = "yes:1"
 -- display certain invisible characters
 opt.listchars = { tab = utf8(0xBB) .. ' ', trail = utf8(0xB7), nbsp = '~' }
 opt.list = true
+-- show max width of text
+opt.colorcolumn = "101"
 -- disable showing the vim mode in the statusline
 opt.showmode = false
 -- do not expand tabs to spaces and configure tabs
