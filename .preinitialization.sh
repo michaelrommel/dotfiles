@@ -5,20 +5,22 @@ export DEBUG=false
 echo -n "Initializing"
 
 # Go location
-export GOPATH=$(readlink -f ${HOME}/Software)/go
+GOPATH=$(readlink -f "${HOME}/[Ss]oftware")/go
+export GOPATH
 
-export PATH="${HOME}/bin:${HOME}/.cargo/bin:$(go env GOPATH)/bin:\
-${HOME}/.fnm:${HOME}/.local/bin:/usr/local/bin:\
-/usr/local/opt/avr-gcc@8/bin:/usr/local/opt/arm-gcc-bin@8/bin:${PATH}"
+export PATH="${HOME}/bin:${HOME}/.cargo/bin:${GOPATH}/bin:${HOME}/.local/bin:\
+/usr/local/bin:/usr/local/opt/avr-gcc@8/bin:/usr/local/opt/arm-gcc-bin@8/bin:\
+${PATH}"
 
 # pyenv installation on macos
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
+# if command -v pyenv 1>/dev/null 2>&1; then
+#   eval "$(pyenv init -)"
+# fi
 
+GPG_TTY=$(tty)
+export GPG_TTY
 export EDITOR=vim
 export MOSH_ESCAPE_KEY='~'
-export GPG_TTY=$(tty)
 export BAT_THEME=gruvbox-dark
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
@@ -35,7 +37,7 @@ fi
 
 #
 # load authenticattion tokens
-# shellcheck source=./.gh_credentials.sh
+# shellcheck source=/home/rommel/.gh_credentials.sh
 [[ -s "${HOME}/.gh_credentials.sh" ]] && \. "${HOME}/.gh_credentials.sh"
 
 # check for mintty to override TERM variable
@@ -47,11 +49,13 @@ unset TERMINAL
 
 # adjust gruvbos colors
 if [[ "${OSNAME}" == "Darwin" ]]; then
-  [[ -s "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh" ]] && \
-    \. "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh"
+	# shellcheck source=/Users/rommel/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh
+	[[ -s "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh" ]] && \
+		\. "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette_osx.sh"
 else
-  [[ -s "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette.sh" ]] && \
-    \. "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette.sh"
+	# shellcheck source=/home/rommel/.vim/plugged/gruvbox/gruvbox_256palette.sh
+	[[ -s "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette.sh" ]] && \
+		\. "${HOME}/.vim/plugged/gruvbox/gruvbox_256palette.sh"
 fi
 
 # color for less and man
@@ -122,7 +126,7 @@ if [[ $RC == 1 || $RC == 2 ]]; then
     fi
     # inherit identities or start new ssh-agent
     [[ ${DEBUG} == false ]] && FLAG="--quiet"
-    # shellcheck disable=SC2068
+    # shellcheck disable=SC2086,SC2068
     eval "$( keychain ${FLAG} --eval --ignore-missing \
         --agents ssh --inherit any-once ${IDENTITIES[@]} )"
   else
@@ -146,15 +150,15 @@ if [[ "${OSNAME}" == "Darwin" ]]; then
 else
   LEAVEDATE=$(date -d "2026-10-01" +"%s")
   BEGINOFDAYSTRING=$(date +"%Y-%m-%d 00:00:00")
-  BEGINOFDAY=$(date -d ${BEGINOFDAYSTRING} +"%s")
+  BEGINOFDAY=$(date -d "${BEGINOFDAYSTRING}" +"%s")
   NOW=$(date +"%s")
 fi
-[[ -f ${HOME}/.motd_shown ]] && MOTDSHOWN=$(<${HOME}/.motd_shown)
+[[ -f ${HOME}/.motd_shown ]] && MOTDSHOWN=$(<"${HOME}/.motd_shown")
 MOTDSHOWN=${MOTDSHOWN:-0}
 DIFF=$((NOW - MOTDSHOWN))
 if [[ ${DIFF} -gt 86400 ]]; then
   # calculat
-  echo ${BEGINOFDAY} >${HOME}/.motd_shown
+  echo "${BEGINOFDAY}" >"${HOME}/.motd_shown"
   # Count down the days of working for others
   WEEKSLEFT=$(( (LEAVEDATE - NOW) / (7*24*3600) ))
   echo -e "Weeks to work: \e[94m${WEEKSLEFT}\e[0m"

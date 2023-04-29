@@ -25,11 +25,12 @@ logtail () {
 dnotify () {
   local title=$1
   shift 1
-  local body=$@
+  IFS=" "
+  local body=$*
   if [[ -z "${TMUX}" ]]; then
-    printf "\x1b]99;i=1:d=0;${title}\x1b\\";printf "\x1b]99;i=1:d=1:p=body;${body}\x1b\\"
+    printf "\x1b]99;i=1:d=0;%s\x1b\\" "${title}"; printf "\x1b]99;i=1:d=1:p=body;%s\x1b\\" "${body}"
   else
-    printf "\x1bPtmux;\x1b\x1b]99;i=1:d=0;${title}\x1b\x1b\\";printf "\x1b\x1b]99;i=1:d=1:p=body;${body}\x1b\x1b\\"
+    printf "\x1bPtmux;\x1b\x1b]99;i=1:d=0;%s\x1b\x1b\\" "${title}"; printf "\x1b\x1b]99;i=1:d=1:p=body;%s\x1b\x1b\\" "${body}"
   fi
 }
 

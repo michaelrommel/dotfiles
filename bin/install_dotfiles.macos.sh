@@ -64,24 +64,23 @@ mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
 ln -sf ../.dotfiles/.ssh/config .
 
 echo "Configuring tmux plugins"
-cd "${HOME}" || exit
-ln -sf .dotfiles/.tmux.conf .
-mkdir -p "${HOME}/.tmux/plugins"; cd "${HOME}/.tmux" || exit
-git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm"
+mkdir -p "${HOME}/.config/tmux"; cd "${HOME}/.config/tmux" || exit
+ln -sf ../../.dotfiles/.config/tmux/tmux.conf .
+mkdir -p "${HOME}/.local/share/tmux/plugins"; cd "${HOME}/.local/share/tmux/plugins" || exit
+git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.local/share/tmux/plugins/tpm"
 cd plugins || exit
-ln -s ../../.dotfiles/.tmux/plugins/tmux-network-bandwidth .
-ln -s ../../.dotfiles/.tmux/plugins/tmux-plugin-cpu .
+for p in tmux-network-bandwidth tmux-gruvbox tmux-plugin-cpu; do
+	ln -s ../../.dotfiles/.local/share/tmux/plugins/$p .
+done
 "${HOME}/.tmux/plugins/tpm/bin/install_plugins"
-cd tmux-gruvbox || exit
-ln -sf ../../../.dotfiles/.tmux/plugins/tmux-gruvbox/tmux-gruvbox-dark.conf .
 
 echo "Installing the fast Node Manager (fnm) and node"
 cd "${HOME}" || exit
 brew install fnm
 ln -sf .dotfiles/.fnm.sh .
 source .fnm.sh
-fnm install 'v18'
-fnm default 'v18'
+fnm install 'lts/*'
+fnm default lts-latest
 
 echo "Configuring git"
 cd "${HOME}" || exit
@@ -119,8 +118,9 @@ echo "Installing tree-sitter cli"
 cargo install tree-sitter-cli
 
 echo "Installing neovim configurations"
-mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
-ln -sf ../../.dotfiles/.config/nvim/init.lua .
+mkdir -p "${HOME}/.config/miro"; cd "${HOME}/.config/miro" || exit
+ln -sf ../../.dotfiles/.config/miro/init.lua .
+ln -sf ../../.dotfiles/.config/miro/lua .
 
 echo "Installing asciidoctor extensions"
 # cargo install --version 0.4.2 svgbob_cli
@@ -128,8 +128,8 @@ if [[ "${http_proxy}" != "" ]]; then
   OPTS=" --http-proxy ${http_proxy}"
 fi
 # for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
-sudo gem install ${OPTS} asciidoctor-diagram
-sudo gem install ${OPTS} asciidoctor-pdf
+sudo gem install "${OPTS}" asciidoctor-diagram
+sudo gem install "${OPTS}" asciidoctor-pdf
 
 echo "Configuring kitty"
 cd "${HOME}" || exit

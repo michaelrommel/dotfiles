@@ -148,16 +148,15 @@ fi
 # fi
 
 echo "Configuring tmux plugins"
-cd "${HOME}" || exit
-ln -sf .dotfiles/.tmux.conf .
-mkdir -p "${HOME}/.tmux/plugins"; cd "${HOME}/.tmux" || exit
-git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.tmux/plugins/tpm"
+mkdir -p "${HOME}/.config/tmux"; cd "${HOME}/.config/tmux" || exit
+ln -sf ../../.dotfiles/.config/tmux/tmux.conf .
+mkdir -p "${HOME}/.local/share/tmux/plugins"; cd "${HOME}/.local/share/tmux/plugins" || exit
+git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.local/share/tmux/plugins/tpm"
 cd plugins || exit
-ln -s ../../.dotfiles/.tmux/plugins/tmux-network-bandwidth .
-ln -s ../../.dotfiles/.tmux/plugins/tmux-plugin-cpu .
+for p in tmux-network-bandwidth tmux-gruvbox tmux-plugin-cpu; do
+	ln -s ../../.dotfiles/.local/share/tmux/plugins/$p .
+done
 "${HOME}/.tmux/plugins/tpm/bin/install_plugins"
-cd tmux-gruvbox || exit
-ln -sf ../../../.dotfiles/.tmux/plugins/tmux-gruvbox/tmux-gruvbox-dark.conf .
 
 # echo "Installing Node Version Manager (nvm) and node"
 # cd "${HOME}" || exit
@@ -178,9 +177,6 @@ fnm default lts-latest
 echo "Installing yarn"
 cd "${HOME}" || exit
 npm install --global yarn
-# curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-# echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-# sudo apt update && sudo apt install -y yarn
 
 echo "Configuring git"
 cd "${HOME}" || exit
@@ -199,27 +195,25 @@ done
 #   npm install --save-dev typescript
 # fi
 
-echo "Installing vim configurations"
-cd "${HOME}" || exit
-mkdir -p "${HOME}/.vim/plugins";
-ln -sf .dotfiles/.vimrc .
-curl -fLo "${HOME}/.vim/autoload/plug.vim" --create-dirs \
-    "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-cd "${HOME}/.vim" || exit
-ln -sf ../.dotfiles/.vim/coc-settings.json .
-vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
-
-# echo "Updating neovim"
-# sudo add-apt-repository -y ppa:neovim-ppa/stable
-# sudo apt install -y neovim
-#
-# echo "Installing neovim configurations"
-# curl -fLo "${HOME}/.local/share/nvim/site/autoload/plug.vim" --create-dirs \
+# echo "Installing vim configurations"
+# cd "${HOME}" || exit
+# mkdir -p "${HOME}/.vim/plugins";
+# ln -sf .dotfiles/.vimrc .
+# curl -fLo "${HOME}/.vim/autoload/plug.vim" --create-dirs \
 #     "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-# mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
-# ln -sf ../../.dotfiles/.vim/coc-settings.json .
-# ln -sf ../../.dotfiles/.vimrc init.vim
-# nvim -es -u "${HOME}/.config/nvim/init.vim" -i NONE -c "PlugInstall" -c "qa"
+# cd "${HOME}/.vim" || exit
+# ln -sf ../.dotfiles/.vim/coc-settings.json .
+# vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
+
+echo "Updating neovim"
+sudo apt-get install ninja-build gettext cmake unzip curl
+cd "${HOME}" || exit
+mkdir -p "${HOME}/software/"; cd "${HOME}/software/" || exit
+git clone https://github.com/neovim/neovim neovim_src
+cd neovim_src || exit
+git checkout stable
+make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=${HOME}/software/neovim"
+make install
 
 echo "Installing rust"
 curl https://sh.rustup.rs -sSf | sh -s -- -y
@@ -227,6 +221,11 @@ export PATH="${HOME}/.cargo/bin:${PATH}"
 
 echo "Installing tree-sitter cli"
 cargo install tree-sitter-cli
+
+echo "Installing neovim configurations"
+mkdir -p "${HOME}/.config/miro"; cd "${HOME}/.config/miro" || exit
+ln -sf ../../.dotfiles/.config/miro/init.lua .
+ln -sf ../../.dotfiles/.config/miro/lua .
 
 echo "Installing shellcheck"
 mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
@@ -244,8 +243,8 @@ echo "Installing asciidoctor extensions"
 if [[ "${http_proxy}" != "" ]]; then
   OPTS=" --http-proxy ${http_proxy}"
 fi
-sudo gem install ${OPTS} asciidoctor-diagram
-sudo gem install ${OPTS} asciidoctor-pdf
+sudo gem install "${OPTS}" asciidoctor-diagram
+sudo gem install "${OPTS}" asciidoctor-pdf
 
 cd "${HOME}" || exit
-sudo chsh -s /usr/bin/zsh $(whoami)
+sudo chsh -s /usr/bin/zsh "$(whoami)"
