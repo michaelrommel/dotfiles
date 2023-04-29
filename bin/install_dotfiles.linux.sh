@@ -152,9 +152,8 @@ mkdir -p "${HOME}/.config/tmux"; cd "${HOME}/.config/tmux" || exit
 ln -sf ../../.dotfiles/.config/tmux/tmux.conf .
 mkdir -p "${HOME}/.local/share/tmux/plugins"; cd "${HOME}/.local/share/tmux/plugins" || exit
 git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.local/share/tmux/plugins/tpm"
-cd plugins || exit
 for p in tmux-network-bandwidth tmux-gruvbox tmux-plugin-cpu; do
-	ln -s ../../.dotfiles/.local/share/tmux/plugins/$p .
+	ln -s ../../../../.dotfiles/.local/share/tmux/plugins/$p .
 done
 "${HOME}/.tmux/plugins/tpm/bin/install_plugins"
 
