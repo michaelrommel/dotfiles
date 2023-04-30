@@ -19,4 +19,5 @@ require("core.mappings")
 
 -- lazy load now all plugins
 require("plugins")
+
 -- vim: sw=4:ts=4

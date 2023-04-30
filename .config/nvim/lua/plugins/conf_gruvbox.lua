@@ -19,10 +19,10 @@ local opts = {
 	palette_overrides = {},
 	overrides = {},
 	dim_inactive = false,
-	transparent_mode = false,
+	transparent_mode = true,
 }
 
-M.setup = function ()
+M.setup = function()
 	-- setup must be called before loading the colorscheme
 	require("gruvbox").setup(opts)
 	vim.cmd([[colorscheme gruvbox]])

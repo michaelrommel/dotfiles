@@ -34,10 +34,54 @@ opt.splitbelow = true
 opt.clipboard = "unnamedplus"
 -- keep an undo file
 opt.undofile = true
+-- show autocomplete menu always, do not autoselect an entry and
+-- do not insert anything automatically
+opt.completeopt = "menuone,noinsert,noselect"
+-- fold with markers
+opt.foldmethod = "marker"
+-- we can break long lines in wrap mode without inserting a <EOL>
+opt.linebreak = true
+opt.breakindent = true
+opt.showbreak = " " .. utf8(0xf17aa) .. " "
+-- set max syntax highlighting column, after that syntax is off
+opt.synmaxcol = 240
 
 -- disable some default providers
 for _, provider in ipairs { "node", "perl", "ruby" } do
 	g["loaded_" .. provider .. "_provider"] = 0
+end
+
+-- disable some builtin plugins
+local disabled_built_ins = {
+	"2html_plugin",
+	"getscript",
+	"getscriptPlugin",
+	"gzip",
+	"logipat",
+	"netrw",
+	"netrwPlugin",
+	"netrwSettings",
+	"netrwFileHandlers",
+	"matchit",
+	"tar",
+	"tarPlugin",
+	"rrhelper",
+	"spellfile_plugin",
+	"vimball",
+	"vimballPlugin",
+	"zip",
+	"zipPlugin",
+	"tutor",
+	"rplugin",
+	"synmenu",
+	"optwin",
+	"compiler",
+	"bugreport",
+	"ftplugin",
+}
+
+for _, plugin in pairs(disabled_built_ins) do
+	g["loaded_" .. plugin] = 1
 end
 
 -- vim: sw=4:ts=4

@@ -9,7 +9,10 @@ fn.sign_define("DiagnosticSignWarn", { text = utf8(0xf529), texthl = "Diagnostic
 fn.sign_define("DiagnosticSignInformation", { text = utf8(0xf7fc), texthl = "DiagnosticSignInfo" })
 fn.sign_define("DiagnosticSignHint", { text = utf8(0xf835), texthl = "DiagnosticSignHint" })
 
-vim.cmd([[highlight link FloatBorder NormalFloat]])
+-- Diagnostic popup
+vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1d2021]]
+vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1d2021]]
+-- vim.cmd([[highlight link FloatBorder NormalFloat]])
 
 -- define here, that removes lspkind as another module
 M.icons = {

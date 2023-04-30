@@ -1,4 +1,4 @@
-local opts = require("plugins.conf_lazy").opts
+local lazyopts = require("plugins.conf_lazy").opts
 local icons = require("core.theme").icons
 
 local fn = vim.fn
@@ -20,24 +20,29 @@ require("lazy").setup({
 			})
 		end,
 		dependencies = {
-			{
-				"nvim-tree/nvim-web-devicons",
-				config = function()
-					require("nvim-web-devicons").setup({ default = true })
-				end,
-			},
-			{
-				"ellisonleao/gruvbox.nvim",
-				-- lazy = false, -- make sure we load this during startup if it is your main
-				-- colorscheme, but since it is in a dependency of a non-lazy loaded plugin, this
-				-- is probably not needed (and does not work here in a dependency anyhow
-				priority = 1000, -- make sure to load this before all the other start plugins
-				config = function()
-					require("plugins.conf_gruvbox").setup()
-				end,
-			},
+			"nvim-tree/nvim-web-devicons",
+			"ellisonleao/gruvbox.nvim",
 		}
 	},
+	-- the colour scheme
+	{
+		"ellisonleao/gruvbox.nvim",
+		lazy = false,
+		priority = 1000, -- make sure to load this before all the other start plugins
+		config = function()
+			require("plugins.conf_gruvbox").setup()
+		end,
+	},
+	-- some decorative icons used in the statusline and completion menus as well as
+	-- the tree
+	{
+		"nvim-tree/nvim-web-devicons",
+		lazy = true,
+		config = function()
+			require("nvim-web-devicons").setup({ default = true })
+		end,
+	},
+	-- an installer for language servers and debug adapters
 	{
 		"williamboman/mason.nvim",
 		lazy = true,
@@ -45,20 +50,32 @@ require("lazy").setup({
 			require("mason").setup()
 		end,
 	},
+	-- an implementation of the Debug Adapter Protocol for nvim
 	{
 		"mfussenegger/nvim-dap",
 		lazy = true,
 		ft = { "python", "javascript" },
 		config = function()
+			-- register key mappings for working in debug mode
+			require("core.mappings").dap_mappings()
+			-- set up the javascript adapter, the nvim-dap-vscode-js does not work
 			require("plugins.conf_dap").setup()
 		end,
 		dependencies = {
-			-- {
-			-- 	"jay-babu/mason-nvim-dap.nvim",
-			-- 	config = function()
-			-- 		require("mason-nvim-dap").setup()
-			-- 	end,
-			-- },
+			-- this ensures that mason autoinstalls the mentioned adapters
+			{
+				"jay-babu/mason-nvim-dap.nvim",
+				lazy = true,
+				ft = { "python", "javascript" },
+				config = function()
+					require("mason-nvim-dap").setup({
+						ensure_installed = { "js-debug-adapter", "debugpy" }
+					})
+				end,
+			},
+			-- this configures the python adapter
+			-- make sure that in the top level directory there is alqays
+			-- a pyproject.toml file with settings for venv and pyright
 			{
 				"mfussenegger/nvim-dap-python",
 				lazy = true,
@@ -67,6 +84,7 @@ require("lazy").setup({
 					require("dap-python").setup()
 				end
 			},
+			-- a TUI interface for the debug adapter
 			{
 				"rcarriga/nvim-dap-ui",
 				lazy = true,
@@ -77,6 +95,8 @@ require("lazy").setup({
 
 		}
 	},
+	-- this extends the builtin treesitter and autoloads additional language
+	-- grammars when a buffer is opened
 	{
 		"nvim-treesitter/nvim-treesitter",
 		lazy = true,
@@ -96,96 +116,55 @@ require("lazy").setup({
 		end,
 	},
 	-- snippets
-	-- {
-	-- 	"L3MON4D3/LuaSnip",
-	-- 	dependencies = {
-	-- 		"rafamadriz/friendly-snippets",
-	-- 		config = function()
-	-- 			require("luasnip.loaders.from_vscode").lazy_load()
-	-- 		end,
-	-- 	},
-	-- 	config = function()
-	-- 		local types = require("luasnip.util.types")
-	-- 		require("luasnip").setup({
-	-- 			opts = {
-	-- 				history = true,
-	-- 				delete_check_events = "TextChanged",
-	-- 				enable_autosnippets = false,
-	-- 			},
-	-- 			ext_opts = {
-	-- 				-- mark the types of snippets fields with colors
-	-- 				[types.choiceNode] = {
-	-- 					active = {
-	-- 						virt_text = { { "●", "GruvboxOrange" } }
-	-- 					}
-	-- 				},
-	-- 				[types.insertNode] = {
-	-- 					active = {
-	-- 						virt_text = { { "●", "GruvboxBlue" } }
-	-- 					}
-	-- 				}
-	-- 			},
-	-- 		})
-	-- 	end,
-	-- 	keys = {
-	-- 		-- {
-	-- 		-- 	"<tab>",
-	-- 		-- 	function()
-	-- 		-- 		return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
-	-- 		-- 	end,
-	-- 		-- 	expr = true,
-	-- 		-- 	silent = true,
-	-- 		-- 	mode = "i",
-	-- 		-- },
-	-- 		-- { "<tab>",   function() require("luasnip").jump(1) end,  mode = "s" },
-	-- 		-- { "<s-tab>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
-	-- 	},
-	-- },
 	{
 		"hrsh7th/vim-vsnip",
 		dependencies = {
+			-- a collection of many programming language snippets
 			"rafamadriz/friendly-snippets",
-			-- config = function()
-			-- 	require("luasnip.loaders.from_vscode").lazy_load()
-			-- end,
 		},
 	},
-	-- auto pairs
+	-- this automatically inserts closing quotes or brackets
 	{
-		"echasnovski/mini.pairs",
+		"windwp/nvim-autopairs",
 		event = "VeryLazy",
 		config = function()
-			require("mini.pairs").setup()
+			require("nvim-autopairs").setup({})
 		end,
 	},
+	-- a completion engine, that can get suggestions from different sources
 	{
 		"hrsh7th/nvim-cmp",
 		lazy = true,
 		event = "InsertEnter",
 		dependencies = {
+			-- get suggestions from language servers
 			"hrsh7th/cmp-nvim-lsp",
+			-- get text fragments from current buffer, mostly sensible for
+			-- markdown texts or so
 			"hrsh7th/cmp-buffer",
+			-- can suggest filenames from the local filesystem
 			"hrsh7th/cmp-path",
+			-- provides vim commandline completions
 			"hrsh7th/cmp-cmdline",
+			-- completions for the nvim lua api
 			"hrsh7th/cmp-nvim-lua",
-			-- "saadparwaiz1/cmp_luasnip",
+			-- vsips provider
 			"hrsh7th/cmp-vsnip",
 			"hrsh7th/vim-vsnip",
 		},
 		config = function()
 			local cmp = require("cmp")
-			--local luasnip = require("luasnip")
-			vim.opt.completeopt = "menu,menuone,noselect"
-			cmp.config.preselect = cmp.PreselectMode.None
-			-- cmp.config.experimental = { ghost_text = true }
-			cmp.config.experimental = { ghost_text = { hl_group = 'Comment' } }
-			local feedkey = function(key, mode)
-				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-			end
+			local cmp_mappings = require("core.mappings").cmp_mappings()
 			cmp.setup({
+				experimental = {
+					ghost_text = { hl_group = 'Comment' }
+				},
+				completion = {
+					autocomplete = false,
+				},
+				preselect = cmp.PreselectMode.None,
 				snippet = {
 					expand = function(args)
-						-- luasnip.lsp_expand(args.body)
 						fn["vsnip#anonymous"](args.body)
 					end,
 				},
@@ -226,69 +205,7 @@ require("lazy").setup({
 				}, {
 					{ name = "buffer" }
 				}),
-				mapping = cmp.mapping.preset.insert({
-					-- scroll the documentation, if an entry provides it
-					['<C-d>'] = cmp.mapping.scroll_docs(-4), -- Up
-					['<C-f>'] = cmp.mapping.scroll_docs(4), -- Down
-					-- C-b (back) C-f (forward) for snippet placeholder navigation.
-					-- opens the menu if it does not automatically appear
-					['<C-Space>'] = cmp.mapping.complete(),
-					-- confirm the current selection and close float
-					['<CR>'] = cmp.mapping.confirm {
-						-- behavior = cmp.ConfirmBehavior.Replace,
-						-- do not autoselect the first item on <CR>
-						select = false,
-					},
-					-- close float and do not accept completion
-					['<Esc>'] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.abort()
-						else
-							fallback()
-						end
-					end, { 'i', 's' }),
-					-- allow navigation inside the float with j and k
-					['j'] = cmp.mapping(function(fallback)
-						if cmp.visible() and cmp.get_active_entry() then
-							cmp.select_next_item()
-						else
-							fallback()
-						end
-					end, { 'i', 's' }),
-					['k'] = cmp.mapping(function(fallback)
-						if cmp.visible() and cmp.get_active_entry() then
-							cmp.select_prev_item()
-						else
-							fallback()
-						end
-					end, { 'i', 's' }),
-					-- inside float, navigate up/down, also jump in snippets
-					['<Tab>'] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_next_item()
-						elseif fn["vsnip#available"](1) == 1 then
-							feedkey("<Plug>(vsnip-jump-next)", "")
-							-- feedkey("<Plug>(vsnip-expand-or-jump)", "")
-							-- elseif luasnip.expand_or_locally_jumpable() then
-							-- 	luasnip.expand_or_jump()
-							-- elseif has_words_before() then
-							-- 	cmp.complete()
-						else
-							fallback()
-						end
-					end, { 'i', 's' }),
-					['<S-Tab>'] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item()
-						elseif fn["vsnip#available"](-1) == 1 then
-							feedkey("<Plug>(vsnip-jump-prev)", "")
-							-- elseif luasnip.jumpable(-1) then
-							-- 	luasnip.jump(-1)
-						else
-							fallback()
-						end
-					end, { 'i', 's' }),
-				}),
+				mapping = cmp.mapping.preset.insert(cmp_mappings),
 			})
 			cmp.setup.cmdline('/', {
 				mapping = cmp.mapping.preset.cmdline(),
@@ -306,14 +223,17 @@ require("lazy").setup({
 			})
 		end,
 	},
+	-- autoinstaller for language servers' configurations
 	{
 		"williamboman/mason-lspconfig.nvim",
 		lazy = true,
 		ft = { "bash", "css", "graphql", "html", "json", "json5", "lua", "python", "rust", "svelte", "javascript" },
 		dependencies = {
 			"williamboman/mason.nvim",
+			-- language server configuration
 			"neovim/nvim-lspconfig",
 			"hrsh7th/nvim-cmp",
+			-- separates the update intervals of lsp from autosaved files/buffers
 			"antoinemadec/FixCursorHold.nvim"
 		},
 		config = function()
@@ -325,11 +245,7 @@ require("lazy").setup({
 
 			-- inject default capabilities from completion module
 			local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
 			-- print(vim.inspect(vim.tbl_keys(vim.lsp.handlers)))
-
-			vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1f2335]]
-			vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1f2335]]
 
 			vim.g.cursorhold_updatetime = 500
 
@@ -381,11 +297,14 @@ require("lazy").setup({
 			}
 		end
 	},
+	-- fallback language server, that can use external programs for linting
+	-- and autoformatting
 	{
 		"jose-elias-alvarez/null-ls.nvim",
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"williamboman/mason.nvim",
+			-- asynchronous lib for lua
 			"nvim-lua/plenary.nvim",
 		},
 		config = function()
@@ -395,8 +314,7 @@ require("lazy").setup({
 				debug = true,
 				root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "package.json", "Makefile", ".git"),
 				sources = {
-					-- nls.builtins.formatting.stylua,
-					-- nls.builtins.formatting.shfmt,
+					nls.builtins.formatting.shfmt,
 					nls.builtins.code_actions.eslint.with({
 						prefer_local = "node_modules/.bin",
 					}),
@@ -409,7 +327,6 @@ require("lazy").setup({
 					nls.builtins.code_actions.shellcheck,
 					nls.builtins.diagnostics.shellcheck,
 					nls.builtins.formatting.autopep8,
-					-- nls.builtins.diagnostics.flake8,
 					nls.builtins.formatting.prettier.with({
 						filetypes = { "html", "json", "jsonc", "json5", "yaml", "markdown" },
 						extra_args = function(params)
@@ -426,6 +343,7 @@ require("lazy").setup({
 			})
 		end,
 	},
+	-- small commeing/uncommenting plugin
 	{
 		"numToStr/Comment.nvim",
 		lazy = true,
@@ -434,6 +352,7 @@ require("lazy").setup({
 			require('Comment').setup()
 		end
 	},
+	-- lists git status and diff lines in the left signcolumn
 	{
 		"lewis6991/gitsigns.nvim",
 		lazy = true,
@@ -442,6 +361,7 @@ require("lazy").setup({
 			require('gitsigns').setup()
 		end
 	},
+	-- visually draws vertical lines for code blocks
 	{
 		"lukas-reineke/indent-blankline.nvim",
 		lazy = true,
@@ -453,6 +373,7 @@ require("lazy").setup({
 			}
 		end
 	},
+	-- offers a "help" function for key mappings
 	{
 		"folke/which-key.nvim",
 		lazy = true,
@@ -463,18 +384,24 @@ require("lazy").setup({
 			require("which-key").setup({
 				-- window = { border = "rounded" },
 			})
+			require("core.mappings").std_mappings()
 		end,
 	},
+	-- explorer style tree on the left
 	{
 		"nvim-tree/nvim-tree.lua",
+		lazy = true,
 		version = "*",
+		keys = {
+			{ "<leader>e", "<cmd>NvimTreeToggle<cr>", desc = "Explorer Tree" },
+		},
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
 			require("nvim-tree").setup {
 				view = {
-					width = 40,
+					width = 50,
 					mappings = {
 						list = {
 						}
@@ -483,4 +410,4 @@ require("lazy").setup({
 			}
 		end,
 	}
-}, opts)
+}, lazyopts)
