@@ -45,6 +45,8 @@ opt.breakindent = true
 opt.showbreak = " " .. utf8(0xf17aa) .. " "
 -- set max syntax highlighting column, after that syntax is off
 opt.synmaxcol = 240
+-- set sessionoptions for compatibility with auto-session
+opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 -- disable some default providers
 for _, provider in ipairs { "node", "perl", "ruby" } do

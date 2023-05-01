@@ -241,8 +241,8 @@ require("lazy").setup({
 			cmp.setup.cmdline(':', {
 				mapping = cmp.mapping.preset.cmdline(),
 				sources = cmp.config.sources({
-					{ name = 'path' }
-				}, {
+					-- 	{ name = 'path' }
+					-- }, {
 					{ name = 'cmdline' }
 				})
 			})
@@ -445,23 +445,35 @@ require("lazy").setup({
 	},
 	-- terminal buffer, that can be resumed
 	{
-		"s1n7ax/nvim-terminal",
+		"akinsho/toggleterm.nvim",
 		lazy = true,
-		event = "BufEnter",
+		version = "*",
+		cmd = "ToggleTerm",
 		dependencies = {
 		},
 		config = function()
-			require("nvim-terminal").setup({
-				window = {
-					position = "botright",
-					split = "sp",
-					width = 50,
-					height = 15,
-				},
-				disable_default_keymaps = true,
-			})
+			local default_opts = require("plugins.conf_toggleterm").default_opts
+			require("toggleterm").setup(default_opts)
 		end,
 	},
+	-- {
+	-- 	"s1n7ax/nvim-terminal",
+	-- 	lazy = true,
+	-- 	event = "BufEnter",
+	-- 	dependencies = {
+	-- 	},
+	-- 	config = function()
+	-- 		require("nvim-terminal").setup({
+	-- 			window = {
+	-- 				position = "botright",
+	-- 				split = "sp",
+	-- 				width = 50,
+	-- 				height = 15,
+	-- 			},
+	-- 			disable_default_keymaps = true,
+	-- 		})
+	-- 	end,
+	-- },
 	-- fuzzy file finder
 	{
 		"nvim-telescope/telescope.nvim",
@@ -547,6 +559,7 @@ require("lazy").setup({
 	-- keybindings for changing surround quotes, brackets etc.
 	{
 		"kylechui/nvim-surround",
+		lazy = true,
 		version = "*", -- Use for stability; omit to use `main` branch for the latest features
 		event = "VeryLazy",
 		config = function()
@@ -554,7 +567,60 @@ require("lazy").setup({
 				-- Configuration here, or leave empty to use defaults
 			})
 		end
-	}
+	},
+	-- automatic session handling, storing sessions in a dir under .local/share/miro/sessions
+	{
+		"rmagatti/auto-session",
+		lazy = true,
+		event = "BufEnter",
+		config = function()
+			local function restore_nvim_tree()
+				print("Restoring nvim tree")
+				local nt = require('nvim-tree.api')
+				nt.tree.open()
+			end
+			require("auto-session").setup({
+				log_level = "error",
+				auto_session_suppress_dirs = { "~/", "/" },
+				auto_session_enabled = true,
+				auto_session_create_enabled = true,
+				post_restore_cmds = { restore_nvim_tree },
+			})
+		end
+	},
+	-- make code images
+	{
+		"krivahtoo/silicon.nvim",
+		lazy = true,
+		build = "./install.sh build",
+		cmd = "Silicon",
+		config = function()
+			require('silicon').setup {
+				font = 'VictorMono Nerd Font=34; Noto Color Emoji',
+				theme = 'gruvbox',
+				background = '#1d2021',
+				line_number = true,
+				pad_vert = 40,
+				pad_horiz = 50,
+				output = {
+					path = "."
+				},
+				shadow = {
+					blur_radius = 20,
+					offset_x = 8,
+					offset_y = 8,
+					color = "#100808"
+				},
+				watermark = {
+					text = ' @miro  ',
+					color = "#83a598"
+				},
+				window_title = function()
+					return vim.fn.fnamemodify(vim.fn.bufname(vim.fn.bufnr()), ':~:.')
+				end,
+			}
+		end
+	},
 	-- TODO: remove comment lines
 	-- motion plugin
 	-- {

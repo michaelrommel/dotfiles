@@ -4,13 +4,12 @@
 
 const person = process.argv.slice(2).join(' ');
 
-
 const delay = (s) => {
   return new Promise(resolve => setTimeout(resolve, s * 1000));
 };
 
 const bestWishes = async (name) => {
-  const bff = new RegExp(/^Firstname Lastname$/, 'i');
+  const bff = /^Firstname Lastname$/i;
   if (bff.test(name)) {
     while ('🚶' !== '⚰') {
       process.stdout.write('🥰 ');

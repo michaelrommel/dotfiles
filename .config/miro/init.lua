@@ -14,10 +14,10 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- load all key mappings
-require("core.mappings")
-
 -- lazy load now all plugins
 require("plugins")
+
+-- load all key mappings
+require("core.mappings")
 
 -- vim: sw=4:ts=4

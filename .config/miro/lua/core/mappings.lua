@@ -12,10 +12,20 @@ end
 
 M.std_mappings = function()
 	local wk = require("which-key")
-	local term = require("nvim-terminal").DefaultTerminal
 	local ts = require("telescope.builtin")
-	local tfp = require("plugins/conf_telescope")
+	local tsc = require("plugins.conf_telescope")
 	local tc = require("todo-comments")
+	local ttc = require("plugins.conf_toggleterm")
+	local term = require('toggleterm.terminal').Terminal
+	local floatterm = term:new(ttc.floatterm_opts)
+	local function floatterm_toggle()
+		floatterm:toggle()
+	end
+	local miniterm = term:new(ttc.miniterm_opts)
+	local function miniterm_toggle()
+		miniterm:toggle()
+	end
+
 	wk.register({
 		-- moves the cursor left and right in insert mode
 		['<C-h>'] = { "<Left>", "Move 1 char left" },
@@ -27,7 +37,8 @@ M.std_mappings = function()
 		['<C-j>'] = { "<C-w>j", "Lower split" },
 		['<C-k>'] = { "<C-w>k", "Upper split" },
 		['<C-l>'] = { "<C-w>l", "Right split" },
-		['<C-t>'] = { function() term.toggle() end, "Toggle Terminal" },
+		['<C-t>'] = { function() miniterm_toggle() end, "Toggle Mini Terminal" },
+		['<C-S-t>'] = { function() floatterm_toggle() end, "Toggle Terminal" },
 		['[t'] = { function() tc.jump_prev() end, "Previous TODO" },
 		[']t'] = { function() tc.jump_next() end, "Next TODO" },
 	}, { mode = { "n" } })
@@ -45,7 +56,7 @@ M.std_mappings = function()
 		-- find functions with telescope
 		['f'] = {
 			['f'] = { function() ts.find_files() end, "Find files" },
-			['p'] = { function() tfp.find_files_from_project_git_root() end,
+			['p'] = { function() tsc.find_files_from_project_git_root() end,
 				"Find files in project" },
 			['g'] = { function() ts.live_grep() end, "Live grep" },
 			['b'] = { function() ts.buffers() end, "Find buffers" },
