@@ -434,7 +434,12 @@ require("lazy").setup({
 						list = {
 						}
 					}
-				}
+				},
+				update_cwd = true,
+				update_focused_file = {
+					enable = true,
+					update_cwd = true,
+				},
 			})
 		end,
 	},
@@ -463,7 +468,7 @@ require("lazy").setup({
 		lazy = true,
 		cmd = "Telescope",
 		dependencies = {
-			'nvim-lua/plenary.nvim',
+			"nvim-lua/plenary.nvim",
 			"nvim-telescope/telescope-fzf-native.nvim",
 		},
 		config = function()
@@ -528,6 +533,28 @@ require("lazy").setup({
 			})
 		end
 	},
+	-- moves to the project's root dir
+	{
+		"notjedi/nvim-rooter.lua",
+		lazy = true,
+		event = "BufEnter",
+		config = function()
+			require("nvim-rooter").setup({
+				rooter_patterns = { ".git", "pyproject.toml" }
+			})
+		end
+	},
+	-- keybindings for changing surround quotes, brackets etc.
+	{
+		"kylechui/nvim-surround",
+		version = "*", -- Use for stability; omit to use `main` branch for the latest features
+		event = "VeryLazy",
+		config = function()
+			require("nvim-surround").setup({
+				-- Configuration here, or leave empty to use defaults
+			})
+		end
+	}
 	-- TODO: remove comment lines
 	-- motion plugin
 	-- {
