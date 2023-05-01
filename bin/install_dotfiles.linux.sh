@@ -1,41 +1,44 @@
 #! /bin/bash
 
 echo "Installing apt packages"
-sudo apt-get -y  update
+sudo apt-get -y update
 sudo apt-get -y install build-essential autoconf automake pkg-config \
-    libevent-dev libncurses5-dev bison byacc curl tmux git vim \
-    mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
-    unzip sysstat net-tools dnsutils asciidoctor \
-    python3-pip universal-ctags software-properties-common \
-    bc dh-autoreconf libcurl4-gnutls-dev libexpat1-dev \
-    gawk gettext libz-dev libssl-dev install-info  || exit
+	libevent-dev libncurses5-dev bison byacc curl tmux git vim \
+	mosh keychain neofetch zsh ncurses-bin gdebi-core apt-file \
+	unzip sysstat net-tools dnsutils asciidoctor \
+	python3-pip universal-ctags software-properties-common \
+	bc dh-autoreconf libcurl4-gnutls-dev libexpat1-dev \
+	gawk gettext libz-dev libssl-dev install-info || exit
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
 
-OSRELEASE=$( "${UNAME}" -r )
+OSRELEASE=$("${UNAME}" -r)
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
-  # on WSL2 install golang to be able to compile npiperelay
-  sudo apt-get -y install golang socat
+	# on WSL2 install golang to be able to compile npiperelay
+	sudo apt-get -y install golang socat
 fi
 
 echo "Installing ripgrep from github"
 cd "${HOME}" || exit
-mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
+mkdir -p "${HOME}/software/archives"
+cd "${HOME}/software/archives" || exit
 curl -OL https://github.com/BurntSushi/ripgrep/releases/download/12.1.1/ripgrep_12.1.1_amd64.deb
 sudo dpkg -i "${HOME}/software/archives/ripgrep_12.1.1_amd64.deb"
 
 echo "Installing fd from github"
 # provides faster find version, not available for Ubuntu 18.04
 cd "${HOME}" || exit
-mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
+mkdir -p "${HOME}/software/archives"
+cd "${HOME}/software/archives" || exit
 curl -OL https://github.com/sharkdp/fd/releases/download/v8.1.1/fd_8.1.1_amd64.deb
 sudo dpkg -i "${HOME}/software/archives/fd_8.1.1_amd64.deb"
 
 echo "Installing bat from github"
 # provides syntax highlighting pager
 cd "${HOME}" || exit
-mkdir -p "${HOME}/software/archives"; cd "${HOME}/software/archives" || exit
+mkdir -p "${HOME}/software/archives"
+cd "${HOME}/software/archives" || exit
 curl -OL https://github.com/sharkdp/bat/releases/download/v0.17.1/bat_0.17.1_amd64.deb
 sudo dpkg -i "${HOME}/software/archives/bat_0.17.1_amd64.deb"
 
@@ -52,11 +55,11 @@ git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
 echo "Installing zsh with theme p10k / bash fallback aliases"
 cd "${HOME}" || exit
 sh -c "$(curl -fsSL \
-  https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) \
+	https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) \
   --unattended"
 echo "Installing powerlevel10k for zsh"
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
-    "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+	"${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
 # echo "Installing git-completion for zsh"
 # git clone https://github.com/bobthecow/git-flow-completion \
 #     "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/git-flow-completion"
@@ -76,7 +79,8 @@ ln -sf .dotfiles/.preinitialization.sh .bash_aliases
 touch .hushlogin
 
 echo "Installing scripts into ~/bin"
-mkdir -p "${HOME}/bin"; cd "${HOME}/bin" || exit
+mkdir -p "${HOME}/bin"
+cd "${HOME}/bin" || exit
 ln -sf ../.dotfiles/bin/ansi-vte52.sh .
 ln -sf ../.dotfiles/bin/set_gruvbox_colors.sh .
 ln -sf ../.dotfiles/bin/terminal.sh .
@@ -85,20 +89,21 @@ ln -sf ../.dotfiles/bin/terminal-colors.py .
 ln -sf ../.dotfiles/bin/emoji.js .
 ln -sf ../.dotfiles/bin/remove_stale_agents.sh .
 ln -sf ../.dotfiles/bin/vff.sh .
+ln -sf ../.dotfiles/bin/reset_nvim.sh .
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
-  # on WSL2 install a shell script with npiperelay as ssh-agent
-  ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
-  # install the wsltty configuration
-  #cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
-  #cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
-  #cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/ || exit
-  #mkdir -p emojis/.git/info; cd emojis || exit
-  #git init
-  #git remote add origin https://github.com/iamcal/emoji-data.git
-  #git config core.sparsecheckout true
-  #echo img-apple-64 >>.git/info/sparse-checkout
-  #git pull --depth=1 origin master
-  #mv img-apple-64 apple
+	# on WSL2 install a shell script with npiperelay as ssh-agent
+	ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
+	# install the wsltty configuration
+	#cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
+	#cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
+	#cd /mnt/c/Users/rommminw/AppData/Roaming/wsltty/ || exit
+	#mkdir -p emojis/.git/info; cd emojis || exit
+	#git init
+	#git remote add origin https://github.com/iamcal/emoji-data.git
+	#git config core.sparsecheckout true
+	#echo img-apple-64 >>.git/info/sparse-checkout
+	#git pull --depth=1 origin master
+	#mv img-apple-64 apple
 fi
 
 echo "Creating current terminfo files"
@@ -110,29 +115,30 @@ sudo /usr/bin/tic -x "${HOME}/.dotfiles/terminfo/xterm-kitty.terminfo"
 
 echo "Configuring ssh"
 cd "${HOME}" || exit
-mkdir -p "${HOME}/.ssh"; cd "${HOME}/.ssh" || exit
+mkdir -p "${HOME}/.ssh"
+cd "${HOME}/.ssh" || exit
 ln -sf ../.dotfiles/.ssh/config .
 
-GIT_VERSION=$(git --version |sed -e 's/git version \([0-9]*\.[0-9]*\)\..*/\1/')
-if (( $(echo "${GIT_VERSION} < 2.26" | bc -l) )); then
-  # echo "Building git"
-  # cd "${HOME}" || exit
-  # mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
-  # git clone git://git.kernel.org/pub/scm/git/git.git
-  # sudo apt remove -y git
-  # cd git || exit
-  # make configure
-  # ./configure --prefix=/usr
-  # make all info
-  # sudo make install install-info
-  source /etc/os-release
-  if [[ ${VERSION_CODENAME} == "buster" ]]; then
-    echo "Adding buster backports"
-    echo "deb http://deb.debian.org/debian buster-backports main" \
-      | sudo tee /etc/apt/sources.list.d/buster-backports.list
-    sudo apt update
-    sudo apt install -y -t buster-backports git
-  fi
+GIT_VERSION=$(git --version | sed -e 's/git version \([0-9]*\.[0-9]*\)\..*/\1/')
+if (($(echo "${GIT_VERSION} < 2.26" | bc -l))); then
+	# echo "Building git"
+	# cd "${HOME}" || exit
+	# mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
+	# git clone git://git.kernel.org/pub/scm/git/git.git
+	# sudo apt remove -y git
+	# cd git || exit
+	# make configure
+	# ./configure --prefix=/usr
+	# make all info
+	# sudo make install install-info
+	source /etc/os-release
+	if [[ ${VERSION_CODENAME} == "buster" ]]; then
+		echo "Adding buster backports"
+		echo "deb http://deb.debian.org/debian buster-backports main" |
+			sudo tee /etc/apt/sources.list.d/buster-backports.list
+		sudo apt update
+		sudo apt install -y -t buster-backports git
+	fi
 fi
 
 # TMUX_VERSION=$(tmux -V)
@@ -148,9 +154,11 @@ fi
 # fi
 
 echo "Configuring tmux plugins"
-mkdir -p "${HOME}/.config/tmux"; cd "${HOME}/.config/tmux" || exit
+mkdir -p "${HOME}/.config/tmux"
+cd "${HOME}/.config/tmux" || exit
 ln -sf ../../.dotfiles/.config/tmux/tmux.conf .
-mkdir -p "${HOME}/.local/share/tmux/plugins"; cd "${HOME}/.local/share/tmux/plugins" || exit
+mkdir -p "${HOME}/.local/share/tmux/plugins"
+cd "${HOME}/.local/share/tmux/plugins" || exit
 git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.local/share/tmux/plugins/tpm"
 for p in tmux-network-bandwidth tmux-gruvbox tmux-plugin-cpu; do
 	ln -s ../../../../.dotfiles/.local/share/tmux/plugins/$p .
@@ -187,7 +195,7 @@ cd "${HOME}" || exit
 mkdir -p "${HOME}/.config/coc/extensions"
 cd "${HOME}/.config/coc/extensions" || exit
 for p in coc-css coc-diagnostic coc-eslint coc-json coc-snippets coc-svelte coc-tailwindcss coc-tsserver; do
-  npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --omit=dev $p
+	npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --omit=dev $p
 done
 # if [[ -d "./node_modules/coc-svelte" ]]; then
 #   cd "./node_modules/coc-svelte" || exit
@@ -207,7 +215,8 @@ done
 echo "Updating neovim"
 sudo apt-get install ninja-build gettext cmake unzip curl
 cd "${HOME}" || exit
-mkdir -p "${HOME}/software/"; cd "${HOME}/software/" || exit
+mkdir -p "${HOME}/software/"
+cd "${HOME}/software/" || exit
 git clone https://github.com/neovim/neovim neovim_src
 cd neovim_src || exit
 git checkout stable
@@ -222,25 +231,28 @@ echo "Installing tree-sitter cli"
 cargo install tree-sitter-cli
 
 echo "Installing neovim configurations"
-mkdir -p "${HOME}/.config/miro"; cd "${HOME}/.config/miro" || exit
+mkdir -p "${HOME}/.config/miro"
+cd "${HOME}/.config/miro" || exit
 ln -sf ../../.dotfiles/.config/miro/init.lua .
 ln -sf ../../.dotfiles/.config/miro/lua .
 
 echo "Installing shellcheck"
-mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
+mkdir -p "${HOME}/software"
+cd "${HOME}/software" || exit
 scversion="stable" # or "v0.4.7", or "latest"
 curl -sL "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJ
 sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
 
 echo "Installing neovim configurations"
-mkdir -p "${HOME}/.config/nvim"; cd "${HOME}/.config/nvim" || exit
+mkdir -p "${HOME}/.config/nvim"
+cd "${HOME}/.config/nvim" || exit
 ln -sf ../../.dotfiles/.config/nvim/init.lua .
 
 echo "Installing asciidoctor extensions"
 # cargo install --version 0.4.2 svgbob_cli
 # for specific version use: sudo gem install --version 2.0.4 asciidoctor-diagram
 if [[ "${http_proxy}" != "" ]]; then
-  OPTS=" --http-proxy ${http_proxy}"
+	OPTS=" --http-proxy ${http_proxy}"
 fi
 sudo gem install "${OPTS}" asciidoctor-diagram
 sudo gem install "${OPTS}" asciidoctor-pdf

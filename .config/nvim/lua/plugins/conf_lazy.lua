@@ -1,6 +1,9 @@
 local M = {}
 
 M.opts = {
+	ui = {
+		border = "rounded"
+	},
 	performance = {
 		rtp = {
 			disabled_plugins = {

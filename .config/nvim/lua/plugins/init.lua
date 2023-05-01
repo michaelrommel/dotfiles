@@ -47,7 +47,40 @@ require("lazy").setup({
 		"williamboman/mason.nvim",
 		lazy = true,
 		config = function()
-			require("mason").setup()
+			require("mason").setup({
+				ui = {
+					border = "rounded"
+				}
+			})
+		end,
+	},
+	-- this ensures that mason autoinstalls the mentioned adapters
+	{
+		"jay-babu/mason-nvim-dap.nvim",
+		lazy = true,
+		ft = { "python", "javascript" },
+		dependencies = {
+			"williamboman/mason.nvim"
+		},
+		config = function()
+			require("mason-nvim-dap").setup({
+				ensure_installed = { "js", "python" }
+			})
+		end,
+	},
+	-- this ensures that mason autoinstalls the mentioned formatters
+	{
+		"jay-babu/mason-null-ls.nvim",
+		lazy = true,
+		ft = { "python", "javascript", "json", "json5", "lua" },
+		dependencies = {
+			"williamboman/mason.nvim",
+			"jose-elias-alvarez/null-ls.nvim",
+		},
+		config = function()
+			require("mason-null-ls").setup({
+				ensure_installed = { "jq", "black", "isort" }
+			})
 		end,
 	},
 	-- an implementation of the Debug Adapter Protocol for nvim
@@ -62,17 +95,7 @@ require("lazy").setup({
 			require("plugins.conf_dap").setup()
 		end,
 		dependencies = {
-			-- this ensures that mason autoinstalls the mentioned adapters
-			{
-				"jay-babu/mason-nvim-dap.nvim",
-				lazy = true,
-				ft = { "python", "javascript" },
-				config = function()
-					require("mason-nvim-dap").setup({
-						ensure_installed = { "js-debug-adapter", "debugpy" }
-					})
-				end,
-			},
+			"jay-babu/mason-nvim-dap.nvim",
 			-- this configures the python adapter
 			-- make sure that in the top level directory there is alqays
 			-- a pyproject.toml file with settings for venv and pyright
@@ -118,6 +141,7 @@ require("lazy").setup({
 	-- snippets
 	{
 		"hrsh7th/vim-vsnip",
+		lazy = true,
 		dependencies = {
 			-- a collection of many programming language snippets
 			"rafamadriz/friendly-snippets",
@@ -135,6 +159,7 @@ require("lazy").setup({
 	{
 		"hrsh7th/nvim-cmp",
 		lazy = true,
+		version = false,
 		event = "InsertEnter",
 		dependencies = {
 			-- get suggestions from language servers
@@ -326,7 +351,12 @@ require("lazy").setup({
 					}),
 					nls.builtins.code_actions.shellcheck,
 					nls.builtins.diagnostics.shellcheck,
-					nls.builtins.formatting.autopep8,
+					nls.builtins.formatting.isort.with({
+						extra_args = { "--profile", "black", "-l", "100" }
+					}),
+					nls.builtins.formatting.black.with({
+						extra_args = { "--line-length", "100" }
+					}),
 					nls.builtins.formatting.prettier.with({
 						filetypes = { "html", "json", "jsonc", "json5", "yaml", "markdown" },
 						extra_args = function(params)
@@ -382,7 +412,7 @@ require("lazy").setup({
 			vim.o.timeout = true
 			vim.o.timeoutlen = 600
 			require("which-key").setup({
-				-- window = { border = "rounded" },
+				window = { border = "rounded" },
 			})
 			require("core.mappings").std_mappings()
 		end,
@@ -392,14 +422,12 @@ require("lazy").setup({
 		"nvim-tree/nvim-tree.lua",
 		lazy = true,
 		version = "*",
-		keys = {
-			{ "<leader>e", "<cmd>NvimTreeToggle<cr>", desc = "Explorer Tree" },
-		},
+		event = "BufEnter",
 		dependencies = {
 			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
-			require("nvim-tree").setup {
+			require("nvim-tree").setup({
 				view = {
 					width = 50,
 					mappings = {
@@ -407,7 +435,122 @@ require("lazy").setup({
 						}
 					}
 				}
-			}
+			})
 		end,
-	}
+	},
+	-- terminal buffer, that can be resumed
+	{
+		"s1n7ax/nvim-terminal",
+		lazy = true,
+		event = "BufEnter",
+		dependencies = {
+		},
+		config = function()
+			require("nvim-terminal").setup({
+				window = {
+					position = "botright",
+					split = "sp",
+					width = 50,
+					height = 15,
+				},
+				disable_default_keymaps = true,
+			})
+		end,
+	},
+	-- fuzzy file finder
+	{
+		"nvim-telescope/telescope.nvim",
+		lazy = true,
+		cmd = "Telescope",
+		dependencies = {
+			'nvim-lua/plenary.nvim',
+			"nvim-telescope/telescope-fzf-native.nvim",
+		},
+		config = function()
+			require("telescope").setup({
+				extensions = {
+					fzf = {
+						fuzzy = true,
+						override_generic_sorter = true,
+						override_file_sorter = true,
+						case_mode = "smart_case",
+					}
+				}
+			})
+			require("telescope").load_extension('fzf')
+		end,
+	},
+	-- native fzf integration
+	{
+		"nvim-telescope/telescope-fzf-native.nvim",
+		lazy = true,
+		build =
+		"cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+	},
+	-- highlight TODO and other comments
+	{
+		"folke/todo-comments.nvim",
+		lazy = true,
+		event = "BufEnter",
+		dependencies = {
+			"nvim-lua/plenary.nvim"
+		},
+		config = function()
+			require("todo-comments").setup()
+		end
+	},
+	-- zen mode and dimming
+	{
+		"folke/zen-mode.nvim",
+		lazy = true,
+		event = "BufEnter",
+		dependencies = {
+			"folke/twilight.nvim"
+		},
+		config = function()
+			require("zen-mode").setup({
+				window = {
+					-- width = 0.9,
+					width = 120,
+				}
+			})
+		end
+	},
+	{
+		"folke/twilight.nvim",
+		lazy = true,
+		event = "BufEnter",
+		config = function()
+			require("twilight").setup({
+				dimming = {
+					alpha = 0.7,
+				}
+			})
+		end
+	},
+	-- TODO: remove comment lines
+	-- motion plugin
+	-- {
+	-- 	"ggandor/leap.nvim",
+	-- 	lazy = true,
+	-- 	event = "BufEnter",
+	-- 	config = function()
+	-- 		require("leap").add_default_mappings()
+	-- 	end
+	-- },
+	-- tab bar
+	-- {
+	-- 	'romgrk/barbar.nvim',
+	-- 	dependencies = {
+	-- 		'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+	-- 		'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+	-- 	},
+	-- 	init = function() vim.g.barbar_auto_setup = false end,
+	-- 	opts = {
+	-- 		-- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+	-- 		animation = false,
+	-- 		minimum_padding = 2,
+	-- 	},
+	-- 	version = '^1.0.0', -- optional: only update when a new 1.x version is released
+	-- },
 }, lazyopts)

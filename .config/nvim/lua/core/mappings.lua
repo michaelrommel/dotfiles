@@ -12,15 +12,45 @@ end
 
 M.std_mappings = function()
 	local wk = require("which-key")
+	local term = require("nvim-terminal").DefaultTerminal
+	local ts = require("telescope.builtin")
+	local tfp = require("plugins/conf_telescope")
+	local tc = require("todo-comments")
 	wk.register({
 		-- moves the cursor left and right in insert mode
 		['<C-h>'] = { "<Left>", "Move 1 char left" },
 		['<C-l>'] = { "<Right>", "Move 1 char right" },
 	}, { mode = { "i", "v" } })
 	wk.register({
+		-- jumps to splits
+		['<C-h>'] = { "<C-w>h", "Left split" },
+		['<C-j>'] = { "<C-w>j", "Lower split" },
+		['<C-k>'] = { "<C-w>k", "Upper split" },
+		['<C-l>'] = { "<C-w>l", "Right split" },
+		['<C-t>'] = { function() term.toggle() end, "Toggle Terminal" },
+		['[t'] = { function() tc.jump_prev() end, "Previous TODO" },
+		[']t'] = { function() tc.jump_next() end, "Next TODO" },
+	}, { mode = { "n" } })
+	wk.register({
+		-- jumps to splits
+		['<Esc>'] = { "<C-\\><C-n>", "Close terminal" },
+	}, { mode = { "t" } })
+	wk.register({
 		-- opens up the nvim tree
 		['e'] = { function() require("nvim-tree").focus() end, "Open explorer tree" },
-	}, { leader = true, mode = "n" })
+		-- clears search highlighting
+		['c'] = { "<cmd>nohl<cr>", "Clear search highlights" },
+		-- zen mode
+		['z'] = { function() require("zen-mode").toggle() end, "Toggle zen mode" },
+		-- find functions with telescope
+		['f'] = {
+			['f'] = { function() ts.find_files() end, "Find files" },
+			['p'] = { function() tfp.find_files_from_project_git_root() end,
+				"Find files in project" },
+			['g'] = { function() ts.live_grep() end, "Live grep" },
+			['b'] = { function() ts.buffers() end, "Find buffers" },
+		}
+	}, { prefix = "<leader>", mode = "n" })
 end
 
 M.cmp_mappings = function()
@@ -168,16 +198,16 @@ M.lsp_mappings = function(bufnr)
 	}, { mode = "n", buffer = bufnr, noremap = true, silent = true })
 	wk.register({
 		-- opens up the nvim tree
-		['t'] = { lsp.buf.type_definition , "Goto type definition" },
-		['rn']= { lsp.buf.rename, "Rename all symbol occurrences" },
+		['t'] = { lsp.buf.type_definition, "Goto type definition" },
+		['rn'] = { lsp.buf.rename, "Rename all symbol occurrences" },
 		['D'] = { diagnostic.open_float, "Open diagnostics float" },
 		['q'] = { diagnostic.setloclist, "Open quickfix window" },
 		['wa'] = { lsp.buf.add_workspace_folder, "Add workspace folder" },
 		['wr'] = { lsp.buf.remove_workspace_folder, "Remove workspace folder" },
-		['wl'] = {function()
+		['wl'] = { function()
 			print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-		end, "List all workspaces"}
-	}, { prefix = "<leader>", mode = "n", buffer = bufnr, noremap = true, silent = true})
+		end, "List all workspaces" }
+	}, { prefix = "<leader>", mode = "n", buffer = bufnr, noremap = true, silent = true })
 end
 
 return M

@@ -65,6 +65,18 @@ M.on_attach = function(client, bufnr)
 		vim.lsp.handlers.hover,
 		{ border = "rounded" }
 	)
+	vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+		vim.lsp.handlers.hover,
+		{ border = "rounded" }
+	)
+	vim.diagnostic.config({
+		float = { border = "rounded" }
+	})
+
+	require("lspconfig.ui.windows").default_options = {
+		border = "rounded"
+	}
+
 	require("core.mappings").lsp_mappings(bufnr)
 end
 
