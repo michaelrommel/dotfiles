@@ -144,8 +144,10 @@ M.dap_mappings = function()
 			-- start the debugging: mnemonic debug run
 			r = {
 				function()
-					local addr = fn.input("Host: ", "127.0.0.1")
-					require("dap").configurations["javascript"][2]["address"] = addr
+					if vim.bo.filetype == "javascript" then
+						local addr = fn.input("Host: ", "127.0.0.1")
+						require("dap").configurations["javascript"][2]["address"] = addr
+					end
 					require('dap').continue()
 				end, "Run"
 			},
