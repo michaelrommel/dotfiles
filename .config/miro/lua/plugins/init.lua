@@ -596,7 +596,6 @@ require("lazy").setup({
 		event = "BufEnter",
 		config = function()
 			local function restore_nvim_tree()
-				print("Restoring nvim tree")
 				local nt = require('nvim-tree.api')
 				nt.tree.open()
 			end
