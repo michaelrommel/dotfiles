@@ -2,6 +2,7 @@ local lazyopts = require("plugins.conf_lazy").opts
 local icons = require("core.theme").icons
 
 local fn = vim.fn
+local api = vim.api
 
 require("lazy").setup({
 	{
@@ -150,12 +151,20 @@ require("lazy").setup({
 	-- this automatically inserts closing quotes or brackets
 	{
 		"windwp/nvim-autopairs",
+		lazy = true,
 		event = "VeryLazy",
 		config = function()
 			require("nvim-autopairs").setup({})
 		end,
 	},
 	-- a completion engine, that can get suggestions from different sources
+	{
+		"michaelrommel/cmp-gitcommit",
+		lazy = true,
+		config = function()
+			require("cmp-gitcommit").setup({})
+		end,
+	},
 	{
 		"hrsh7th/nvim-cmp",
 		lazy = true,
@@ -176,10 +185,21 @@ require("lazy").setup({
 			-- vsips provider
 			"hrsh7th/cmp-vsnip",
 			"hrsh7th/vim-vsnip",
+			"michaelrommel/cmp-gitcommit",
 		},
 		config = function()
 			local cmp = require("cmp")
 			local cmp_mappings = require("core.mappings").cmp_mappings()
+			-- print("registring autocommand")
+			-- if vim.bo.filetype == "gitcommit" then
+			-- 	cmp.setup.buffer({
+			-- 		sources = cmp.config.sources({
+			-- 			{ name = "conventionalcommits" }
+			-- 		}, {
+			-- 			{ name = "buffer" }
+			-- 		})
+			-- 	})
+			-- end
 			cmp.setup({
 				experimental = {
 					ghost_text = { hl_group = 'Comment' }
@@ -216,6 +236,7 @@ require("lazy").setup({
 							luasnip = "[lsnip]",
 							vsnip = "[vsnip]",
 							nvim_lua = "[lua]",
+							gitcommit = "[gc]",
 						})[entry.source.name]
 						return vim_item
 					end
@@ -223,7 +244,7 @@ require("lazy").setup({
 				-- the helper builds groups, second group will not
 				-- show, while the first one is available
 				sources = cmp.config.sources({
-					-- { name = 'luasnip' },
+					{ name = "gitcommit" },
 					{ name = 'vsnip' },
 					{ name = 'nvim_lsp' },
 					{ name = 'path' },
@@ -238,14 +259,14 @@ require("lazy").setup({
 					{ name = 'buffer' }
 				}
 			})
-			cmp.setup.cmdline(':', {
-				mapping = cmp.mapping.preset.cmdline(),
-				sources = cmp.config.sources({
-					-- 	{ name = 'path' }
-					-- }, {
-					{ name = 'cmdline' }
-				})
-			})
+			-- cmp.setup.cmdline(':', {
+			-- 	mapping = cmp.mapping.preset.cmdline(),
+			-- 	sources = cmp.config.sources({
+			-- 		-- 	{ name = 'path' }
+			-- 		-- }, {
+			-- 		{ name = 'cmdline' }
+			-- 	})
+			-- })
 		end,
 	},
 	-- autoinstaller for language servers' configurations
@@ -585,6 +606,7 @@ require("lazy").setup({
 				auto_session_enabled = true,
 				auto_session_create_enabled = true,
 				post_restore_cmds = { restore_nvim_tree },
+				bypass_session_save_file_types = { "gitcommit", "NvimTree" }
 			})
 		end
 	},

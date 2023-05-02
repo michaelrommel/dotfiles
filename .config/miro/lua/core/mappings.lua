@@ -66,6 +66,12 @@ end
 
 M.cmp_mappings = function()
 	local cmp = require("cmp")
+	local has_words_before = function()
+		unpack = unpack or table.unpack
+		local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+		return col ~= 0 and
+			vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+	end
 	return {
 		-- scroll the documentation, if an entry provides it
 		['<C-y>'] = cmp.mapping.scroll_docs(-4), -- Up
@@ -75,9 +81,10 @@ M.cmp_mappings = function()
 			if cmp.visible() then
 				cmp.abort()
 			else
+				print("complete()")
 				cmp.complete()
 			end
-		end, { 'i', 's' }),
+		end, { 's', 'i' }),
 		-- confirm the current selection and close float
 		['<CR>'] = cmp.mapping.confirm {
 			-- replace rest of the word if in the middle
@@ -107,11 +114,9 @@ M.cmp_mappings = function()
 			if cmp.visible() then
 				cmp.select_next_item()
 			elseif fn["vsnip#available"](1) == 1 then
-				print("available=" .. fn["vsnip#available"](1))
-				-- feedkey("<Plug>(vsnip-jump-next)", "")
 				feedkey("<Plug>(vsnip-expand-or-jump)", "")
-				-- elseif has_words_before() then
-				-- 	cmp.complete()
+			elseif has_words_before() then
+				cmp.complete()
 			else
 				fallback()
 			end

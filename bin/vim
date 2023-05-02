@@ -1,0 +1,5 @@
+#! /bin/bash
+if [[ "$0" =~ "vimdiff" ]]; then
+	OPTS=-d
+fi
+NVIM_APPNAME=miro nvim ${OPTS} $*
