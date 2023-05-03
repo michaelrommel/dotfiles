@@ -47,6 +47,9 @@ opt.showbreak = " " .. utf8(0xf17aa) .. " "
 opt.synmaxcol = 240
 -- set sessionoptions for compatibility with auto-session
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+-- these options are necessary for which-key as well
+opt.timeout = true
+opt.timeoutlen = 500
 
 -- disable some default providers
 for _, provider in ipairs { "node", "perl", "ruby" } do

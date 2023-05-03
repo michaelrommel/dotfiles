@@ -69,21 +69,6 @@ require("lazy").setup({
 			})
 		end,
 	},
-	-- this ensures that mason autoinstalls the mentioned formatters
-	{
-		"jay-babu/mason-null-ls.nvim",
-		lazy = true,
-		ft = { "python", "javascript", "json", "json5", "lua" },
-		dependencies = {
-			"williamboman/mason.nvim",
-			"jose-elias-alvarez/null-ls.nvim",
-		},
-		config = function()
-			require("mason-null-ls").setup({
-				ensure_installed = { "jq", "black", "isort" }
-			})
-		end,
-	},
 	-- an implementation of the Debug Adapter Protocol for nvim
 	{
 		"mfussenegger/nvim-dap",
@@ -343,6 +328,23 @@ require("lazy").setup({
 			}
 		end
 	},
+	-- this ensures that mason autoinstalls the mentioned formatters
+	{
+		"jay-babu/mason-null-ls.nvim",
+		lazy = true,
+		event = { "BufReadPre", "BufNewFile" },
+		-- ft = { "python", "javascript", "json", "json5", "lua" },
+		dependencies = {
+			"williamboman/mason.nvim",
+			"jose-elias-alvarez/null-ls.nvim",
+		},
+		config = function()
+			require("mason-null-ls").setup({
+				ensure_installed = nil,
+				automatic_installation = false,
+			})
+		end,
+	},
 	-- fallback language server, that can use external programs for linting
 	-- and autoformatting
 	{
@@ -430,8 +432,6 @@ require("lazy").setup({
 		lazy = true,
 		event = "VeryLazy",
 		config = function()
-			vim.o.timeout = true
-			vim.o.timeoutlen = 600
 			require("which-key").setup({
 				window = { border = "rounded" },
 			})
@@ -609,40 +609,51 @@ require("lazy").setup({
 			})
 		end
 	},
-	-- make code images
+	-- create code images
 	{
-		"krivahtoo/silicon.nvim",
+		"michaelrommel/nvim-silicon",
 		lazy = true,
-		build = "./install.sh build",
 		cmd = "Silicon",
 		config = function()
-			require('silicon').setup {
-				font = 'VictorMono Nerd Font=34; Noto Color Emoji',
-				theme = 'gruvbox',
-				background = '#1d2021',
-				line_number = true,
-				pad_vert = 40,
-				pad_horiz = 50,
-				output = {
-					path = "."
-				},
-				shadow = {
-					blur_radius = 20,
-					offset_x = 8,
-					offset_y = 8,
-					color = "#100808"
-				},
-				watermark = {
-					text = ' @miro  ',
-					color = "#83a598"
-				},
-				window_title = function()
-					return vim.fn.fnamemodify(vim.fn.bufname(vim.fn.bufnr()), ':~:.')
-				end,
-			}
+			require("silicon").setup({
+				-- Configuration here, or leave empty to use defaults
+			})
 		end
 	},
 	-- TODO: remove comment lines
+	-- make code images
+	-- {
+	-- 	"krivahtoo/silicon.nvim",
+	-- 	lazy = true,
+	-- 	build = "./install.sh build",
+	-- 	cmd = "Silicon",
+	-- 	config = function()
+	-- 		require('silicon').setup()
+	-- 		-- -- font = 'VictorMono Nerd Font=34; Noto Color Emoji',
+	-- 		-- -- theme = 'gruvbox',
+	-- 		-- background = '#1d2021',
+	-- 		-- line_number = true,
+	-- 		-- pad_vert = 40,
+	-- 		-- pad_horiz = 50,
+	-- 		-- output = {
+	-- 		-- 	path = "."
+	-- 		-- },
+	-- 		-- shadow = {
+	-- 		-- 	blur_radius = 20,
+	-- 		-- 	offset_x = 8,
+	-- 		-- 	offset_y = 8,
+	-- 		-- 	color = "#100808"
+	-- 		-- },
+	-- 		-- watermark = {
+	-- 		-- 	text = ' @miro  ',
+	-- 		-- 	color = "#83a598"
+	-- 		-- },
+	-- 		-- window_title = function()
+	-- 		-- 	return vim.fn.fnamemodify(vim.fn.bufname(vim.fn.bufnr()), ':~:.')
+	-- 		-- end,
+	-- 		--})
+	-- 	end
+	-- },
 	-- motion plugin
 	-- {
 	-- 	"ggandor/leap.nvim",

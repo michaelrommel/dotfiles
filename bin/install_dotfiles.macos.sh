@@ -125,7 +125,8 @@ echo "Installing neovim configurations"
 mkdir -p "${HOME}/.config/miro"
 cd "${HOME}/.config/miro" || exit
 ln -sf ../../.dotfiles/.config/miro/init.lua .
-ln -sf ../../.dotfiles/.config/miro/lua .
+ln -sf ../../.dotfiles/.config/miro/lua/ .
+ln -sf ../../.dotfiles/.config/miro/after/ .
 
 echo "Installing asciidoctor extensions"
 # cargo install --version 0.4.2 svgbob_cli

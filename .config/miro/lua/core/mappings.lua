@@ -30,6 +30,7 @@ M.std_mappings = function()
 		-- moves the cursor left and right in insert mode
 		['<C-h>'] = { "<Left>", "Move 1 char left" },
 		['<C-l>'] = { "<Right>", "Move 1 char right" },
+		['kj'] = { "<Esc>", "Alternative Escape" },
 	}, { mode = { "i", "v" } })
 	wk.register({
 		-- jumps to splits
@@ -44,7 +45,8 @@ M.std_mappings = function()
 	}, { mode = { "n" } })
 	wk.register({
 		-- jumps to splits
-		['<Esc>'] = { "<C-\\><C-n>", "Close terminal" },
+		['<C-q>'] = { "<C-\\><C-n>", "Put terminal in Normal mode" },
+		-- ['kj'] = { "<C-\\><C-n>", "Put terminal in Normal mode" },
 	}, { mode = { "t" } })
 	wk.register({
 		-- opens up the nvim tree

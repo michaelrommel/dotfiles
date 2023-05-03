@@ -1,4 +1,4 @@
-require "core"
+require("core")
 
 -- initialize lazy loader
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

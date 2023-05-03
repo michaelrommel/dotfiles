@@ -90,6 +90,8 @@ ln -sf ../.dotfiles/bin/emoji.js .
 ln -sf ../.dotfiles/bin/remove_stale_agents.sh .
 ln -sf ../.dotfiles/bin/vff.sh .
 ln -sf ../.dotfiles/bin/reset_nvim.sh .
+ln -sf ../.dotfiles/bin/vim .
+ln -sf ../.dotfiles/bin/vim vimdiff
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
 	# on WSL2 install a shell script with npiperelay as ssh-agent
 	ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
@@ -212,6 +214,12 @@ done
 # ln -sf ../.dotfiles/.vim/coc-settings.json .
 # vim -es -u "${HOME}/.vimrc" -i NONE -c "PlugInstall" -c "qa"
 
+echo "Installing fonts"
+mkdir -p "${HOME}/.local/share"
+cd "${HOME}/.local/share" || exit
+ln -sf ../../.dotfiles/.local/share/fonts/ .
+fc-cache -f
+
 echo "Updating neovim"
 sudo apt-get install ninja-build gettext cmake unzip curl
 cd "${HOME}" || exit
@@ -234,7 +242,8 @@ echo "Installing neovim configurations"
 mkdir -p "${HOME}/.config/miro"
 cd "${HOME}/.config/miro" || exit
 ln -sf ../../.dotfiles/.config/miro/init.lua .
-ln -sf ../../.dotfiles/.config/miro/lua .
+ln -sf ../../.dotfiles/.config/miro/lua/ .
+ln -sf ../../.dotfiles/.config/miro/after/ .
 
 echo "Installing shellcheck"
 mkdir -p "${HOME}/software"
@@ -242,11 +251,6 @@ cd "${HOME}/software" || exit
 scversion="stable" # or "v0.4.7", or "latest"
 curl -sL "https://github.com/koalaman/shellcheck/releases/download/${scversion?}/shellcheck-${scversion?}.linux.x86_64.tar.xz" | tar -xJ
 sudo cp "shellcheck-${scversion}/shellcheck" /usr/bin/
-
-echo "Installing neovim configurations"
-mkdir -p "${HOME}/.config/nvim"
-cd "${HOME}/.config/nvim" || exit
-ln -sf ../../.dotfiles/.config/nvim/init.lua .
 
 echo "Installing asciidoctor extensions"
 # cargo install --version 0.4.2 svgbob_cli
