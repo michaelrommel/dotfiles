@@ -9,7 +9,7 @@ const delay = (s) => {
 };
 
 const bestWishes = async (name) => {
-  const bff = /^Firstname Lastname$/i;
+  const bff = /^John Doe$/i;
   if (bff.test(name)) {
     while ('🚶' !== '⚰') {
       process.stdout.write('🥰 ');
