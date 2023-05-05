@@ -30,7 +30,7 @@ M.std_mappings = function()
 		-- moves the cursor left and right in insert mode
 		['<C-h>'] = { "<Left>", "Move 1 char left" },
 		['<C-l>'] = { "<Right>", "Move 1 char right" },
-		['kj'] = { "<Esc>", "Alternative Escape" },
+		-- ['kj'] = { "<Esc>", "Alternative Escape" },
 	}, { mode = { "i", "v" } })
 	wk.register({
 		-- jumps to splits
@@ -38,8 +38,8 @@ M.std_mappings = function()
 		['<C-j>'] = { "<C-w>j", "Lower split" },
 		['<C-k>'] = { "<C-w>k", "Upper split" },
 		['<C-l>'] = { "<C-w>l", "Right split" },
-		['<C-t>'] = { function() miniterm_toggle() end, "Toggle Mini Terminal" },
-		['<C-S-t>'] = { function() floatterm_toggle() end, "Toggle Terminal" },
+		['<C-c>'] = { function() miniterm_toggle() end, "Toggle Mini Terminal" },
+		['<C-S-c>'] = { function() floatterm_toggle() end, "Toggle Terminal" },
 		['[t'] = { function() tc.jump_prev() end, "Previous TODO" },
 		[']t'] = { function() tc.jump_next() end, "Next TODO" },
 	}, { mode = { "n" } })

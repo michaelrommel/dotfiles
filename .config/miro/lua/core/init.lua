@@ -50,6 +50,8 @@ opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,te
 -- these options are necessary for which-key as well
 opt.timeout = true
 opt.timeoutlen = 500
+-- for minimal tabline
+opt.showtabline = 2
 
 -- disable some default providers
 for _, provider in ipairs { "node", "perl", "ruby" } do

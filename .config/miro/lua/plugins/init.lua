@@ -513,7 +513,14 @@ require("lazy").setup({
 						override_file_sorter = true,
 						case_mode = "smart_case",
 					}
-				}
+				},
+				defaults = {
+					mappings = {
+						n = {
+							["q"] = require('telescope.actions').close,
+						},
+					},
+				},
 			})
 			require("telescope").load_extension('fzf')
 		end,
@@ -617,65 +624,27 @@ require("lazy").setup({
 		config = function()
 			require("silicon").setup({
 				-- Configuration here, or leave empty to use defaults
+				font = "VictorMono NF=34;Noto Emoji=34",
+				to_clipboard = false,
 			})
 		end
 	},
-	-- TODO: remove comment lines
-	-- make code images
-	-- {
-	-- 	"krivahtoo/silicon.nvim",
-	-- 	lazy = true,
-	-- 	build = "./install.sh build",
-	-- 	cmd = "Silicon",
-	-- 	config = function()
-	-- 		require('silicon').setup()
-	-- 		-- -- font = 'VictorMono Nerd Font=34; Noto Color Emoji',
-	-- 		-- -- theme = 'gruvbox',
-	-- 		-- background = '#1d2021',
-	-- 		-- line_number = true,
-	-- 		-- pad_vert = 40,
-	-- 		-- pad_horiz = 50,
-	-- 		-- output = {
-	-- 		-- 	path = "."
-	-- 		-- },
-	-- 		-- shadow = {
-	-- 		-- 	blur_radius = 20,
-	-- 		-- 	offset_x = 8,
-	-- 		-- 	offset_y = 8,
-	-- 		-- 	color = "#100808"
-	-- 		-- },
-	-- 		-- watermark = {
-	-- 		-- 	text = ' @miro  ',
-	-- 		-- 	color = "#83a598"
-	-- 		-- },
-	-- 		-- window_title = function()
-	-- 		-- 	return vim.fn.fnamemodify(vim.fn.bufname(vim.fn.bufnr()), ':~:.')
-	-- 		-- end,
-	-- 		--})
-	-- 	end
-	-- },
-	-- motion plugin
-	-- {
-	-- 	"ggandor/leap.nvim",
-	-- 	lazy = true,
-	-- 	event = "BufEnter",
-	-- 	config = function()
-	-- 		require("leap").add_default_mappings()
-	-- 	end
-	-- },
-	-- tab bar
-	-- {
-	-- 	'romgrk/barbar.nvim',
-	-- 	dependencies = {
-	-- 		'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
-	-- 		'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-	-- 	},
-	-- 	init = function() vim.g.barbar_auto_setup = false end,
-	-- 	opts = {
-	-- 		-- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
-	-- 		animation = false,
-	-- 		minimum_padding = 2,
-	-- 	},
-	-- 	version = '^1.0.0', -- optional: only update when a new 1.x version is released
-	-- },
+	-- slim tab line
+	{
+		'michaelrommel/nvim-tabline',
+		lazy = true,
+		event = "BufEnter",
+		dependencies = { 'nvim-tree/nvim-web-devicons' }, -- optional
+		config = function()
+			require("tabline").setup({
+				show_index = true,
+				show_modify = true,
+				show_icon = true,
+				modify_indicator = ":+",
+				no_name = "no name",
+				brackets = { "", "" },
+				inactive_tab_max_length = 20,
+			})
+		end
+	},
 }, lazyopts)
