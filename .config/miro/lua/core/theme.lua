@@ -6,7 +6,7 @@ local fn = vim.fn
 -- Change diagnostic signs to be consistent with defaults from nvim-lualine
 fn.sign_define("DiagnosticSignError", { text = utf8(0xf659), texthl = "DiagnosticSignError" })
 fn.sign_define("DiagnosticSignWarn", { text = utf8(0xf529), texthl = "DiagnosticSignWarn" })
-fn.sign_define("DiagnosticSignInformation", { text = utf8(0xf7fc), texthl = "DiagnosticSignInfo" })
+fn.sign_define("DiagnosticSignInfo", { text = utf8(0xf7fc), texthl = "DiagnosticSignInfo" })
 fn.sign_define("DiagnosticSignHint", { text = utf8(0xf835), texthl = "DiagnosticSignHint" })
 
 -- Diagnostic popup

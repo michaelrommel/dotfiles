@@ -624,8 +624,8 @@ require("lazy").setup({
 		config = function()
 			require("silicon").setup({
 				-- Configuration here, or leave empty to use defaults
-				font = "VictorMono NF=34;Noto Emoji=34",
-				to_clipboard = false,
+				theme = "gruvbox",
+				to_clipboard = true,
 			})
 		end
 	},
