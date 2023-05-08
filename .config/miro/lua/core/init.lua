@@ -35,6 +35,7 @@ opt.ruler = false
 -- new windows appear on the right and below the current window
 opt.splitright = true
 opt.splitbelow = true
+opt.equalalways = true
 -- use the clipboard instead of registers
 opt.clipboard = "unnamedplus"
 -- keep an undo file
