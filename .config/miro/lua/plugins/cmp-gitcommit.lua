@@ -2,7 +2,5 @@
 return {
 	"michaelrommel/cmp-gitcommit",
 	lazy = true,
-	config = function()
-		require("cmp-gitcommit").setup({})
-	end,
+	config = true,
 }

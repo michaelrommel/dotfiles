@@ -6,12 +6,10 @@ return {
 	dependencies = {
 		"folke/twilight.nvim"
 	},
-	config = function()
-		require("zen-mode").setup({
-			window = {
-				-- width = 0.9,
-				width = 120,
-			}
-		})
-	end
+	opt = {
+		window = {
+			-- width = 0.9,
+			width = 120,
+		}
+	}
 }

@@ -3,11 +3,9 @@ return {
 	"folke/twilight.nvim",
 	lazy = true,
 	event = "BufEnter",
-	config = function()
-		require("twilight").setup({
-			dimming = {
-				alpha = 0.7,
-			}
-		})
-	end
+	opt = {
+		dimming = {
+			alpha = 0.7,
+		}
+	}
 }

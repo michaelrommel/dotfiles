@@ -80,7 +80,7 @@ M.cmp_mappings = function()
 			if cmp.visible() then
 				cmp.abort()
 			else
-				print("complete()")
+				-- print("complete()")
 				cmp.complete()
 			end
 		end, { 's', 'i' }),

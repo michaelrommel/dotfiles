@@ -3,9 +3,7 @@ return {
 	"notjedi/nvim-rooter.lua",
 	lazy = true,
 	event = "BufEnter",
-	config = function()
-		require("nvim-rooter").setup({
-			rooter_patterns = { ".git", "pyproject.toml" }
-		})
-	end
+	opt = {
+		rooter_patterns = { ".git", "pyproject.toml" }
+	}
 }

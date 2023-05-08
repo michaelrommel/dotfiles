@@ -14,12 +14,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local lazyopts = require("configs.conf_lazy").opts
-
 -- load theme icons
 require("core.theme")
 
 -- lazy load now all plugins
+local lazyopts = require("configs.conf_lazy").opts
 require("lazy").setup("plugins", lazyopts)
 
 -- load all key mappings

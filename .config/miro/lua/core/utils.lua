@@ -33,6 +33,8 @@ M.dump = function(t)
 			-- print(v)
 			if type(k) == "number" then
 				k = '["' .. k .. '"]'
+			else
+				k = conv[type(k)](k)
 			end
 			if type(v) == "table" then
 				s = s .. (s == "{" and " " or ", ") .. (k .. " = " .. M.dump(v))

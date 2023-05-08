@@ -3,16 +3,14 @@
 return {
 	"nvim-lualine/lualine.nvim",
 	lazy = false,
-	config = function()
-		require("lualine").setup({
-			options = {
-				theme = 'gruvbox',
-			},
-			sections = {
-				lualine_y = { "progress", "selectioncount" }
-			}
-		})
-	end,
+	opts = {
+		options = {
+			theme = 'gruvbox',
+		},
+		sections = {
+			lualine_y = { "progress", "selectioncount" }
+		}
+	},
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
 		"ellisonleao/gruvbox.nvim",
