@@ -3,9 +3,6 @@ local fn = vim.fn
 local lsp = vim.lsp
 local diagnostic = vim.diagnostic
 
--- this is the standard leader for neovim in many configurations
-vim.g.mapleader = " "
-
 local feedkey = function(key, mode)
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
@@ -13,9 +10,9 @@ end
 M.std_mappings = function()
 	local wk = require("which-key")
 	local ts = require("telescope.builtin")
-	local tsc = require("plugins.conf_telescope")
+	local tsc = require("configs.conf_telescope")
 	local tc = require("todo-comments")
-	local ttc = require("plugins.conf_toggleterm")
+	local ttc = require("configs.conf_toggleterm")
 	local term = require('toggleterm.terminal').Terminal
 	local floatterm = term:new(ttc.floatterm_opts)
 	local function floatterm_toggle()

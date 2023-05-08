@@ -18,4 +18,32 @@ M.utf8 = function(decimal)
 	return table.concat(charbytes)
 end
 
+M.dump = function(t)
+	local conv = {
+		["nil"] = function() return "nil" end,
+		["function"] = function(f) return tostring(f) end,
+		["number"] = function(n) return tostring(n) end,
+		["string"] = function(s) return '"' .. s .. '"' end,
+		["boolean"] = function(b) return tostring(b) end
+	}
+	if type(t) == "table" then
+		local s = "{"
+		for k, v in pairs(t) do
+			-- print(k)
+			-- print(v)
+			if type(k) == "number" then
+				k = '["' .. k .. '"]'
+			end
+			if type(v) == "table" then
+				s = s .. (s == "{" and " " or ", ") .. (k .. " = " .. M.dump(v))
+			else
+				s = s .. (s == "{" and " " or ", ") .. k .. " = " .. conv[type(v)](v)
+			end
+		end
+		return s .. " }"
+	else
+		return conv[type(t)](t)
+	end
+end
+
 return M

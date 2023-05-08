@@ -3,6 +3,9 @@ local utf8 = require("core.utils").utf8
 local opt = vim.opt
 local g = vim.g
 
+-- this is the standard leader for neovim in many configurations
+vim.g.mapleader = " "
+
 -- This enables 24 bit aka Truecolor. Also switches to using guifg
 -- attributes instead of cterm attributes:
 opt.termguicolors = true

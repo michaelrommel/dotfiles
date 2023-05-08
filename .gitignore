@@ -61,3 +61,6 @@ typings/
 
 # ctags
 tags
+
+# neovim custom directory for local overrides
+.config/miro/lua/custom/

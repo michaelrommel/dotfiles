@@ -14,8 +14,22 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+local lazyopts = require("configs.conf_lazy").opts
+-- local overrides = require("custom.plugins").overrides
+-- local dump = require("core.utils").dump
+
+-- local plugins = vim.tbl_deep_extend(
+-- 	"force",
+-- 	default_plugins,
+-- 	overrides or {}
+-- )
+-- vim.notify(dump(plugins), vim.log.levels.info)
+
+-- load theme icons
+require("core.theme")
+
 -- lazy load now all plugins
-require("plugins")
+require("lazy").setup("plugins", lazyopts)
 
 -- load all key mappings
 require("core.mappings")
