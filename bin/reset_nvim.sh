@@ -10,4 +10,5 @@ rm -rf ".local/state/${NVAN}"
 mkdir -p ".config/${NVAN}"
 cd ".config/${NVAN}" || exit
 ln -sf ../../.dotfiles/.config/${NVAN}/init.lua .
-ln -sf ../../.dotfiles/.config/${NVAN}/lua .
+ln -sf ../../.dotfiles/.config/${NVAN}/lua/ .
+ln -sf ../../.dotfiles/.config/${NVAN}/after/ .

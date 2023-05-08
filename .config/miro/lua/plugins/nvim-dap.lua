@@ -7,7 +7,7 @@ return {
 		-- register key mappings for working in debug mode
 		require("core.mappings").dap_mappings()
 		-- set up the javascript adapter, the nvim-dap-vscode-js does not work
-		require("plugins.conf_dap").setup()
+		require("configs.conf_dap_js").setup()
 	end,
 	dependencies = {
 		"jay-babu/mason-nvim-dap.nvim",

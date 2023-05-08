@@ -15,15 +15,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local lazyopts = require("configs.conf_lazy").opts
--- local overrides = require("custom.plugins").overrides
--- local dump = require("core.utils").dump
-
--- local plugins = vim.tbl_deep_extend(
--- 	"force",
--- 	default_plugins,
--- 	overrides or {}
--- )
--- vim.notify(dump(plugins), vim.log.levels.info)
 
 -- load theme icons
 require("core.theme")

@@ -4,6 +4,8 @@ local opt = vim.opt
 local g = vim.g
 
 -- this is the standard leader for neovim in many configurations
+-- it is the only keymapping we set here, because this needs to be
+-- sourced before the plugin manager
 vim.g.mapleader = " "
 
 -- This enables 24 bit aka Truecolor. Also switches to using guifg
