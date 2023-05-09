@@ -7,7 +7,7 @@ return {
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
 	},
-	opt = {
+	opts = {
 		view = {
 			width = 50,
 			mappings = {

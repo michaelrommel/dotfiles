@@ -95,6 +95,7 @@ ln -sf ../.dotfiles/bin/vim vimdiff
 if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then
 	# on WSL2 install a shell script with npiperelay as ssh-agent
 	ln -sf ../.dotfiles/bin/wsl2-relay-agent.sh ssh-agent
+	ln -sf ../.dotfiles/bin/nvim-paste.sh .
 	# install the wsltty configuration
 	#cp ../.dotfiles/.wsltty/.wsltty.conf "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config"
 	#cp ../.dotfiles/.wsltty/gruvbox_dark.minttyrc "/mnt/c/Users/rommminw/AppData/Roaming/wsltty/config/themes"
