@@ -102,8 +102,11 @@ zstyle ':completion:*:*:git:*' group-order 'main commands' 'alias commands' 'ext
 # automatically load bash completion functions
 autoload -U +X bashcompinit && bashcompinit
 
-# start autocompletion
-autoload -Uz compinit && compinit
+# start autocompletion only here, if it hasn't been started already via
+# the carapace init script
+if [[ -z "${CARAPACE_EXCLUDES}" ]]; then
+	autoload -Uz compinit && compinit
+fi
 
 if [[ -d "${HOME}/.config/zsh/zsh-autosuggestions" ]]; then
 	# autosuggestion

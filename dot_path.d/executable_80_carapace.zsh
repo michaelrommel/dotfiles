@@ -4,5 +4,5 @@ if carapace --version >/dev/null 2>&1; then
 	export CARAPACE_EXCLUDES='kill'
 	export CARAPACE_MATCH=1
 	autoload -Uz compinit && compinit
-	source <(carapace _carapace)
+	source <(carapace _carapace zsh)
 fi

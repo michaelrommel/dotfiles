@@ -1,2 +1,7 @@
 tags
+examples/nodejs/node_modules
+examples/python/.venv
+examples/rust/.bacon-locations
+examples/rust/Cargo.lock
+examples/rust/target
 
