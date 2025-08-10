@@ -7,6 +7,8 @@ update_carapace() {
 	arch="$(get_arch)"
 	if [[ "$arch" == "x86_64" ]]; then
 		arch="amd64"
+	elif [[ "${arch}" == "aarch64" ]]; then
+		arch="arm64"
 	fi
 	mkdir -p "${HOME}/bin"
 	latest=$(curl -s https://api.github.com/repositories/257400448/tags | jq -r ".[0].name")
