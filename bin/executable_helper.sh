@@ -7,9 +7,9 @@ is_zsh() {
 
 if ! is_zsh && [[ "${BASH_VERSINFO[0]}" -lt 4 ]]; then
 	if [[ -x /opt/homebrew/bin/bash ]]; then
-		/opt/homebrew/bin/bash -c "$0"
+		exec /opt/homebrew/bin/bash "$0"
 	elif [[ -x /usr/local/bin/bash ]]; then
-		/usr/local/bin/bash -c "$0"
+		exec /usr/local/bin/bash "$0"
 	else
 		echo "Your bash is too old."
 		exit 1
