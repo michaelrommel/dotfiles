@@ -5,6 +5,9 @@ source "${HOME}/bin/helper.sh"
 update_mise() {
 	echo "Updating mise..."
 	platform="${OS}"
+	if [ "$platform" = darwin ]; then
+		platform="macos"
+	fi
 	arch="$(get_arch)"
 	if [ "$arch" = x86_64 ]; then
 		arch="x64"
