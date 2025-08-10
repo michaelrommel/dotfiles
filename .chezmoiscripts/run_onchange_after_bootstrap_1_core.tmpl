@@ -1,0 +1,170 @@
+#! /usr/bin/env bash
+
+# This script should install all necessary packages and tools for 
+# the "core" version of the dotfiles
+
+{{ if not (has "core" .global.roles)  -}}
+exit 0
+{{ end -}}
+
+echo "bootstrap core"
+
+source "${HOME}/bin/helper.sh"
+cd "${HOME}" || exit
+
+echo "Installing basic packages"
+if is_mac; then
+	desired=(jq mosh keychain ncurses gawk autoconf automake pkg-config 
+		coreutils imagemagick fzf)
+	missing=()
+	check_brewed "missing" "${desired[@]}"
+	if [[ "${#missing[@]}" -gt 0 ]]; then
+		echo "(brew) installing ${missing[*]}"
+		brew install "${missing[@]}"
+	fi
+else
+	# default packages for all debian versions
+	desired=(curl git jq vim mosh keychain zsh ncurses-bin apt-file file
+		unzip sysstat net-tools  bc gawk universal-ctags socat
+		librsvg2-bin imagemagick)
+	eval "$(grep VERSION_ID /etc/os-release)"
+	if [[ ${VERSION_ID} -ge 13 ]]; then
+		desired+=(bind9-dnsutils)
+	else
+		desired+=(dnsutils software-properties-common)
+	fi
+	missing=()
+	check_dpkged "missing" "${desired[@]}"
+	if [[ "${#missing[@]}" -gt 0 ]]; then
+		echo "(apt) installing ${missing[*]}"
+		sudo apt-get -y update
+		sudo apt-get -y install "${missing[@]}"
+	fi
+
+	if [[ ! -x "${HOME}/.fzf/bin/fzf" ]]; then
+		echo "Installing fzf"
+		# needs to come before zsh, as we are sourceing completion & keybindings there
+		cd "${HOME}" || exit
+		git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
+		"${HOME}/.fzf/install" --no-key-bindings --no-completion --no-update-rc --no-bash --no-zsh --no-fish
+	fi
+
+fi
+
+mkdir -p "${HOME}/.cargo/bin"
+mkdir -p "${HOME}/bin"
+
+# shell prompt
+if [[ ! -f "${HOME}/.cargo/bin/starship" ]]; then
+	"${HOME}/bin/update_starship.sh"
+fi
+
+# smarter "cd"
+if [[ ! -f "${HOME}/.cargo/bin/zoxide" ]]; then
+	"${HOME}/bin/update_zoxide.sh"
+fi
+
+# column oriented file manager
+if [[ ! -f "${HOME}/.cargo/bin/yazi" ]]; then
+	"${HOME}/bin/update_yazi.sh"
+fi
+
+# better autocompletion in the shell
+if [[ ! -f "${HOME}/bin/carapace" ]]; then
+	"${HOME}/bin/update_carapace.sh"
+fi
+
+cd "${HOME}" || exit
+# version manager for tools
+if [[ ! -f "${HOME}/bin/mise" ]]; then
+	source "${HOME}/bin/update_mise.sh"
+fi
+
+cd "${HOME}" || exit
+if is_wsl; then
+	if ! go version >/dev/null 2>&1; then
+		source "${HOME}/bin/install_go.sh"
+	fi
+	# compile the npiperelay program if it is not already existing
+	NPR=/mnt/c/ProgramFiles/npiperelay/npiperelay.exe
+	if [[ ! -f "${NPR}" ]]; then
+		unset GOBIN
+		GOOS=windows go install github.com/jstarks/npiperelay@latest
+		cp "${GOPATH}/bin/windows_amd64/npiperelay.exe" "${NPR}"
+	fi
+fi
+
+GIT_VERSION=$(git --version | sed -e 's/git version \([0-9]*\.[0-9]*\)\..*/\1/')
+#if (($(echo "${GIT_VERSION} < 2.26" | bc -l))); then
+if ! satisfied "2.26" "${GIT_VERSION}"; then
+	if ! is_mac; then
+		source /etc/os-release
+		if [[ ${VERSION_CODENAME} == "buster" ]]; then
+			echo "Adding buster backports"
+			echo "deb http://deb.debian.org/debian buster-backports main" |
+				sudo tee /etc/apt/sources.list.d/buster-backports.list
+			sudo apt update
+			sudo apt install -y -t buster-backports git
+		else
+			echo "git is outdated, you should build git from source"
+			# cd "${HOME}" || exit
+			# mkdir -p "${HOME}/software"; cd "${HOME}/software" || exit
+			# git clone git://git.kernel.org/pub/scm/git/git.git
+			# sudo apt remove -y git
+			# cd git || exit
+			# make configure
+			# ./configure --prefix=/usr
+			# make all info
+			# sudo make install install-info
+		fi
+	fi
+fi
+
+cd "${HOME}" || exit
+touch .hushlogin
+
+if ! is_mac; then
+	MYSH=$(getent passwd "${LOGNAME}" | cut -d: -f7)
+	if [[ ! $MYSH =~ "zsh" ]]; then
+		echo "Changing login shell to zsh"
+		sudo chsh -s /usr/bin/zsh "${LOGNAME}"
+		echo "done"
+	fi
+fi
+
+## I may replace some functions with the chezmoi data
+## {
+##   "chezmoi": {
+##     "arch": "amd64",
+##     "configFile": "/home/logsan/.config/chezmoi/chezmoi.toml",
+##     "destDir": "/home/logsan",
+##     "executable": "/home/logsan/bin/chezmoi",
+##     "fqdnHostname": "md2v3xkc.ad005.onehc.net",
+##     "hostname": "md2v3xkc",
+##     "kernel": {
+##       "osrelease": "6.6.87.2-microsoft-standard-WSL2",
+##       "ostype": "Linux",
+##       "version": "#1 SMP PREEMPT_DYNAMIC Thu Jun  5 18:30:46 UTC 2025"
+##     },
+##     "os": "linux",
+##     "osRelease": {
+##       "bugReportURL": "https://bugs.debian.org/",
+##       "homeURL": "https://www.debian.org/",
+##       "id": "debian",
+##       "name": "Debian GNU/Linux",
+##       "prettyName": "Debian GNU/Linux 12 (bookworm)",
+##       "supportURL": "https://www.debian.org/support",
+##       "version": "12 (bookworm)",
+##       "versionCodename": "bookworm",
+##       "versionID": "12"
+##     },
+##     "username": "logsan",
+##   },
+##   "global": {
+##     "roles": [
+##       "minimal",
+##       "core",
+##       "tmux"
+##     ]
+##   }
+## }

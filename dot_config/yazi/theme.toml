@@ -1,0 +1,27 @@
+"$schema" = "https://yazi-rs.github.io/schemas/theme.json"
+
+[flavor]
+dark  = "gruvbox-dark"
+light  = "gruvbox-dark"
+
+[mode]
+normal_main = { fg = "#1d2120", bg = "#83a598", bold = true }
+normal_alt  = { fg = "#83a598", bg = "#3c3836" }
+
+# Select mode
+select_main = { fg = "#1d2120", bg = "#fb4934", bold = true }
+select_alt  = { fg = "#fb4934", bg = "#3c3836" }
+
+# Unset mode
+unset_main = { fg = "#1d2120", bg = "#b8bb26", bold = true }
+unset_alt  = { fg = "#b8bb26", bg = "#3c3836" }
+
+[status]
+separator_open  = ""
+separator_close = ""
+
+# Progress
+progress_label = { fg = "#1d2120", bold = true }
+progress_normal = { fg = "#504945", bg = "#3c3836" }
+progress_error = { fg = "#fb4934", bg = "#3c3836" }
+

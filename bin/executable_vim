@@ -1,0 +1,13 @@
+#! /bin/bash
+if [[ "$0" =~ "vimdiff" ]]; then
+	OPTS=-d
+fi
+
+if [[ -x "${HOME}/software/neovim/bin/nvim" ]]; then
+	NVIM=${HOME}/software/neovim/bin/nvim
+else
+	NVIM=nvim
+fi
+
+# shellcheck disable=SC2086,SC2048
+NVIM_APPNAME=miro exec "${NVIM}" ${OPTS} "$@"

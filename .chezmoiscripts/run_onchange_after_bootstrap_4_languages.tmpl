@@ -1,0 +1,42 @@
+#! /usr/bin/env bash
+
+# This script should install all necessary packages and tools for 
+# the "languages" version of the dotfiles
+#
+{{ if not (has "languages" .global.roles)  -}}
+exit 0
+{{ end -}}
+
+echo "bootstrap languages"
+
+source "${HOME}/bin/helper.sh"
+
+cd "${HOME}" || exit
+# version manager for tools
+if [[ ! -f "${HOME}/bin/mise" ]]; then
+	source "${HOME}/bin/update_mise.sh"
+fi
+
+# if we do not set those paths here, then all installed binaries
+# that were installed using mise, cannot be found. We want to be able
+# to rerun this script multiple times without errors
+source "${HOME}/.path.d/50_mise.bash"
+source "${HOME}/.path.d/99_default.sh"
+eval "$(mise hook-env)"
+
+if ! rustup -V >/dev/null 2>&1; then
+	source "${HOME}/bin/install_rust.sh"
+fi
+
+if ! grep -qs python ~/.config/mise/config.toml; then
+	source "${HOME}/bin/install_python.sh"
+fi
+
+if ! node --version >/dev/null 2>&1; then
+	source "${HOME}/bin/install_node.sh"
+fi
+
+if ! go version >/dev/null 2>&1; then
+	source "${HOME}/bin/install_go.sh"
+fi
+

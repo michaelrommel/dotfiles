@@ -1,0 +1,13 @@
+IdentityFile ~/.ssh/id_ed25519
+ForwardAgent yes
+ForwardX11 true
+ForwardX11Trusted false
+ServerAliveInterval 25
+
+Include ~/.colima/ssh_config
+Include "configs/company_config"
+
+Host crow
+HostkeyAlias crow-vpn.layer-7.net
+Hostname 192.168.30.1
+User rommel

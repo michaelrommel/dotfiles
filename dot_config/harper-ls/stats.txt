@@ -1,0 +1,2 @@
+{"kind":{"Lint":{"kind":"Spelling","context":[{"content":"proprietory","kind":{"kind":"Word","value":null}}]}},"when":1745267818,"uuid":"0263634b-8b90-409f-8c46-64f522e62ea9"}
+{"kind":{"Lint":{"kind":"Spelling","context":[{"content":"glueing","kind":{"kind":"Word","value":null}}]}},"when":1745267946,"uuid":"4dfda18c-9740-4cfd-95a6-8848914df715"}

@@ -1,0 +1,36 @@
+#! /usr/bin/env bash
+
+# This script should run every time there is an update and
+# the neovim role is assigned
+
+{{ if not (has "neovim" .global.roles)  -}}
+exit 0
+{{ end -}}
+
+echo "update neovim"
+
+source "${HOME}/bin/helper.sh"
+
+if ! is_mac; then
+	echo "Updating font cache"
+	if [[ -x /usr/bin/fc-cache ]]; then
+		fc-cache -f
+	fi
+fi
+
+echo "Updating theme cache"
+if [[ -d "${HOME}/.config/silicon" ]]; then
+	cd "${HOME}/.config/silicon" || exit
+	if [[ -x "${HOME}/.cargo/bin/silicon" ]]; then
+		SILICON="${HOME}/.cargo/bin/silicon"
+	elif [[ -x "/opt/homebrew/bin/silicon" ]]; then
+		SILICON="/opt/homebrew/bin/silicon"
+	else
+		unset SILICON
+	fi
+
+	if [[ -n "${SILICON}" ]]; then
+		"${SILICON}" --build-cache 1>/dev/null
+	fi
+fi
+

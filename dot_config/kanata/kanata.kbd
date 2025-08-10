@@ -1,0 +1,109 @@
+(platform (macos)
+  (defcfg
+    process-unmapped-keys yes
+    concurrent-tap-hold yes
+    ;; macos-dev-names-exclude (
+    ;;   "MX Master"
+    ;; )
+  )
+)
+
+(platform (winiov2)
+  (defcfg
+    process-unmapped-keys yes
+    concurrent-tap-hold yes
+  )
+)
+
+(defsrc
+       q w e r t y u i o p
+  caps a s d f g h j k l ; '
+  lsft z x c v b n m , . / rsft
+  lctl  lalt   spc   ralt
+)
+(defvar
+  tap-time 100
+  cursor-tap-time 300
+  hold-time 250
+)
+
+(defvirtualkeys
+  shift (multi (layer-switch base) lsft)
+  clear (multi (layer-switch base) (on-press release-virtualkey shift))
+)
+
+(defalias
+	escctl (tap-hold-release $tap-time $hold-time esc lctl)
+	tabsft (tap-hold-release $tap-time $hold-time tab lsft)
+	;; make the double tap repeat action shorter for keys where I seldomly use repeats, only hjkl
+	a (tap-hold-release $tap-time $hold-time a lsft)
+	s (tap-hold-release $tap-time $hold-time s lmet)
+	d (tap-hold-release $tap-time $hold-time d lalt)
+	f (tap-hold-release $tap-time $hold-time f lctl)
+	j (tap-hold-release $cursor-tap-time $hold-time j rctl)
+	k (tap-hold-release $cursor-tap-time $hold-time k ralt)
+	l (tap-hold-release $cursor-tap-time $hold-time l rmet)
+	; (tap-hold-press $tap-time $hold-time ; rsft)
+	uml (switch
+		() (tap-hold-release 200 500 lalt (multi (layer-switch umlaut) (on-release tap-virtualkey clear))) break
+	)
+	cdl (switch
+		() (tap-hold-release $tap-time 500 spc (multi (layer-switch code) (on-release tap-virtualkey clear))) break
+	)
+	ae (switch
+		((input real rsft)) (unicode Ä) break
+		((input real ;)) (unicode Ä) break
+		()(unicode ä) break
+	)
+	oe (switch
+		((input real lsft)) (unicode Ö) break
+		((input real a)) (unicode Ö) break
+		()(unicode ö) break
+	)
+	ue (switch
+		((input real lsft)) (unicode Ü) break
+		((input real a)) (unicode Ü) break
+		()(unicode ü) break
+	)
+	ss (unicode ß)
+)
+
+(deflayer base
+           q  w  e  r  t  y    u     i     o    p 
+   @escctl @a @s @d @f g  h    @j    @k    @l   @;   bspc
+   tab     z  x  c  v  b  n    m     ,     .    /    '
+   @escctl @uml     @cdl             @uml
+)
+
+(deflayer code
+           =    7  8  9  0  S-[  S-]  pgup  S-9   S-0
+   -       lsft 4  5  6  ,  left down up    right rsft   _
+   _       S-1  1  2  3  .  [    ]    pgdn  `     \      _
+   -       lctl     _                rctl
+)
+
+(deflayer umlaut
+           _    _   _  _  _  _    @ue  _     @oe   _  
+   _       @ae  @ss _  _  _  _    _    _     _     _      _
+   _       _    _   _  _  _  _    _    _     _     _      _
+   _       _         _               _
+)
+
+(platform (winiov2)
+  (defoverrides
+    (lalt lsft 4) (PrintScreen)
+    (ralt rsft 4) (PrintScreen)
+    (rmet 4) (PrintScreen)
+    (lalt lsft 5) (alt PrintScreen)
+    (ralt rsft 5) (alt PrintScreen)
+    (rmet 5) (alt PrintScreen)
+    (lalt lctl j) (pgdn)
+    (lalt lctl k) (pgup)
+    (lalt lmet k) (lalt lmet F19)
+    (lalt lmet left) (lalt lmet F20)
+    (lalt lmet up) (lalt lmet F22)
+    (lalt lmet right) (lalt lmet F24)
+    (lalt lmet down) (lalt lmet F21)
+  )
+)
+

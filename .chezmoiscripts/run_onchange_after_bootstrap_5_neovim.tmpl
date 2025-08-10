@@ -1,0 +1,108 @@
+#! /usr/bin/env bash
+
+# This script should install all necessary packages and tools for 
+# the "neovim" version of the dotfiles
+
+{{ if not (has "neovim" .global.roles)  -}}
+exit 0
+{{ end -}}
+
+echo "bootstrap neovim"
+
+source "${HOME}/bin/helper.sh"
+
+if is_zsh; then
+	echo "Running under zsh"
+fi
+
+cd "${HOME}" || exit
+# version manager for tools
+if [[ ! -f "${HOME}/bin/mise" ]]; then
+	source "${HOME}/bin/update_mise.sh"
+fi
+
+# if we do not set those paths here, then all installed binaries
+# that were installed using mise, cannot be found. We want to be able
+# to rerun this script multiple times without errors
+source "${HOME}/.path.d/10_rust.bash"
+source "${HOME}/.path.d/50_mise.bash"
+source "${HOME}/.path.d/99_default.sh"
+eval "$(mise hook-env)"
+
+echo "Installing dependency packages"
+if is_mac; then
+	desired=(cmake shellcheck@0.9 shfmt@1.33 universal-ctags
+		fontconfig@2.14)
+	missing=()
+	check_brewed "missing" "${desired[@]}"
+	if [[ "${#missing[@]}" -gt 0 ]]; then
+		echo "(brew) installing ${missing[*]}"
+		brew install "${missing[@]}"
+	fi
+else
+	desired=(curl git universal-ctags unzip fontconfig libfontconfig1-dev
+		libxcb1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev
+		libharfbuzz-dev
+		ninja-build gettext cmake build-essential autoconf automake)
+	missing=()
+	check_dpkged "missing" "${desired[@]}"
+	if [[ "${#missing[@]}" -gt 0 ]]; then
+		echo "(apt) installing ${missing[*]}"
+		sudo apt-get -y update
+		sudo apt-get -y install "${missing[@]}"
+	fi
+
+	# echo "Compiling and installing neovim"
+	# cd "${HOME}" || exit
+	# mkdir -p "${HOME}/software/"
+	# cd "${HOME}/software/" || exit
+	# git clone --filter=tree:0 https://github.com/neovim/neovim neovim_src
+	# cd neovim_src || exit
+	# git checkout stable
+	# make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=${HOME}/software/neovim"
+	# make install
+fi
+
+if ! rustup -V >/dev/null 2>&1; then
+	source "${HOME}/bin/install_rust.sh"
+fi
+
+if ! bob --version >/dev/null 2>&1; then
+	echo "Installing bob (neovim version manager)"
+	# Unfortunately, binary versions have the wrong GLIBC
+	#source "${HOME}/bin/update_bob.sh"
+	cargo install --locked bob-nvim
+fi
+
+if ! nvim --version >/dev/null 2>&1; then
+	echo "Installing neovim (nightly)"
+	bob use nightly
+fi
+
+if ! tree-sitter -V >/dev/null 2>&1; then
+	echo "Installing tree-sitter cli"
+	cargo install tree-sitter-cli
+fi
+
+if ! silicon -V >/dev/null 2>&1; then
+	echo "Installing silicon"
+	cargo install silicon
+fi
+
+if ! grep -qs python ~/.config/mise/config.toml; then
+	source "${HOME}/bin/install_python.sh"
+fi
+
+if ! python3 -c 'import pynvim;' >/dev/null 2>&1; then
+	echo "Installing python neovim module"
+	python3 -mpip install pynvim
+fi
+
+if ! nvr --version >/dev/null 2>&1; then
+	echo "Installing neovim-remote"
+	python3 -mpip install neovim-remote
+fi
+
+if ! node --version >/dev/null 2>&1; then
+	source "${HOME}/bin/install_node.sh"
+fi

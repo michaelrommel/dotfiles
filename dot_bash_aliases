@@ -1,0 +1,10 @@
+export DEBUG=false
+
+# user specific initialization
+if [[ -f "${HOME}/.preinitialization.sh" ]]; then
+	source "${HOME}/.preinitialization.sh"
+else
+	source "${HOME}/.minimalrc"
+fi
+# my personal initialization script 2nd part
+[[ -f "${HOME}/.postinitialization.sh" ]] && source "${HOME}/.postinitialization.sh"

@@ -1,0 +1,43 @@
+echo -n "Initializing"
+
+#MYSH=$(readlink /proc/$$/exe)
+MYSH=$(ps -o comm= $$)
+if [[ $MYSH =~ "zsh" ]]; then
+	is_zsh=1
+else
+	is_zsh=0
+fi
+
+if [[ -d "${HOME}/.path.d" ]]; then
+	for p in "${HOME}/.path.d"/*sh; do
+		ext=${p##*.}
+		program=$(basename "$p" ".$ext")
+		program=${program/#*_/}
+		case $ext in
+		"zsh")
+			if [[ $is_zsh -eq 1 ]]; then
+				# echo "sourcing zsh version of ${p}"
+				# shellcheck disable=1090
+				echo -n " • ${program}"
+				source "${p}"
+			fi
+			;;
+		"bash")
+			if [[ $is_zsh -eq 0 ]]; then
+				# echo "sourcing bash version of ${p}"
+				# shellcheck disable=1090
+				echo -n " • ${program}"
+				source "${p}"
+			fi
+			;;
+		*)
+			# echo "sourcing sh version of ${p}"
+			# shellcheck disable=1090
+			echo -n " • ${program}"
+			source "${p}"
+			;;
+		esac
+	done
+fi
+
+echo -n -e '\e[1G\e[2K\e[0m'

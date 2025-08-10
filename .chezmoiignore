@@ -1,0 +1,92 @@
+# There are a couple of files, that should never be ignored
+#.bash_aliases
+#.config/zsh
+#.inputrc
+#.minimalrc
+#.path.d/10_rust.bash
+#.path.d/10_rust.zsh
+#.path.d/40_go.sh
+#.path.d/50_mise.bash
+#.path.d/50_mise.zsh
+#.path.d/80_pipx.sh
+#.path.d/99_default.sh
+#.postinitialization.sh
+#.zshenv
+#bin/helper.sh
+#bin/install_*
+#bin/update_mise.sh
+
+{{ if not (has "core" .global.roles) }}
+.config/fd
+.config/ghostty
+.config/kanata
+.config/starship.toml
+.config/wezterm
+.config/yazi
+.git_template
+.git_template
+.gitconfig
+.path.d/25_fzf.zsh
+.path.d/25_fzf.bash
+.path.d/80_carapace.bash
+.path.d/80_carapace.zsh
+.path.d/80_yazi.sh
+.path.d/80_zoxide.bash
+.path.d/80_zoxide.zsh
+.preinitialization.sh
+.ssh
+.terminfo_src
+bin/check_raid.sh
+bin/clean_dotfiles.sh
+bin/convert_cast.sh
+bin/dir_colors.sh
+bin/emoji.js
+bin/less_colors.sh
+bin/ls_colors.sh
+bin/rm_stale_agents.sh
+bin/set_gruvbox_colors.sh
+bin/terminal-24bit-test.sh
+bin/terminal-256color-test.py
+bin/terminal-ansi-vte52-test.sh
+bin/terminal-truecolor-test.sh
+bin/terminal.sh
+bin/update_starship.sh
+bin/update_yazi.sh
+bin/update_zoxide.sh
+bin/vff.sh
+bin/wsl2-relay-agent.sh
+{{ end }}
+
+{{ if not (has "tmux" .global.roles) }}
+.local/share/tmux
+.path.d/60_tmux.sh
+.config/tmux
+bin/tmx
+{{ end }}
+
+{{ if not (has "tools" .global.roles) }}
+.path.d/30_bat_extras.sh
+.path.d/30_bat.sh
+.path.d/90_tooling.sh
+.config/bat
+.config/silicon
+{{ end }}
+
+{{ if not (or (has "neovim" .global.roles) (has "tools" .global.roles)) }}
+bin/shellcheck
+{{ end }}
+
+{{ if not (has "neovim" .global.roles) }}
+.config/bob
+.config/dictionaries
+.config/harper-ls
+.config/miro
+.local/share/assets
+.local/share/fonts
+.path.d/80_bob.zsh
+bin/vim
+bin/tmux_paste.sh
+bin/nvim_paste.sh
+bin/reset_nvim.sh
+software/examples
+{{ end }}

@@ -1,0 +1,15 @@
+#! /usr/bin/env bash
+
+# This script should run every time there is an update and
+# the tools role is assigned
+
+{{ if not (has "tools" .global.roles)  -}}
+exit 0
+{{ end -}}
+
+echo "update tools"
+
+if [[ -x /usr/bin/bat ]]; then
+	echo "Updating theme cache"
+	bat cache --build 1>/dev/null
+fi

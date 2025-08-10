@@ -1,0 +1,14 @@
+{{ if (has "core" .global.roles) -}}
+[".config/zsh/zsh-autosuggestions"]
+	type = "git-repo"
+	url = "https://github.com/zsh-users/zsh-autosuggestions" 
+	refreshPeriod = "168h"
+{{ end -}}
+
+{{ if (has "tmux" .global.roles) -}}
+[".local/share/tmux/plugins/tpm"]
+	type = "git-repo"
+	url = "https://github.com/tmux-plugins/tpm" 
+	refreshPeriod = "168h"
+{{ end -}}
+

@@ -1,0 +1,9 @@
+%YAML 1.2
+---
+name: Plain
+file_extensions:
+  - txt
+scope: source.plain
+contexts:
+  main:
+    - match: ''

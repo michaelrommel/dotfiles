@@ -1,0 +1,230 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = false
+
+format = """
+[](dark1)\
+$os\
+$username\
+$hostname\
+$directory\
+[](fg:dark1)\
+$sudo\
+$git_branch\
+$git_status\
+$git_state\
+$status\
+$character\
+[ ](fg:dark1)"""
+
+right_format = """
+$c\
+$cpp\
+$rust\
+$golang\
+$nodejs\
+$python\
+$docker_context\
+$cmd_duration\
+$time\
+"""
+
+palette = 'gruvbox_dark'
+
+[palettes.gruvbox_dark]
+bright_aqua = '#8ec07c'
+bright_blue = '#83a598'
+bright_green = '#b8bb26'
+bright_orange = '#fe8019'
+bright_purple = '#d3869b'
+bright_red = '#fb4934'
+bright_yellow = '#fabd2f'
+dark0 = '#282828'
+dark0_hard = '#1d2021'
+dark0_soft = '#32302f'
+dark1 = '#3c3836'
+dark2 = '#504945'
+dark3 = '#665c54'
+dark4 = '#7c6f64'
+faded_aqua = '#427b58'
+faded_blue = '#076678'
+faded_green = '#79740e'
+faded_orange = '#af3a03'
+faded_purple = '#8f3f71'
+faded_red = '#9d0006'
+faded_yellow = '#b57614'
+gray = '#928374'
+light0 = '#fbf1c7'
+light0_hard = '#f9f5d7'
+light0_soft = '#f2e5bc'
+light1 = '#ebdbb2'
+light2 = '#d5c4a1'
+light3 = '#bdae93'
+light4 = '#a89984'
+neutral_aqua = '#689d6a'
+neutral_blue = '#458588'
+neutral_green = '#98971a'
+neutral_orange = '#d65d0e'
+neutral_purple = '#b16286'
+neutral_red = '#cc241d'
+neutral_yellow = '#d79921'
+
+[os]
+disabled = false
+style = 'bg:dark1 fg:light3'
+
+[os.symbols]
+Windows = '󰍲  '
+Ubuntu = '󰕈  '
+SUSE = '  '
+Raspbian = '󰐿  '
+Mint = '󰣭  '
+Macos = '󰀵  '
+Manjaro = '  '
+Linux = '󰌽  '
+Gentoo = '󰣨  '
+Fedora = '󰣛  '
+Alpine = '  '
+Amazon = '  '
+Android = '  '
+Arch = '󰣇  '
+Artix = '󰣇  '
+EndeavourOS = '  '
+CentOS = '  '
+Debian = '󰣚  '
+Redhat = '󱄛  '
+RedHatEnterprise = '󱄛  '
+Pop = '  '
+
+[username]
+show_always = false
+style_user = 'bg:dark1 fg:light3'
+style_root = 'bg:neutral_yellow fg:neutral_red'
+format = '[$user]($style)'
+
+[hostname]
+ssh_only = true
+style = 'bg:dark1 fg:light3'
+format = '([@$hostname ]($style))'
+
+[directory]
+truncate_to_repo = false
+use_logical_path = false
+style = 'bg:dark1 fg:light3'
+repo_root_style = 'bold bg:dark1 fg:light1'
+format = '[$path]($style)'
+repo_root_format = '[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)'
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = "󰇚"
+"Music" = "󰝚 "
+"Movies" = " "
+"Pictures" = " "
+"Developer" = "󰲋 "
+"Software" = "󰘦 "
+"~" = " "
+
+[sudo]
+disabled = false
+symbol = ' 󰣘 '
+style = 'fg:bright_orange bg:dark0_hard'
+format = '[$symbol]($style)'
+
+[git_branch]
+symbol = ""
+style = "bg:light3"
+format = '[[ $symbol $branch](fg:dark0 bg:light3)]($style)'
+
+[git_status]
+style = "bg:light3"
+format = '[[($all_status$ahead_behind )](fg:dark0_hard bg:light3)]($style)[](fg:light3 bg:dark0_hard)'
+conflicted = ' =$count'
+ahead = ' ⇡$ahead_count'
+behind = ' ⇣$behind_count'
+diverged = ' ⇕:⇡${ahead_count}⇣${behind_count'
+up_to_date = ''
+untracked = ' ?$count'
+stashed = ' \$$count'
+modified = ' !$count'
+staged = ' +$count'
+renamed = ' »$count'
+deleted = ' x$count'
+
+[git_state]
+style = "fg:dark0_hard bg:light4"
+format = '[ $state( $progress_current/$progress_total) ]($style)[](fg:light4 bg:dark0_hard)'
+
+[c]
+symbol = " "
+style = "bg:none"
+format = '[[ $symbol](fg:dark4)[($version) ](fg:light2)]($style)'
+
+[cpp]
+symbol = " "
+style = "bg:none"
+format = '[[ $symbol](fg:dark4)[($version) ](fg:light2)]($style)'
+
+[golang]
+symbol = " "
+style = "bg:none"
+format = '[[ $symbol](fg:dark4)[($version) ](fg:light2)]($style)'
+
+[nodejs]
+symbol = " "
+style = "bg:none"
+format = '[[ $symbol](fg:neutral_green)[($version) ](fg:light2)]($style)'
+
+[python]
+symbol = " "
+style = "bg:none"
+format = '[[ $symbol](fg:neutral_yellow)[(\($virtualenv\) )($version) ](fg:light2)]($style)'
+
+[rust]
+symbol = " "
+style = "bg:none"
+format = '[[ $symbol](fg:neutral_orange)[($version) ](fg:light2)]($style)'
+
+[docker_context]
+symbol = " "
+style = "bg:none"
+format = '[[ $symbol](fg:dark4)[( $context) ](fg:light2)]($style)'
+
+[cmd_duration]
+min_time = 0
+show_milliseconds = true
+format = '[[ ](fg:dark4)[$duration](fg:light2)]($style)'
+style = 'bg:none'
+
+[time]
+disabled = false
+time_format = "%T"
+style = "bg:none"
+format = '[[  ](fg:dark4)[$time](fg:light2)]($style)'
+
+[line_break]
+disabled = true
+
+[status]
+disabled = false
+format = '[](fg:dark0_hard bg:dark1)[ ($common_meaning$signal_name$maybe_int )$symbol]($style)'
+symbol = ' '
+success_symbol = ' '
+not_executable_symbol = ' '
+not_found_symbol = '󰍉 '
+sigint_symbol = ''
+signal_symbol = '󰈿'
+success_style = 'bold bg:dark1 fg:neutral_green'
+failure_style = 'bold bg:dark1 fg:neutral_red'
+map_symbol = true
+
+[character]
+disabled = false
+format = '[$symbol](bg:dark1)'
+success_symbol = ''
+error_symbol = ''
+vimcmd_symbol = '[NORM](bold bg:dark1 fg:neutral_blue)'
+vimcmd_replace_one_symbol = '[RONE ](bold bg:dark1 fg:neutral_purple)'
+vimcmd_replace_symbol = '[REP ](bold bg:dark1 fg:neutral_purple)'
+vimcmd_visual_symbol = '[VIS ](bold bg:dark1 fg:neutral_yellow)'

@@ -1,0 +1,125 @@
+# user specific initialization
+if [[ -f "${HOME}/.preinitialization.sh" ]]; then
+	source "${HOME}/.preinitialization.sh"
+else
+	source "${HOME}/.minimalrc"
+fi
+
+# history settings
+export HISTFILE=${HOME}/.zsh_history
+export HISTSIZE=10000
+export SAVEHIST=10000
+setopt append_history
+setopt hist_expire_dups_first
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_save_no_dups
+setopt extended_history
+
+# use up to search history for lines beginning with the same pattern
+autoload -Uz up-line-or-beginning-search
+autoload -Uz down-line-or-beginning-search
+autoload -Uz complist
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+[[ -n ${key[Up]} ]] && bindkey "${key[Up]}" up-line-or-beginning-search
+[[ -n ${key[Down]} ]] && bindkey "${key[Down]}" down-line-or-beginning-search
+# make Ctrl-K and Ctrl-J act like Up and Down
+bindkey -M viins ^K up-line-or-beginning-search
+bindkey -M viins ^J down-line-or-beginning-search
+bindkey -M vicmd ^K up-line-or-beginning-search
+bindkey -M vicmd ^J down-line-or-beginning-search
+bindkey -M viins ^U backward-word
+bindkey -M viins ^D forward-word
+zmodload zsh/complist
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+
+# Change cursor shape for different vi modes.
+_fix_cursor() {
+	echo -ne '\e[6 q'
+}
+
+function zle-keymap-select {
+	if [[ ${KEYMAP} == vicmd ]] ||
+		[[ $1 = 'block' ]]; then
+		echo -ne '\e[2 q'
+	elif [[ ${KEYMAP} == main ]] ||
+		[[ ${KEYMAP} == viins ]] ||
+		[[ ${KEYMAP} = '' ]] ||
+		[[ $1 = 'beam' ]]; then
+		_fix_cursor
+	fi
+}
+zle -N zle-keymap-select
+precmd_functions+=(_fix_cursor)
+
+# function zle-line-init() {
+#     zle -K viins
+#     echo -ne "\e[5 q"
+# }
+# zle -N zle-line-init
+
+# set the window title for the shell
+function _set_win_title(){
+    echo -ne "\033]0;$USER:$PWD\007"
+}
+precmd_functions+=(_set_win_title)
+
+zstyle ':completion:*' completer _extensions _expand_alias _complete _approximate
+
+# case insensitive completion - was the only thing I used from oh-my-zsh
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+# Complete . and .. special directories
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' list-dirs-first true
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' group-name ''
+# shellcheck disable=SC2296
+zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}" "ma=48;5;4;38;5;255"
+# Don't complete unavailable commands.
+zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+# General styling, note that this is using tag names
+zstyle ':completion:*:descriptions'  format '%F{#a89984}-- %d --%f'
+zstyle ':completion:*:corrections'   format '%F{#b8bb26}-- %d (errors: %e) --%f'
+zstyle ':completion:*:messages'      format '%B%F{#d3869b}-- %d --%f%b'
+zstyle ':completion:*:warnings'      format '%B%F{#cc241d} no matches found %f%b'
+
+# Kill
+# shellcheck disable=SC2016
+zstyle ':completion:*:*:*:*:processes' command 'ps -u $LOGNAME -o pid,user,command -w'
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:*:kill:*' force-list always
+zstyle ':completion:*:*:kill:*' insert-ids menu
+# Git
+zstyle ':completion:*:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
+
+# automatically load bash completion functions
+autoload -U +X bashcompinit && bashcompinit
+
+# start autocompletion
+autoload -Uz compinit && compinit
+
+if [[ -d "${HOME}/.config/zsh/zsh-autosuggestions" ]]; then
+	# autosuggestion
+	export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+	export ZSH_AUTOSUGGEST_USE_ASYNC=true
+	export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+	export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
+	export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=243"
+	bindkey '^ ' autosuggest-accept
+	# shellcheck disable=SC1091
+	source "${ZDOTDIR}/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+
+# prompt customization
+# shellcheck disable=SC2086
+[[ -x "${HOME}/.cargo/bin/starship" || -x "/opt/homebrew/bin/starship" ]] && eval "$(starship init zsh)"
+
+# my personal initialization script 2nd part
+[[ -f "${HOME}/.postinitialization.sh" ]] && source "${HOME}/.postinitialization.sh"

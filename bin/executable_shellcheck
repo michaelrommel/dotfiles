@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [[ -x "${HOME}/software/shellcheck-stable/shellcheck" ]]; then
+	SC=${HOME}/software/shellcheck-stable/shellcheck
+else
+	SC=/usr/bin/shellcheck
+fi
+
+#shellcheck disable=2086,2048
+"${SC}" $*
