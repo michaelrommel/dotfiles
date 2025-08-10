@@ -1,3 +1,7 @@
+# This should always be ignored:
+README.md
+tags
+
 # There are a couple of files, that should never be ignored
 #.bash_aliases
 #.config/zsh
