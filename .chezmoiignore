@@ -47,6 +47,7 @@ bin/dir_colors.sh
 bin/emoji.js
 bin/less_colors.sh
 bin/ls_colors.sh
+bin/magick
 bin/rm_stale_agents.sh
 bin/set_gruvbox_colors.sh
 bin/terminal-24bit-test.sh
