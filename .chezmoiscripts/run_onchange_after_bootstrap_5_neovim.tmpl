@@ -15,20 +15,6 @@ if is_zsh; then
 	echo "Running under zsh"
 fi
 
-cd "${HOME}" || exit
-# version manager for tools
-if [[ ! -f "${HOME}/bin/mise" ]]; then
-	source "${HOME}/bin/update_mise.sh"
-fi
-
-# if we do not set those paths here, then all installed binaries
-# that were installed using mise, cannot be found. We want to be able
-# to rerun this script multiple times without errors
-source "${HOME}/.path.d/10_rust.bash"
-source "${HOME}/.path.d/50_mise.bash"
-source "${HOME}/.path.d/99_default.sh"
-eval "$(mise hook-env)"
-
 echo "Installing dependency packages"
 if is_mac; then
 	desired=(cmake shellcheck@0.9 shfmt@1.33 universal-ctags
@@ -49,6 +35,20 @@ else
 		sudo apt-get -y install "${missing[@]}"
 	fi
 fi
+
+cd "${HOME}" || exit
+# version manager for tools
+if [[ ! -f "${HOME}/bin/mise" ]]; then
+	source "${HOME}/bin/update_mise.sh"
+fi
+
+# if we do not set those paths here, then all installed binaries
+# that were installed using mise, cannot be found. We want to be able
+# to rerun this script multiple times without errors
+source "${HOME}/.path.d/10_rust.bash"
+source "${HOME}/.path.d/50_mise.bash"
+source "${HOME}/.path.d/99_default.sh"
+eval "$(mise hook-env)"
 
 {{- if eq .global.neovim "full" }}
 

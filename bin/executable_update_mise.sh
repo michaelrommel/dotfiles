@@ -18,7 +18,7 @@ update_mise() {
 		exit 1
 	fi
 	mkdir -p "${HOME}/bin"
-	latest=$(curl -s https://api.github.com/repositories/586920414/tags | jq -r ".[0].name")
+	latest=$(curl -s https://api.github.com/repositories/586920414/tags | jq -r ".[0].name") || exit 1
 	echo "Latest release seems to be: ${latest}"
 	if ! curl -sL "https://github.com/jdx/mise/releases/download/${latest}/mise-${latest}-${platform}-${arch}" >"${HOME}/bin/mise"; then
 		echo "Download failed. Aborting."
