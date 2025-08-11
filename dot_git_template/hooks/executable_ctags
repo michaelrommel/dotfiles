@@ -2,8 +2,11 @@
 
 # exit immediately if a pipeline has a non zero exit status
 set -e
-# clean up
-trap 'rm -f "$$.tags"' EXIT
-git ls-files | \
-  ctags --tag-relative=yes -L - -f"$$.tags" --languages=C,C++,HTML,Javascript,Python,Sh,Vim
-mv "$$.tags" "tags"
+
+if [[ -f Makefile || -f CMakefile ]]; then
+	# clean up
+	trap 'rm -f "$$.tags"' EXIT
+	git ls-files |
+		ctags --tag-relative=yes -L - -f"$$.tags" --languages=C,C++,HTML,Javascript,Python,Sh,Vim
+	mv "$$.tags" "tags"
+fi
