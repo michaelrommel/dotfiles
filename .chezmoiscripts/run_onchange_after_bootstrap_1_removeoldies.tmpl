@@ -19,7 +19,9 @@ files=("${HOME}/.dir_colors.sh"
 	"${HOME}/ls_colors.sh"
 	"${HOME}/.skhdrc"
 	"${HOME}/.yabairc")
+
 directories=("${HOME}/.oh-my-posh/"
+	"${HOME}/.homesick/"
 	"${HOME}/.terminfo_src/"
 	"${HOME}/.wsltty/"
 	"${HOME}/.rust/"
@@ -29,11 +31,9 @@ for p in "${files[@]}"; do
 	if [[ -f "$p" ]]; then
 		echo "rm $p"
 	fi
-fi
+done
 for p in "${directories[@]}"; do
 	if [[ -d "$p" ]]; then
 		echo "rm -rf $p"
 	fi
-fi
-
-
+done
