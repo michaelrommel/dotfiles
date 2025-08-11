@@ -37,13 +37,7 @@ if is_mac; then
 		brew install "${missing[@]}"
 	fi
 else
-	desired=(libfontconfig1-dev libfontconfig1 libfreetype-dev libfreetype6
-		libharfbuzz-dev libx11-xcb-dev
-		libxcb-render0-dev libxcb-render0 libxcb-shape0-dev libxcb-shape0
-		libxcb-xfixes0-dev libxcb-xfixes0
-		asciidoctor universal-ctags
-		build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev
-		xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev)
+	desired=( asciidoctor universal-ctags xz-utils )
 	eval "$(grep VERSION_ID /etc/os-release)"
 	if [[ ${VERSION_ID} -ge 13 ]]; then
 		desired+=(libncurses-dev )

@@ -21,7 +21,6 @@ tags
 #bin/update_mise.sh
 
 {{ if not (has "core" .global.roles) }}
-.config/fd
 .config/ghostty
 .config/kanata
 .config/starship.toml
@@ -74,8 +73,8 @@ bin/tmx
 .path.d/30_bat_extras.sh
 .path.d/30_bat.sh
 .path.d/90_tooling.sh
+.config/fd
 .config/bat
-.config/silicon
 {{ end }}
 
 {{ if not (or (has "neovim" .global.roles) (has "tools" .global.roles)) }}
@@ -92,6 +91,7 @@ bin/vim
 .config/dictionaries
 .config/harper-ls
 .config/miro
+.config/silicon
 .local/share/assets
 .local/share/fonts
 .path.d/80_bob.sh

@@ -11,8 +11,8 @@ local opts = {
 		keymaps = {
 			["g?"] = { "actions.show_help", mode = "n" },
 			["<CR>"] = "actions.select",
-			["<C-v>"] = { "actions.select", opts = { vertical = true } },
-			["<C-x>"] = { "actions.select", opts = { horizontal = true } },
+			-- ["<C-v>"] = { "actions.select", opts = { vertical = true } },
+			-- ["<C-x>"] = { "actions.select", opts = { horizontal = true } },
 			["<C-t>"] = { "actions.select", opts = { tab = true } },
 			["<C-p>"] = "actions.preview",
 			["<C-l>"] = "actions.refresh",
