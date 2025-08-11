@@ -81,16 +81,20 @@ bin/shellcheck
 {{ end }}
 
 {{ if not (has "neovim" .global.roles) }}
+bin/vim
+{{- if eq .global.neovim "full" }}
 .config/bob
 .config/dictionaries
 .config/harper-ls
 .config/miro
 .local/share/assets
 .local/share/fonts
-.path.d/80_bob.zsh
-bin/vim
+.path.d/80_bob.sh
 bin/tmux_paste.sh
 bin/nvim_paste.sh
 bin/reset_nvim.sh
 software/examples
+{{ else }}
+.config/miro
+{{ end }}
 {{ end }}

@@ -50,6 +50,8 @@ else
 	fi
 fi
 
+{{- if eq .global.neovim "full" }}
+
 if ! rustup -V >/dev/null 2>&1; then
 	source "${HOME}/bin/install_rust.sh"
 fi
@@ -65,8 +67,6 @@ if ! nvim --version >/dev/null 2>&1; then
 	echo "Installing neovim (nightly)"
 	bob use nightly
 fi
-
-{{- if eq .global.neovim "full" }}
 
 if ! tree-sitter -V >/dev/null 2>&1; then
 	echo "Installing tree-sitter cli"
@@ -94,6 +94,14 @@ fi
 
 if ! node --version >/dev/null 2>&1; then
 	source "${HOME}/bin/install_node.sh"
+fi
+
+{{ else }}
+
+if ! nvim --version >/dev/null 2>&1; then
+	echo "Installing neovim (nightly)"
+	mise install neovim@nightly
+	mise use -g neovim@nightly
 fi
 
 {{ end }}
