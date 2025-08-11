@@ -1,0 +1,19 @@
+#! /bin/bash
+if [[ "$0" =~ "vimdiff" ]]; then
+	OPTS=-d
+fi
+
+NVIM=nvim
+
+{{- if eq .global.neovim "minimal" }}
+
+# shellcheck disable=SC2086,SC2048
+NVIM_APPNAME=minimal exec "${NVIM}" ${OPTS} "$@"
+
+{{- else }}
+
+# shellcheck disable=SC2086,SC2048
+NVIM_APPNAME=miro exec "${NVIM}" ${OPTS} "$@"
+
+{{- end }}
+

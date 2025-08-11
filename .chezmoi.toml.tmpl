@@ -1,7 +1,12 @@
 {{- $choices := list "core" "tmux" "tools" "languages" "neovim" -}}
-{{- $roles := promptMultichoiceOnce . "global.roles" "roles"
-    $choices (list "core")
--}}
+{{- $roles := promptMultichoiceOnce . "global.roles" "Which roles do you want?" $choices (list "core") -}}
+{{- $neovim := "minimal" -}}
+{{ if has "neovim" $roles -}}
+	{{- $choices := list "minimal" "full" -}}
+	{{- $neovim = promptChoice "Which neovim type do you want (m=minimal/f=full)" $choices $neovim -}}
+{{- end -}}
+
 [data.global]
 	roles = {{ $roles | toJson  }}
+	neovim = {{ $neovim | toJson }}
 
