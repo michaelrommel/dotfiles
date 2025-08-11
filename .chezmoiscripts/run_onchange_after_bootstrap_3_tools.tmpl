@@ -98,8 +98,9 @@ else
 	if [[ ! -f "${HOME}/.bat/bin/batman" ]]; then
 		echo "Installing bat-extras from github"
 		cd "${HOME}" || exit
-		git clone --depth 1 https://github.com/eth-p/bat-extras.git "${HOME}/.bat"
-		cd "${HOME}/.bat" || exit
+		mkdir -p "${HOME}/software"
+		git clone --depth 1 https://github.com/eth-p/bat-extras.git "${HOME}/software/bat"
+		cd "${HOME}/software/bat" || exit
 		./build.sh --no-manuals --no-verify
 	fi
 
