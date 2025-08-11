@@ -33,7 +33,7 @@ directories=("${HOME}/.oh-my-posh/"
 	"${HOME}/.yazi/")
 
 for p in "${files[@]}"; do
-	if [[ -f "$p" ]]; then
+	if [[ -f "$p" || -h "$p" ]]; then
 		echo "rm $p"
 		rm "$p"
 	fi

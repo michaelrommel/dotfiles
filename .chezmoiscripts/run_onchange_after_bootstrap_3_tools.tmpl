@@ -95,7 +95,7 @@ else
 		sudo dpkg -i "${HOME}/software/archives/bat_0.23.0_amd64.deb"
 	fi
 
-	if [[ ! -f "${HOME}/.bat/bin/batman" ]]; then
+	if [[ ! -f "${HOME}/software/bat/bin/batman" ]]; then
 		echo "Installing bat-extras from github"
 		cd "${HOME}" || exit
 		mkdir -p "${HOME}/software"
