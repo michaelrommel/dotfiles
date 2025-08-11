@@ -53,7 +53,7 @@ vim.g.mapleader = " "
 vim.keymap.del('n', 'Y')
 
 local map = vim.keymap.set
-Map('n', '<leader>v', ':e $MYVIMRC<CR>')
+map('n', '<leader>v', ':e $MYVIMRC<CR>')
 map('n', '<leader>o', ':update<CR> :source<CR>')
 map('n', '<leader>w', ':write<CR>')
 map('n', '<leader>q', ':quit<CR>')
