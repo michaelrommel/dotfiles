@@ -11,7 +11,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply michaelrommel
 ## Roles and neovim variations
 
 
-### Role: none selected at all
+### Role: none
 
 You get a super small installation that only adds a small shell
 configuration, some aliases and a few scripts, that would allow 
@@ -66,7 +66,7 @@ Programming languages
 
 There are two variations: minimal and full
 
-**Minimal**: uses mise to install the nightly version and uses its internal package manager and installs only very few modules, like: treesitter, lsp-config, mason and oil as well as a contrast color theme.
+**Minimal**: uses mise to install the nightly version and uses its internal package manager and installs only very few modules, like: treesitter, lsp-config, mason, conform and oil as well as a contrast color theme.
 
 **Full**: compiles bob as the neovim version, installs nightly and a full configuration with around 40 modules for code formatting, auto brackets, jumping etc. as well as debugger support via nvim-dap.
 
