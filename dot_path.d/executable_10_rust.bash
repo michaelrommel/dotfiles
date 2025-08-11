@@ -18,7 +18,7 @@ fi
 
 # Auto-completion
 # ---------------
-if [[ $- == *i* && -d "${HOME}/.rust/shell" ]]; then
-	source "${HOME}/.rust/shell/completion_rustup.bash" 2>/dev/null
-	source "${HOME}/.rust/shell/completion_cargo.bash" 2>/dev/null
+if [[ $- == *i* && -d "${HOME}/.config/completions/rust" ]]; then
+	source "${HOME}/.config/completions/rust/completion_rustup.bash" 2>/dev/null
+	source "${HOME}/.config/completions/rust/completion_cargo.bash" 2>/dev/null
 fi

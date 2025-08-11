@@ -18,6 +18,6 @@ fi
 
 # Auto-completion
 # ---------------
-if [[ $- == *i* && -d "${HOME}/.rust/shell" ]]; then
-	fpath=(${HOME}/.rust/shell $fpath)
+if [[ $- == *i* && -d "${HOME}/.config/completions/rust" ]]; then
+	fpath=(${HOME}/.config/completions/rust $fpath)
 fi

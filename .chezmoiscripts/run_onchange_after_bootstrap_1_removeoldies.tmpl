@@ -1,0 +1,39 @@
+#! /usr/bin/env bash
+
+# This script should install remove old files left over from the
+# homesick management
+
+{{ if not (has "core" .global.roles)  -}}
+exit 0
+{{ end -}}
+
+echo "bootstrap core (remove old files)"
+
+source "${HOME}/bin/helper.sh"
+cd "${HOME}" || exit
+
+shopt -s nullglob
+
+files=("${HOME}/.dir_colors.sh"
+	"${HOME}/less_colors.sh"
+	"${HOME}/ls_colors.sh"
+	"${HOME}/.skhdrc"
+	"${HOME}/.yabairc")
+directories=("${HOME}/.oh-my-posh/"
+	"${HOME}/.terminfo_src/"
+	"${HOME}/.wsltty/"
+	"${HOME}/.rust/"
+	"${HOME}/.yazi/")
+
+for p in "${files[@]}"; do
+	if [[ -f "$p" ]]; then
+		echo "rm $p"
+	fi
+fi
+for p in "${directories[@]}"; do
+	if [[ -d "$p" ]]; then
+		echo "rm -rf $p"
+	fi
+fi
+
+
