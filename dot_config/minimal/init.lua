@@ -85,7 +85,6 @@ local oil = require "oil"
 oil.setup()
 map('n', '-', function() oil.open_float() end)
 
-vim.lsp.enable({ "lua_ls", "python" })
 require('nvim-treesitter').setup({ 
 	 -- Directory to install parsers and queries to
 	install_dir = vim.fn.stdpath('data') .. '/site',
@@ -93,3 +92,6 @@ require('nvim-treesitter').setup({
 })
 require'nvim-treesitter'.install { 'lua', 'python' }
 
+vim.lsp.enable({ "lua_ls", "jedi_language_server" })
+
+vim.diagnostic.config({ virtual_text = true })
