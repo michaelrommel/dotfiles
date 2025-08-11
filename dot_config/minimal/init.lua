@@ -66,7 +66,7 @@ require("mason").setup()
 require("oil").setup()
 map('n', '-', function() require("oil").open_float() end)
 
-require('nvim-treesitter').setup({ 
+require('nvim-treesitter').setup({
 	highlight = { enable = true, },
 })
 require("nvim-treesitter").install { 'lua', 'python' }
@@ -75,22 +75,21 @@ require("conform").setup({
 	formatters_by_ft = {
 		python = { "ruff_format" },
 	},
-		format_on_save = {
+	format_on_save = {
 		timeout_ms = 500,
 		lsp_fallback = true,
 	},
 })
 
-vim.lsp.enable({ "lua_ls", "jedi_language_server", "ruff" })
 require("lspconfig").lua_ls.setup({
 	settings = {
 		Lua = {
-			 diagnostics = {
-			  globals = { 'vim' },
-			 },
+			diagnostics = {
+				globals = { 'vim' },
+			},
 		},
 	},
 })
+vim.lsp.enable({ "lua_ls", "jedi_language_server", "ruff" })
 
 vim.diagnostic.config({ virtual_text = true })
-
