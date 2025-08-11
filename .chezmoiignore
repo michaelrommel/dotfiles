@@ -86,11 +86,11 @@ bin/vim
 {{ end }}
 
 {{ if has "neovim" .global.roles }}
-{{- if eq .global.neovim "full" }}
+{{- if eq .global.neovim "minimal" }}
 .config/bob
 .config/dictionaries
 .config/harper-ls
-.config/minimal
+.config/miro
 .local/share/assets
 .local/share/fonts
 .path.d/80_bob.sh
@@ -99,6 +99,6 @@ bin/nvim_paste.sh
 bin/reset_nvim.sh
 software/examples
 {{ else }}
-.config/miro
+.config/minimal
 {{ end }}
 {{ end }}
