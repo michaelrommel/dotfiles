@@ -4,14 +4,11 @@
 # global aliases and functions
 alias sha="shasum -a 256"
 alias ff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
-alias vff="${HOME}/bin/vff.sh"
-alias bgr="${HOME}/.bat/src/batgrep.sh"
 
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gst='git status'
 alias gco='git commit'
 
-alias v='vim'
 alias fd='fd -H'
 alias grep='grep --colour=auto'
 
@@ -26,11 +23,6 @@ fi
 alias l="${LS} -lah --color --hyperlink=never"
 alias ll="${LS} -lah --color --hyperlink=never"
 alias lr="${LS} -lahtr --color --hyperlink=never"
-
-lb() {
-	${LS} -lah --color=always "$@" | bat
-}
-export lb
 
 logtail() {
 	tail -f "$@" | bat --paging=never -l log
