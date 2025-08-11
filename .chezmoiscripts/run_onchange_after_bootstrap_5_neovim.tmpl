@@ -40,7 +40,7 @@ if is_mac; then
 		brew install "${missing[@]}"
 	fi
 else
-	desired=(curl git unzip fontconfig)
+	desired=(curl jq git unzip fontconfig)
 	missing=()
 	check_dpkged "missing" "${desired[@]}"
 	if [[ "${#missing[@]}" -gt 0 ]]; then
