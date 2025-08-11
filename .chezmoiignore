@@ -56,6 +56,7 @@ bin/terminal-ansi-vte52-test.sh
 bin/terminal-truecolor-test.sh
 bin/terminal.sh
 bin/update_starship.sh
+bin/update_carapace.sh
 bin/update_yazi.sh
 bin/update_zoxide.sh
 bin/vff.sh
@@ -97,6 +98,7 @@ bin/vim
 bin/tmux_paste.sh
 bin/nvim_paste.sh
 bin/reset_nvim.sh
+bin/update_bob.sh
 software/examples
 {{ else }}
 .config/minimal
