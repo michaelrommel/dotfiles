@@ -1,3 +1,21 @@
+utf8 = function(decimal)
+	local bytemarkers = { { 0x7FF, 192 }, { 0xFFFF, 224 }, { 0x1FFFFF, 240 } }
+	if decimal < 128 then return string.char(decimal) end
+	local charbytes = {}
+	for bytes, vals in ipairs(bytemarkers) do
+		if decimal <= vals[1] then
+			for b = bytes + 1, 2, -1 do
+				local mod = decimal % 64
+				decimal = (decimal - mod) / 64
+				charbytes[b] = string.char(128 + mod)
+			end
+			charbytes[1] = string.char(vals[2] + decimal)
+			break
+		end
+	end
+	return table.concat(charbytes)
+end
+
 vim.cmd("syntax off")
 
 vim.opt.winborder = "rounded"
@@ -35,28 +53,43 @@ vim.g.mapleader = " "
 vim.keymap.del('n', 'Y')
 
 local map = vim.keymap.set
+Map('n', '<leader>v', ':e $MYVIMRC<CR>')
 map('n', '<leader>o', ':update<CR> :source<CR>')
 map('n', '<leader>w', ':write<CR>')
 map('n', '<leader>q', ':quit<CR>')
-map('n', '<leader>v', ':e $MYVIMRC<CR>')
--- map('n', '<leader>s', ':e #<CR>')
--- map('n', '<leader>S', ':sf #<CR>')
--- map('n', '<leader>lf', vim.lsp.buf.format)
--- map({ 'n', 'v' }, '<leader>y', '"+y')
--- map({ 'n', 'v' }, '<leader>d', '"+d')
--- map({ 'n', 'v' }, '<leader>c', '1z=')
+map({ 'n', 'v' }, '<leader>y', '"+y')
+map({ 'n', 'v' }, '<leader>d', '"+d')
+map({ 'n', 'v' }, '<leader>c', '1z=')
 
 vim.pack.add({
-	{ src = "https://github.com/vague2k/vague.nvim" },
+	{ src = "https://github.com/projekt0n/github-nvim-theme" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 	{ src = 'https://github.com/neovim/nvim-lspconfig' },
 	{ src = "https://github.com/mason-org/mason.nvim" },
 })
 
+require("github-theme").setup({
+	options = {
+		styles = {
+			comments = "italic",
+			functions = "bold",
+		}
+	}
+})
+vim.cmd("colorscheme github_dark_high_contrast")
+vim.cmd(":hi statusline guibg=#666666 guifg=White")
+
 require "mason".setup()
-require "oil".setup()
+local oil = require "oil"
+oil.setup()
+map('n', '-', function() oil.open_float() end)
 
 vim.lsp.enable({ "lua_ls", "python" })
-require('nvim-treesitter.configs').setup({ highlight = { enable = true, }, })
+require('nvim-treesitter').setup({ 
+	 -- Directory to install parsers and queries to
+	install_dir = vim.fn.stdpath('data') .. '/site',
+	highlight = { enable = true, },
+})
+require'nvim-treesitter'.install { 'lua', 'python' }
 
