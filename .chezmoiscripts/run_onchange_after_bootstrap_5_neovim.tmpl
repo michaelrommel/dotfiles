@@ -50,6 +50,11 @@ source "${HOME}/.path.d/50_mise.bash"
 source "${HOME}/.path.d/99_default.sh"
 eval "$(mise hook-env)"
 
+# python is needed for installation of Mason packages as well
+if ! grep -qs python ~/.config/mise/config.toml; then
+	source "${HOME}/bin/install_python.sh"
+fi
+
 {{- if eq .global.neovim "full" }}
 
 if ! rustup -V >/dev/null 2>&1; then
@@ -76,10 +81,6 @@ fi
 if ! silicon -V >/dev/null 2>&1; then
 	echo "Installing silicon"
 	cargo install silicon
-fi
-
-if ! grep -qs python ~/.config/mise/config.toml; then
-	source "${HOME}/bin/install_python.sh"
 fi
 
 if ! python3 -c 'import pynvim;' >/dev/null 2>&1; then
