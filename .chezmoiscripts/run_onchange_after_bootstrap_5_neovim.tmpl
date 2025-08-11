@@ -38,7 +38,7 @@ fi
 
 cd "${HOME}" || exit
 # version manager for tools
-if [[ ! -f "${HOME}/bin/mise" ]]; then
+if [[ ! -f "${HOME}/bin/mise" || ! "${HOME}/bin/mise" --version >/dev/null ]]; then
 	source "${HOME}/bin/update_mise.sh"
 fi
 
