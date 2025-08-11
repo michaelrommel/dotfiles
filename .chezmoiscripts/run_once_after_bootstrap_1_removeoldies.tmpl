@@ -30,10 +30,12 @@ directories=("${HOME}/.oh-my-posh/"
 for p in "${files[@]}"; do
 	if [[ -f "$p" ]]; then
 		echo "rm $p"
+		rm "$p"
 	fi
 done
 for p in "${directories[@]}"; do
 	if [[ -d "$p" ]]; then
 		echo "rm -rf $p"
+		rm -rf "$p"
 	fi
 done
