@@ -71,9 +71,3 @@ if ! satisfied "3.5" "${TMUX_VERSION}"; then
 	make install
 fi
 
-# echo "Configuring tmux plugins"
-# mkdir -p "${HOME}/.local/share/tmux/plugins"
-# cd "${HOME}/.local/share/tmux/plugins" || exit
-# if [[ ! -d "tpm" ]]; then
-# 	git clone --depth=1 https://github.com/tmux-plugins/tpm "${HOME}/.local/share/tmux/plugins/tpm"
-# fi

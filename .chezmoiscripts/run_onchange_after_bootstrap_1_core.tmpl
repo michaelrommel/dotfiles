@@ -12,7 +12,6 @@ echo "bootstrap core"
 source "${HOME}/bin/helper.sh"
 cd "${HOME}" || exit
 
-echo "Installing basic packages"
 if is_mac; then
 	desired=(jq mosh keychain ncurses gawk autoconf automake pkg-config 
 		coreutils imagemagick fzf)
@@ -88,6 +87,7 @@ if is_wsl; then
 	# compile the npiperelay program if it is not already existing
 	NPR=/mnt/c/ProgramFiles/npiperelay/npiperelay.exe
 	if [[ ! -f "${NPR}" ]]; then
+		echo "using go to compile npiperelay for windows"
 		unset GOBIN
 		GOOS=windows go install github.com/jstarks/npiperelay@latest
 		cp "${GOPATH}/bin/windows_amd64/npiperelay.exe" "${NPR}"

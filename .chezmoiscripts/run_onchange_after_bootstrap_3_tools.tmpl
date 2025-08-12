@@ -25,7 +25,6 @@ source "${HOME}/.path.d/50_mise.bash"
 source "${HOME}/.path.d/99_default.sh"
 eval "$(mise hook-env)"
 
-echo "Installing dependency packages"
 if is_mac; then
 	desired=(ripgrep@13.0 fd@8.7 bat@0.23 bat-extras@2023.03
 		shellcheck@0.9 shfmt@3.6 universal-ctags)

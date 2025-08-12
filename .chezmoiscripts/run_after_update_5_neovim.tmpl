@@ -18,7 +18,6 @@ if ! is_mac; then
 	fi
 fi
 
-echo "Updating theme cache"
 if [[ -d "${HOME}/.config/silicon" ]]; then
 	cd "${HOME}/.config/silicon" || exit
 	if [[ -x "${HOME}/.cargo/bin/silicon" ]]; then
@@ -29,7 +28,8 @@ if [[ -d "${HOME}/.config/silicon" ]]; then
 		unset SILICON
 	fi
 
-	if [[ -n "${SILICON}" ]]; then
+if [[ -n "${SILICON}"  && ( ! -f "${HOME}/.cache/silicon/syntaxes.bin" || ! -f "${HOME}/.cache/silicon/themes.bin" ) ]]; then
+		echo "Updating theme cache"
 		"${SILICON}" --build-cache 1>/dev/null
 	fi
 fi

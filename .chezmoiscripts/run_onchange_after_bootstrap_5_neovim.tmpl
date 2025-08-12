@@ -11,11 +11,6 @@ echo "bootstrap neovim"
 
 source "${HOME}/bin/helper.sh"
 
-if is_zsh; then
-	echo "Running under zsh"
-fi
-
-echo "Installing dependency packages"
 if is_mac; then
 	desired=(cmake shellcheck@0.9 shfmt@1.33 universal-ctags
 		fontconfig@2.14)
@@ -89,7 +84,7 @@ if ! nvim --version >/dev/null 2>&1; then
 fi
 
 if ! tree-sitter -V >/dev/null 2>&1; then
-	echo "Installing tree-sitter cli"
+	echo "Installing tree-sitter cli via cargo"
 	cargo install tree-sitter-cli
 fi
 
@@ -117,7 +112,7 @@ if ! nvim --version >/dev/null 2>&1; then
 fi
 
 if ! tree-sitter --version >/dev/null 2>&1; then
-	echo "Installing tree-sitter-cli"
+	echo "Installing tree-sitter-cli via node"
 	npm install -g tree-sitter-cli
 fi
 

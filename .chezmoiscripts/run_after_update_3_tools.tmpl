@@ -9,7 +9,7 @@ exit 0
 
 echo "update tools"
 
-if [[ -x /usr/bin/bat ]]; then
+if [[ -x /usr/bin/bat && ( ! -f "${HOME}/.cache/bat/syntaxes.bin" || ! -f "${HOME}/.cache/bat/themes.bin" ) ]]; then
 	echo "Updating theme cache"
 	bat cache --build 1>/dev/null
 fi
