@@ -22,7 +22,10 @@ if is_mac; then
 	fi
 else
 	{{- if eq .global.neovim "full" }}
-		desired=(curl jq git unzip build-essential fontconfig
+		# cmake is needed for some neovim plugins
+		# build-essential (at least C compiler) for tree-sitter
+		# lib* are needed for compiling silicon
+		desired=(curl jq git unzip build-essential cmake fontconfig
 			libfontconfig1-dev
 			libx11-xcb-dev
 			libxcb-render0-dev 
