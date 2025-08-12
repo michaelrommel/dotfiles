@@ -30,7 +30,9 @@ else
 			libxcb-xfixes0-dev 
 			libharfbuzz-dev)
 	{{ else }}
-		desired=(curl jq git unzip)
+		# unfortunately we need the C compiler from build-essential
+		# to compile the treesitter parsers for languages
+		desired=(curl jq git unzip gcc)
 	{{ end }}
 	missing=()
 	check_dpkged "missing" "${desired[@]}"
