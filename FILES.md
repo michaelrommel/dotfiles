@@ -42,7 +42,6 @@ bin/update_mise.sh
 .config/kanata/kanata.kbd
 .config/starship.toml
 .config/wezterm/wezterm.lua
-.config/yazi
 .config/yazi/flavors/gruvbox-dark.yazi
 .config/yazi/flavors/gruvbox-dark.yazi/LICENSE
 .config/yazi/flavors/gruvbox-dark.yazi/LICENSE-tmtheme
@@ -114,7 +113,6 @@ bin/wsl2-relay-agent.sh
 ## Role: tmux
 
 ```text
-.config/tmux
 .config/tmux/tmux.conf
 .local/share/tmux/plugins/tmux-gruvbox
 .local/share/tmux/plugins/tmux-gruvbox/gruvbox-tpm.tmux
@@ -141,7 +139,6 @@ bin/tmx
 ## Role: tools
 
 ```text
-.config/bat/themes
 .config/bat/themes/gruvbox-dark-medium.tmTheme
 .config/fd/ignore
 .path.d/30_bat.sh
@@ -161,6 +158,7 @@ bin/shellcheck
 
 ```text
 bin/vim
+bin/vimdiff
 bin/shellcheck
 ```
 
@@ -175,16 +173,21 @@ config/minimal/init.lua
 ## Variant: full
 
 ```text
-local/share/examples/nodejs
-local/share/examples/nodejs/HappyBirthday.mjs
-local/share/examples/nodejs/README.md
-local/share/examples/nodejs/eslint.config.mjs
-local/share/examples/nodejs/package.json
-local/share/examples/python
-local/share/examples/python/test.py
-local/share/examples/rust
-local/share/examples/rust/Cargo.toml
-local/share/examples/rust/src
-local/share/examples/rust/src/main.rs
-bin/vimdiff
+.config/bob
+.config/dictionaries
+.config/harper-ls
+.config/miro
+.config/silicon
+.local/share/examples/nodejs/HappyBirthday.mjs
+.local/share/examples/nodejs/README.md
+.local/share/examples/nodejs/eslint.config.mjs
+.local/share/examples/nodejs/package.json
+.local/share/examples/python/test.py
+.local/share/examples/rust/Cargo.toml
+.local/share/examples/rust/src
+.local/share/examples/rust/src/main.rs
+bin/tmux_paste.sh
+bin/nvim_paste.sh
+bin/reset_nvim.sh
+bin/update_bob.sh
 ```
