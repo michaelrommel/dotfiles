@@ -30,7 +30,7 @@ else
 			libxcb-xfixes0-dev 
 			libharfbuzz-dev)
 	{{ else }}
-		desired=(curl jq git unzip build-essential fontconfig)
+		desired=(curl jq git unzip)
 	{{ end }}
 	missing=()
 	check_dpkged "missing" "${desired[@]}"
@@ -103,6 +103,13 @@ if ! nvr --version >/dev/null 2>&1; then
 	python3 -mpip install neovim-remote
 fi
 
+if ! is_mac; then
+	echo "Updating font cache"
+	if [[ -x /usr/bin/fc-cache ]]; then
+		fc-cache -f
+	fi
+fi
+
 {{ else }}
 
 if ! nvim --version >/dev/null 2>&1; then
@@ -118,10 +125,4 @@ fi
 
 {{ end }}
 
-if ! is_mac; then
-	echo "Updating font cache"
-	if [[ -x /usr/bin/fc-cache ]]; then
-		fc-cache -f
-	fi
-fi
 
