@@ -157,6 +157,8 @@ bin/shellcheck
 
 ## Role: neovim
 
+Files managed in both variants:
+
 ```text
 bin/vim
 bin/vimdiff
@@ -164,14 +166,14 @@ bin/shellcheck
 ```
 
 
-## Variant: minimal
+### Variant: minimal
 
 ```text
 config/minimal/init.lua
 ```
 
 
-## Variant: full
+### Variant: full
 
 ```text
 .config/bob/config.toml
