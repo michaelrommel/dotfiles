@@ -1,5 +1,24 @@
 #! /usr/bin/env bash
 
+red() {
+  echo -e "\033[31m$1\033[0m"
+}
+green() {
+  echo -e "\033[32m$1\033[0m"
+}
+yellow() {
+  echo -e "\033[33m$1\033[0m"
+}
+blue() {
+  echo -e "\033[34m$1\033[0m"
+}
+purple() {
+  echo -e "\033[35m$1\033[0m"
+}
+aqua() {
+  echo -e "\033[36m$1\033[0m"
+}
+
 is_zsh() {
 	MYSH=$(ps -o comm= $$)
 	if [[ "${MYSH}" =~ "zsh" ]]; then return 0; else return 1; fi
