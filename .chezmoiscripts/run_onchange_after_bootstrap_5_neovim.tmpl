@@ -117,3 +117,11 @@ if ! tree-sitter --version >/dev/null 2>&1; then
 fi
 
 {{ end }}
+
+if ! is_mac; then
+	echo "Updating font cache"
+	if [[ -x /usr/bin/fc-cache ]]; then
+		fc-cache -f
+	fi
+fi
+

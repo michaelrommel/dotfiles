@@ -11,13 +11,6 @@ echo "update neovim"
 
 source "${HOME}/bin/helper.sh"
 
-if ! is_mac; then
-	echo "Updating font cache"
-	if [[ -x /usr/bin/fc-cache ]]; then
-		fc-cache -f
-	fi
-fi
-
 if [[ -d "${HOME}/.config/silicon" ]]; then
 	cd "${HOME}/.config/silicon" || exit
 	if [[ -x "${HOME}/.cargo/bin/silicon" ]]; then
