@@ -67,6 +67,7 @@ bin/wsl2-relay-agent.sh
 .path.d/60_tmux.sh
 .config/tmux
 bin/tmx
+bin/tmux_paste.sh
 {{ end }}
 
 {{ if not (has "languages" .global.roles) }}
@@ -100,7 +101,6 @@ bin/vimdiff
 .local/share/assets
 .local/share/fonts
 .path.d/80_bob.sh
-bin/tmux_paste.sh
 bin/nvim_paste.sh
 bin/reset_nvim.sh
 bin/update_bob.sh
