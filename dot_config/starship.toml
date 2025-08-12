@@ -143,7 +143,7 @@ format = '[[($all_status$ahead_behind )](fg:dark0_hard bg:light3)]($style)[](
 conflicted = ' =$count'
 ahead = ' ⇡$ahead_count'
 behind = ' ⇣$behind_count'
-diverged = ' ⇕:⇡${ahead_count}⇣${behind_count'
+diverged = ' ⇕:⇡${ahead_count}⇣${behind_count}'
 up_to_date = ''
 untracked = ' ?$count'
 stashed = ' \$$count'
