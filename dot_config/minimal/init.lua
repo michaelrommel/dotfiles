@@ -37,12 +37,15 @@ map('n', '<leader>v', ':e $MYVIMRC<CR>')
 map('n', '<leader>o', ':update<CR> :source<CR>')
 map('n', '<leader>w', ':write<CR>')
 map('n', '<leader>q', ':quit<CR>')
+map('n', '<leader>gr', ':colorscheme gruvbox<CR>')
+map('n', '<leader>gi', ':colorscheme github_dark_high_contrast<CR>')
 map({ 'n', 'v' }, '<leader>y', '"+y')
 map({ 'n', 'v' }, '<leader>d', '"+d')
 map({ 'n', 'v' }, '<leader>c', '1z=')
 
 vim.pack.add({
 	{ src = "https://github.com/projekt0n/github-nvim-theme" },
+	{ src = "https://github.com/michaelrommel/gruvbox.nvim" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
@@ -57,20 +60,20 @@ require("github-theme").setup({
 			functions = "bold",
 		}
 	}
-})
-vim.cmd("colorscheme github_dark_high_contrast")
+}) -- vim.cmd("colorscheme github_dark_high_contrast")
+require("gruvbox").setup({
+	italic = {
+		strings = false,
+		comments = true,
+		folds = true,
+	},
+	contrast = "hard",
+}) -- vim.cmd("colorscheme gruvbox")
 vim.cmd(":hi statusline guibg=#666666 guifg=White")
 
 require("mason").setup()
-
 require("oil").setup()
 map('n', '-', function() require("oil").open_float() end)
-
-require('nvim-treesitter').setup({
-	highlight = { enable = true, },
-})
-require("nvim-treesitter").install { 'lua', 'python' }
-
 require("conform").setup({
 	formatters_by_ft = {
 		python = { "ruff_format" },
@@ -80,7 +83,10 @@ require("conform").setup({
 		lsp_fallback = true,
 	},
 })
-
+require('nvim-treesitter').setup({
+	highlight = { enable = true, },
+})
+require("nvim-treesitter").install { 'lua', 'python' }
 require("lspconfig").lua_ls.setup({
 	settings = {
 		Lua = {
@@ -91,5 +97,4 @@ require("lspconfig").lua_ls.setup({
 	},
 })
 vim.lsp.enable({ "lua_ls", "jedi_language_server", "ruff" })
-
 vim.diagnostic.config({ virtual_text = true })
