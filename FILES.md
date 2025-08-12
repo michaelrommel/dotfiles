@@ -2,9 +2,8 @@
 
 ## Role: none
 
+```text
 .bash_aliases
-.config/zsh
-.config/zsh
 .config/zsh/.zprofile
 .config/zsh/.zshenv
 .config/zsh/.zshrc
@@ -26,28 +25,24 @@ bin/install_node.sh
 bin/install_python.sh
 bin/install_rust.sh
 bin/update_mise.sh
-
+```
 
 ## Role: core
 
-.config/.terminfo_src
+```text
 .config/.terminfo_src/mintty.terminfo
 .config/.terminfo_src/tmux.terminfo
 .config/.terminfo_src/wezterm.terminfo
 .config/.terminfo_src/xterm-ghostty.terminfo
 .config/.terminfo_src/xterm-kitty.terminfo
-.config/ghostty
 .config/ghostty/config
-.config/kanata
 .config/kanata/com.michaelrommel.kanata.plist
 .config/kanata/com.michaelrommel.karabiner-vhiddaemon.plist
 .config/kanata/com.michaelrommel.karabiner-vhidmanager.plist
 .config/kanata/kanata.kbd
 .config/starship.toml
-.config/wezterm
 .config/wezterm/wezterm.lua
 .config/yazi
-.config/yazi/flavors
 .config/yazi/flavors/gruvbox-dark.yazi
 .config/yazi/flavors/gruvbox-dark.yazi/LICENSE
 .config/yazi/flavors/gruvbox-dark.yazi/LICENSE-tmtheme
@@ -58,7 +53,6 @@ bin/update_mise.sh
 .config/yazi/init.lua
 .config/yazi/keymap.toml
 .config/yazi/package.toml
-.config/yazi/plugins
 .config/yazi/plugins/hexyl.yazi
 .config/yazi/plugins/hexyl.yazi/LICENSE
 .config/yazi/plugins/hexyl.yazi/README.md
@@ -77,15 +71,12 @@ bin/update_mise.sh
 .config/yazi/plugins/zoom.yazi/main.lua
 .config/yazi/theme.toml
 .config/yazi/yazi.toml
-.git_template
 .git_template/HEAD
-.git_template/hooks
 .git_template/hooks/ctags
 .git_template/hooks/post-checkout
 .git_template/hooks/post-commit
 .git_template/hooks/post-merge
 .git_template/hooks/post-rewrite
-.git_template/info
 .git_template/info/exclude
 .gitconfig
 .path.d/25_fzf.bash
@@ -118,15 +109,13 @@ bin/update_yazi.sh
 bin/update_zoxide.sh
 bin/vff.sh
 bin/wsl2-relay-agent.sh
-
+```
 
 ## Role: tmux
 
+```text
 .config/tmux
 .config/tmux/tmux.conf
-.local/share/tmux
-.local/share/tmux/plugins
-.local/share/tmux/plugins
 .local/share/tmux/plugins/tmux-gruvbox
 .local/share/tmux/plugins/tmux-gruvbox/gruvbox-tpm.tmux
 .local/share/tmux/plugins/tmux-gruvbox/tmux-gruvbox-dark.conf
@@ -146,35 +135,46 @@ bin/wsl2-relay-agent.sh
 .local/share/tmux/plugins/tpm
 .path.d/60_tmux.sh
 bin/tmx
+```
+
 
 ## Role: tools
 
-.config/bat
+```text
 .config/bat/themes
 .config/bat/themes/gruvbox-dark-medium.tmTheme
-.config/fd
 .config/fd/ignore
 .path.d/30_bat.sh
 .path.d/30_bat_extras.sh
 bin/shellcheck
+```
+
 
 ## Role: languages
 
+```text
 .path.d/90_toolchains.sh
+```
+
 
 ## Role: neovim
 
+```text
 bin/vim
 bin/shellcheck
+```
+
 
 ## Variant: minimal
 
-config/minimal
+```text
 config/minimal/init.lua
+```
+
 
 ## Variant: full
 
-local/share/examples
+```text
 local/share/examples/nodejs
 local/share/examples/nodejs/HappyBirthday.mjs
 local/share/examples/nodejs/README.md
@@ -187,4 +187,4 @@ local/share/examples/rust/Cargo.toml
 local/share/examples/rust/src
 local/share/examples/rust/src/main.rs
 bin/vimdiff
-
+```
