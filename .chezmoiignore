@@ -1,4 +1,5 @@
 # This should always be ignored:
+FILES.md
 README.md
 tags
 
@@ -21,12 +22,12 @@ tags
 #bin/update_mise.sh
 
 {{ if not (has "core" .global.roles) }}
+.config/.terminfo_src
 .config/ghostty
 .config/kanata
 .config/starship.toml
 .config/wezterm
 .config/yazi
-.git_template
 .git_template
 .gitconfig
 .path.d/25_fzf.zsh
@@ -38,7 +39,6 @@ tags
 .path.d/80_zoxide.zsh
 .preinitialization.sh
 .ssh
-.terminfo_src
 bin/check_raid.sh
 bin/clean_dotfiles.sh
 bin/convert_cast.sh
@@ -70,19 +70,21 @@ bin/tmx
 {{ end }}
 
 {{ if not (has "tools" .global.roles) }}
-.path.d/30_bat_extras.sh
-.path.d/30_bat.sh
-.path.d/90_tooling.sh
-.config/fd
 .config/bat
-{{ end }}
-
-{{ if not (or (has "neovim" .global.roles) (has "tools" .global.roles)) }}
-bin/shellcheck
+.config/fd
+.path.d/30_bat.sh
+.path.d/30_bat_extras.sh
 {{ end }}
 
 {{ if not (has "neovim" .global.roles) }}
 bin/vim
+{{ end }}
+{{ if not (or (has "neovim" .global.roles) (has "tools" .global.roles)) }}
+bin/shellcheck
+{{ end }}
+
+{{ if not (has "languages" .global.roles) }}
+.path.d/90_toolchains.sh
 {{ end }}
 
 {{ if has "neovim" .global.roles }}

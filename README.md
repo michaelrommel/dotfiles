@@ -10,6 +10,9 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply michaelrommel
 
 ## Roles and neovim variations
 
+Below is a description of the involved tools and configs. For a
+detailed overvies, which files are managed and overwritten by 
+chezmoi, please see this file: [FILES.md](./FILES.md)
 
 ### Role: none
 
