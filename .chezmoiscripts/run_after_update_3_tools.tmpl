@@ -7,6 +7,8 @@
 exit 0
 {{ end -}}
 
+source "${HOME}/bin/helper.sh"
+
 yellow "update tools"
 
 if [[ -x /usr/bin/bat && ( ! -f "${HOME}/.cache/bat/syntaxes.bin" || ! -f "${HOME}/.cache/bat/themes.bin" ) ]]; then

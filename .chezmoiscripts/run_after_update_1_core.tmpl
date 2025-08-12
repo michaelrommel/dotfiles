@@ -7,9 +7,9 @@
 exit 0
 {{ end -}}
 
-yellow "update core"
-
 source "${HOME}/bin/helper.sh"
+
+yellow "update core"
 
 if is_wsl && [[ ! -h "${HOME}/bin/ssh-agent" ]]; then
 	echo "Linking wsl2-relay as ssh-agent"

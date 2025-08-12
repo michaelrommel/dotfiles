@@ -7,9 +7,9 @@
 exit 0
 {{ end -}}
 
-blue "bootstrap tmux"
-
 source "${HOME}/bin/helper.sh"
+
+blue "bootstrap tmux"
 
 TMUX_VERSION=$("${HOME}/bin/tmx" 2>/dev/null -V | sed -En "s/^tmux[^0-9]*([.0-9]+).*/\1/p")
 if ! satisfied "3.5" "${TMUX_VERSION}"; then

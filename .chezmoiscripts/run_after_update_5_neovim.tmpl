@@ -7,9 +7,9 @@
 exit 0
 {{ end -}}
 
-yellow "update neovim"
-
 source "${HOME}/bin/helper.sh"
+
+yellow "update neovim"
 
 if [[ -d "${HOME}/.config/silicon" ]]; then
 	cd "${HOME}/.config/silicon" || exit

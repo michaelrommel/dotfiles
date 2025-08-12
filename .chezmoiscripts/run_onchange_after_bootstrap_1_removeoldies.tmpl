@@ -7,9 +7,10 @@
 exit 0
 {{ end -}}
 
+source "${HOME}/bin/helper.sh"
+
 blue "bootstrap core (remove old files)"
 
-source "${HOME}/bin/helper.sh"
 cd "${HOME}" || exit
 
 shopt -s nullglob

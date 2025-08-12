@@ -7,9 +7,10 @@
 exit 0
 {{ end -}}
 
+source "${HOME}/bin/helper.sh"
+
 blue "bootstrap core"
 
-source "${HOME}/bin/helper.sh"
 cd "${HOME}" || exit
 
 if is_mac; then
