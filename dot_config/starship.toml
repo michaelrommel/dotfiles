@@ -4,6 +4,7 @@ add_newline = false
 format = """
 [](dark1)\
 $os\
+$env_var\
 $username\
 $hostname\
 $directory\
@@ -94,6 +95,12 @@ Debian = '󰣚  '
 Redhat = '󱄛  '
 RedHatEnterprise = '󱄛  '
 Pop = '  '
+
+[env_var]
+variable = 'WSL_DISTRO_NAME'
+style = 'bg:dark1 fg:neutral_blue'
+format = "[󰍲 $env_value ]($style)"
+disabled = false
 
 [username]
 show_always = false
