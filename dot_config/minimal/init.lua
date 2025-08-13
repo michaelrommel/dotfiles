@@ -37,14 +37,14 @@ map('n', '<leader>v', ':e $MYVIMRC<CR>')
 map('n', '<leader>o', ':update<CR> :source<CR>')
 map('n', '<leader>w', ':write<CR>')
 map('n', '<leader>q', ':quit<CR>')
-map('n', '<leader>gr', ':colorscheme gruvbox<CR>')
-map('n', '<leader>gi', ':colorscheme github_dark_high_contrast<CR>')
+map('n', '<leader>cd', ':colorscheme default<CR>')
+map('n', '<leader>cg', ':colorscheme gruvbox<CR>')
+map('n', '<leader>cl', ':colorscheme lunaperche<CR>')
 map({ 'n', 'v' }, '<leader>y', '"+y')
 map({ 'n', 'v' }, '<leader>d', '"+d')
 map({ 'n', 'v' }, '<leader>c', '1z=')
 
 vim.pack.add({
-	{ src = "https://github.com/projekt0n/github-nvim-theme" },
 	{ src = "https://github.com/michaelrommel/gruvbox.nvim" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
@@ -53,14 +53,6 @@ vim.pack.add({
 	{ src = "https://github.com/mason-org/mason.nvim" },
 })
 
-require("github-theme").setup({
-	options = {
-		styles = {
-			comments = "italic",
-			functions = "bold",
-		}
-	}
-}) -- vim.cmd("colorscheme github_dark_high_contrast")
 require("gruvbox").setup({
 	italic = {
 		strings = false,
