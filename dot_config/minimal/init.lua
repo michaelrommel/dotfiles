@@ -29,6 +29,11 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 	command = "silent! set filetype=sh",
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+	pattern = { "python", "lua" },
+	callback = function() vim.treesitter.start() end,
+})
+
 vim.g.mapleader = " "
 
 vim.keymap.del('n', 'Y')
