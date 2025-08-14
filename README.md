@@ -69,9 +69,21 @@ Programming languages
 
 There are two variations: minimal and full
 
-**Minimal**: uses mise to install the nightly version and uses its internal package manager and installs only very few modules, like: treesitter, lsp-config, mason, conform and oil as well as a contrast color theme.
+**Minimal**: uses mise to install the nightly version and uses 
+its internal package manager and installs only very few modules.
+There is a very stripped down default version, that installs:
+- oil (manages the filesystem)
+- conform (formats on save)
+- treesitter (installs language grammers/parsers)
+- lspconfig (configures LSP servers)
+- mason (provides a framework for installing language servers)
+- mason-lspconfig (ensures a set of language servers are installed)
 
-**Full**: compiles bob as the neovim version, installs nightly and a full configuration with around 40 modules for code formatting, auto brackets, jumping etc. as well as debugger support via nvim-dap.
+A slightly more expanded version called "minimal" (=NVIM_APPNAME)
+that maps .zsh to .bash filetypes, adds a few shortcuts and used 
+my gruvbox color scheme
 
-
+**Full**: compiles bob as the neovim version, installs nightly and a full
+configuration with around 40 modules for code formatting, auto brackets,
+jumping etc. as well as debugger support via nvim-dap.
 

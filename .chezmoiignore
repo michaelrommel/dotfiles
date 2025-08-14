@@ -106,5 +106,6 @@ bin/reset_nvim.sh
 bin/update_bob.sh
 {{ else }}
 .config/minimal
+.config/nvim
 {{ end }}
 {{ end }}

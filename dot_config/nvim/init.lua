@@ -44,22 +44,9 @@ vim.pack.add({
 	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
 })
 
-vim.cmd(":hi statusline guibg=#666666 guifg=White")
 vim.cmd("colorscheme lunaperche")
+vim.cmd(":hi statusline guibg=#444444 guifg=White")
 
-require("mason").setup()
-require("lspconfig").lua_ls.setup({
-	settings = {
-		Lua = {
-			diagnostics = {
-				globals = { 'vim' },
-			},
-		},
-	},
-})
-require("mason-lspconfig").setup {
-	ensure_installed = { "lua_ls", "jedi_language_server", "ruff" },
-}
 require("oil").setup()
 vim.keymap.set('n', '-', function() require("oil").open_float() end)
 
@@ -72,12 +59,29 @@ require("conform").setup({
 		lsp_fallback = true,
 	},
 })
+
 require('nvim-treesitter').setup({
 	highlight = { enable = true, },
 })
-require("nvim-treesitter").install { 'lua', 'python' }
+require("nvim-treesitter").install({ 'lua', 'python' })
 
-local servers = { "lua_ls", "jedi_language_server", "ruff" }
+require("mason").setup()
+vim.lsp.config("jedi_language_server", {})
+vim.lsp.config("ruff", {})
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = { 'vim' },
+			},
+		},
+	},
+})
+local servers = { "jedi_language_server", "ruff", "lua_ls" }
+require("mason-lspconfig").setup {
+	ensure_installed = servers,
+	automatic_enable = false,
+}
 local function is_installed(server_name)
 	local installed_servers = require("mason-lspconfig").get_installed_servers()
 	for _, name in ipairs(installed_servers) do

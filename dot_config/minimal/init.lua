@@ -31,7 +31,12 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = { "python", "lua" },
-	callback = function() vim.treesitter.start() end,
+	callback = function()
+		local ok, parser = pcall(vim.treesitter.get_parser, 0, "python")
+		if ok and parser ~= nil then
+			vim.treesitter.start()
+		end
+	end,
 })
 
 vim.g.mapleader = " "
@@ -42,9 +47,6 @@ map('n', '<leader>v', ':e $MYVIMRC<CR>')
 map('n', '<leader>o', ':update<CR> :source<CR>')
 map('n', '<leader>w', ':write<CR>')
 map('n', '<leader>q', ':quit<CR>')
-map('n', '<leader>cd', ':colorscheme default<CR>')
-map('n', '<leader>cg', ':colorscheme gruvbox<CR>')
-map('n', '<leader>cl', ':colorscheme lunaperche<CR>')
 map({ 'n', 'v' }, '<leader>y', '"+y')
 map({ 'n', 'v' }, '<leader>d', '"+d')
 map({ 'n', 'v' }, '<leader>c', '1z=')
@@ -56,6 +58,7 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 	{ src = 'https://github.com/neovim/nvim-lspconfig' },
 	{ src = "https://github.com/mason-org/mason.nvim" },
+	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
 })
 
 require("gruvbox").setup({
@@ -65,12 +68,13 @@ require("gruvbox").setup({
 		folds = true,
 	},
 	contrast = "hard",
-}) -- vim.cmd("colorscheme gruvbox")
-vim.cmd(":hi statusline guibg=#666666 guifg=White")
+})
+vim.cmd("colorscheme gruvbox")
+vim.cmd(":hi statusline guibg=#444444 guifg=White")
 
-require("mason").setup()
 require("oil").setup()
 map('n', '-', function() require("oil").open_float() end)
+
 require("conform").setup({
 	formatters_by_ft = {
 		python = { "ruff_format" },
@@ -80,11 +84,16 @@ require("conform").setup({
 		lsp_fallback = true,
 	},
 })
+
 require('nvim-treesitter').setup({
 	highlight = { enable = true, },
 })
-require("nvim-treesitter").install { 'lua', 'python' }
-require("lspconfig").lua_ls.setup({
+require("nvim-treesitter").install({ 'lua', 'python' })
+
+require("mason").setup()
+vim.lsp.config("jedi_language_server", {})
+vim.lsp.config("ruff", {})
+vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
 			diagnostics = {
@@ -93,5 +102,23 @@ require("lspconfig").lua_ls.setup({
 		},
 	},
 })
-vim.lsp.enable({ "lua_ls", "jedi_language_server", "ruff" })
+local servers = { "jedi_language_server", "ruff", "lua_ls" }
+require("mason-lspconfig").setup {
+	ensure_installed = servers,
+	automatic_enable = false,
+}
+local function is_installed(server_name)
+	local installed_servers = require("mason-lspconfig").get_installed_servers()
+	for _, name in ipairs(installed_servers) do
+		if name == server_name then
+			return true
+		end
+	end
+	return false
+end
+for _, server in ipairs(servers) do
+	if is_installed(server) then
+		vim.lsp.enable({ server })
+	end
+end
 vim.diagnostic.config({ virtual_text = true })

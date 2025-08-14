@@ -170,6 +170,7 @@ bin/shellcheck
 
 ```text
 config/minimal/init.lua
+config/nvim/init.lua
 ```
 
 
