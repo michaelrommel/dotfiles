@@ -21,7 +21,7 @@ vim.opt.completeopt = "menuone,noinsert,noselect"
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 vim.opt.autoindent = true
-vim.opt.showbreak = " 󱞪 "
+vim.opt.showbreak = " ⤷ "
 vim.opt.formatoptions = "jcro/qnp"
 
 -- treat zsh like bash
@@ -58,10 +58,10 @@ vim.pack.add({
 	{ src = "https://github.com/michaelrommel/gruvbox.nvim" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter",     version = "main" },
 	{ src = 'https://github.com/neovim/nvim-lspconfig' },
 	{ src = "https://github.com/mason-org/mason.nvim" },
-	{ src = "https://github.com/mason-org/mason-lspconfig.nvim" },
+	{ src = "https://github.com/WhoIsSethDaniel/mason-tool-installer" },
 })
 
 require("gruvbox").setup({
@@ -77,6 +77,7 @@ vim.cmd("colorscheme gruvbox")
 
 require("oil").setup()
 map('n', '-', function() require("oil").open_float() end)
+map('n', 'q', function() require("oil").close_float() end)
 
 require("conform").setup({
 	formatters_by_ft = {
@@ -105,23 +106,42 @@ vim.lsp.config("lua_ls", {
 		},
 	},
 })
-local servers = { "jedi_language_server", "ruff", "lua_ls" }
-require("mason-lspconfig").setup {
+
+-- these are mason server names
+local servers = { "jedi-language-server", "ruff", "lua-language-server" }
+vim.api.nvim_create_autocmd('User', {
+	pattern = 'MasonToolsUpdateCompleted',
+	callback = function(e)
+		vim.schedule(function() print("tool-installer finished.") end)
+	end,
+})
+require("mason-tool-installer").setup({
 	ensure_installed = servers,
-	automatic_enable = false,
-}
-local function is_installed(server_name)
-	local installed_servers = require("mason-lspconfig").get_installed_servers()
-	for _, name in ipairs(installed_servers) do
-		if name == server_name then
-			return true
-		end
+	auto_update = true,
+	start_delay = 500,
+	debounce_hours = 5,
+})
+-- build a mapping table between mason names and lsp names
+local mr = require("mason-registry")
+local specs = mr.get_all_package_specs()
+local mapping_table = {}
+for _, p in ipairs(specs) do
+	local lspconfig = vim.tbl_get(p, "neovim", "lspconfig")
+	if lspconfig then
+		mapping_table[p.name] = lspconfig
 	end
-	return false
+end
+local function is_installed(server_name)
+	local success, p = pcall(mr.get_package, server_name)
+	if not success then
+		return false
+	else
+		return p:is_installed()
+	end
 end
 for _, server in ipairs(servers) do
 	if is_installed(server) then
-		vim.lsp.enable({ server })
+		vim.lsp.enable({ mapping_table[server] })
 	end
 end
 vim.diagnostic.config({ virtual_text = true })
