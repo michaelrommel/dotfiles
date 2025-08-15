@@ -11,6 +11,7 @@ M.std_mappings = function()
 	local tc = require("todo-comments")
 	local flsh = require("flash")
 	local oil = require("oil")
+	local tts = require("nvim-treesitter-textobjects.select")
 
 	local ttc = require("configs.conf_toggleterm")
 	local term = require('toggleterm.terminal').Terminal
@@ -30,9 +31,26 @@ M.std_mappings = function()
 	vim.keymap.del('n', 'Y')
 
 	wk.add({
+		mode = { "x", "o" },
 		-- moves the cursor left and right in insert mode
-		{ "<C-h>", "<Left>",  desc = "Move 1 char left",  mode = { "i", "v" } },
-		{ "<C-l>", "<Right>", desc = "Move 1 char right", mode = { "i", "v" } },
+		{ "a=", function() tts.select_textobject("@assignment.outer", "textobjects") end, desc = "around assignment" },
+		{ "i=", function() tts.select_textobject("@assignment.inner", "textobjects") end, desc = "inside assignment" },
+		{ "=l", function() tts.select_textobject("@assignment.lhs", "textobjects") end,   desc = "left hand side" },
+		{ "=r", function() tts.select_textobject("@assignment.rhs", "textobjects") end,   desc = "right hand side" },
+		{ "aa", function() tts.select_textobject("@parameter.outer", "textobjects") end,  desc = "around parameter" },
+		{ "ia", function() tts.select_textobject("@parameter.inner", "textobjects") end,  desc = "inside parameter" },
+		{ "al", function() tts.select_textobject("@loop.outer", "textobjects") end,       desc = "around loop" },
+		{ "il", function() tts.select_textobject("@loop.inner", "textobjects") end,       desc = "inside loop" },
+		{ "ac", function() tts.select_textobject("@call.outer", "textobjects") end,       desc = "around call" },
+		{ "ic", function() tts.select_textobject("@call.inner", "textobjects") end,       desc = "inside call" },
+		{ "af", function() tts.select_textobject("@function.outer", "textobjects") end,   desc = "around function" },
+		{ "if", function() tts.select_textobject("@function.inner", "textobjects") end,   desc = "inside function" },
+	})
+	wk.add({
+		mode = { "i", "v" },
+		-- moves the cursor left and right in insert mode
+		{ "<C-h>", "<Left>",  desc = "Move 1 char left" },
+		{ "<C-l>", "<Right>", desc = "Move 1 char right" },
 	})
 	wk.add({
 		{ "<C-c>", function() miniterm_toggle() end, desc = "Toggle Mini Terminal" },
@@ -60,7 +78,6 @@ M.std_mappings = function()
 		{ "<leader>ss", function() require("nvim-silicon").shoot() end, desc = "Create code screenshot" },
 	})
 	wk.add({
-		{ "<leader>H",  function() vim.diagnostic.hide() end,              desc = "Hide diagnostics" },
 		{ "<leader>b",  group = "Browse" },
 		{ "<leader>bd", function() require("browse.devdocs").search() end, desc = "DevDocs" },
 		{ "<leader>bg", function() require("browse").input_search() end,   desc = "Google" },
@@ -83,6 +100,7 @@ M.std_mappings = function()
 		{ "<leader>fp", function() tsc.find_files_from_project_git_root() end, desc = "Find files in project" },
 		-- clears search highlighting
 		{ "<leader>h",  "<cmd>nohl<cr>",                                       desc = "Hide search highlights" },
+		{ "<leader>H",  function() vim.diagnostic.hide() end,                  desc = "Hide diagnostics" },
 		{ "<leader>s",  group = "Shortcuts" },
 		{ "<leader>sd", insert_datetime,                                       desc = "Insert a ISO DateTimestamp" },
 	})
@@ -167,8 +185,6 @@ M.dap_mappings = function()
 	-- document the leader key mappings
 	wk.add({
 		{ "<Leader>d",  group = "Debug" },
-		-- set a breakpoint
-		{ "<Leader>dB", function() require('dap').set_breakpoint() end,    desc = "Breakpoint Set" },
 		-- re-start the debug session: mnemonic debug again
 		{ "<Leader>da", function() require('dap').run_last() end,          desc = "Again the last run" },
 		-- toggle a breakpoint: mnemonic debug breakpoint

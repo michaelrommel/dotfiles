@@ -19,7 +19,6 @@ vim.diagnostic.config({
 
 		},
 	},
-	-- float = { border = "rounded" },
 	virtual_text = {
 		current_line = true,
 		prefix = utf8(0x25cf)

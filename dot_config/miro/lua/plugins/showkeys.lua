@@ -8,9 +8,6 @@ return {
 		timeout = 5,
 		maxkeys = 8,
 		show_count = true,
-		winopts = {
-			border = "rounded"
-		},
 		keyformat = {
 			["<BS>"] = utf8(0xf006e) .. " ",
 			["<CR>"] = utf8(0xf0311),

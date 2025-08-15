@@ -2,7 +2,8 @@
 -- grammars when a buffer is opened
 return {
 	"nvim-treesitter/nvim-treesitter",
-	lazy = true,
+	branch = "main",
+	lazy = false,
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects"
 	},
@@ -12,23 +13,16 @@ return {
 	-- 	require("nvim-treesitter.install").update({ with_sync = true })
 	-- end,
 	config = function()
-		require("nvim-treesitter.configs").setup({
-			ensure_installed = { "c", "lua", "vim", "vimdoc", "query" },
-			-- Install parsers synchronously (only applied to `ensure_installed`)
-			sync_install = true,
-			auto_install = true,
-			highlight = {
-				enable = true,
-			},
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = "<C-n>",
-					node_incremental = "<C-n>",
-					scope_incremental = false,
-					node_decremental = "<bs>"
-				}
-			}
+		require("nvim-treesitter").install({ "c", "lua", "vim", "vimdoc", "query",
+			"python", "rust", "javascript", "markdown" })
+		vim.api.nvim_create_autocmd('FileType', {
+			pattern = { "*" },
+			callback = function()
+				local ok, parser = pcall(vim.treesitter.get_parser, 0, vim.bo.filetype)
+				if ok and parser ~= nil then
+					vim.treesitter.start()
+				end
+			end,
 		})
 	end
 }

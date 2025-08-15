@@ -66,7 +66,7 @@ opt.foldmethod = "marker"
 opt.linebreak = true
 opt.breakindent = true
 opt.autoindent = true
-opt.showbreak = " " .. utf8(0xf17aa) .. " "
+opt.showbreak = " " .. utf8(0x2937) .. " "
 -- set max syntax highlighting column, after that syntax is off
 opt.synmaxcol = 240
 -- show max width of text
