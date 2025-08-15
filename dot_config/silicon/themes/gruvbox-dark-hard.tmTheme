@@ -9,7 +9,7 @@
     <key>author</key>
     <string>Brian Reilly (https://github.com/Briles/gruvbox)</string>
     <key>name</key>
-    <string>gruvbox-dark-medium</string>
+    <string>gruvbox-dark-hard</string>
     <key>colorSpaceName</key>
     <string>sRGB</string>
     <key>settings</key>
@@ -18,7 +18,7 @@
         <key>settings</key>
         <dict>
           <key>background</key>
-          <string>#282828</string>
+          <string>#151819</string>
           <key>caret</key>
           <string>#a89984</string>
           <key>foreground</key>
@@ -54,7 +54,7 @@
           <key>findHighlight</key>
           <string>#d79921</string>
           <key>findHighlightForeground</key>
-          <string>#282828</string>
+          <string>#151819</string>
           <key>tagsOptions</key>
           <string>underline</string>
           <key>selectionBorder</key>
@@ -62,7 +62,7 @@
           <key>popupCss</key>
           <string>
             html {
-              background-color: #1b1b1b;
+              background-color: #151819;
               color: #fbf1c7;
               padding: 12px;
             }
