@@ -31,8 +31,8 @@ vim.diagnostic.config({
 })
 
 -- Diagnostic popup
-vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#1d2021]]
-vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#1d2021]]
+vim.cmd [[autocmd! ColorScheme * highlight NormalFloat guibg=#151819]]
+vim.cmd [[autocmd! ColorScheme * highlight FloatBorder guifg=white guibg=#151819]]
 -- vim.cmd([[highlight link FloatBorder NormalFloat]])
 
 -- disable semantic token highlights from the language servers

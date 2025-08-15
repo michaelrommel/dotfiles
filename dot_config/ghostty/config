@@ -360,7 +360,7 @@ freetype-load-flags = hinting,force-autohint,monochrome,autohint
 theme = GruvboxDarkHard
 
 # Background color for the window.
-background = #1d2021
+background = #151819
 
 # Foreground color for the window.
 foreground = #ebdbb2

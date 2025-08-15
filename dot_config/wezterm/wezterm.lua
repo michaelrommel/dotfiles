@@ -140,16 +140,16 @@ config.window_padding = {
 config.color_schemes = {
 	['Gruvbox Dark Hard'] = {
 		foreground = "#ebdbb2",
-		background = "#1d2021",
+		background = "#151819",
 		-- cursor_bg = "#d5c4a1",
 		cursor_bg = "#d79921",
 		cursor_border = "#ebdbb2",
-		cursor_fg = "#1d2021",
+		cursor_fg = "#151819",
 		selection_bg = "#504945",
 		selection_fg = "#ebdbb2",
 
 		ansi = {
-			"#1d2021",
+			"#151819",
 			"#cc241d",
 			"#98971a",
 			"#d79921",
