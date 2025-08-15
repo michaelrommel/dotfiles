@@ -9,6 +9,7 @@ local opts = {
 	opts = {
 		debug = false,
 		font = "VictorMono NF=34;Noto Emoji",
+		theme = "gruvbox-dark-hard",
 		num_separator = "\u{258f} ",
 		shadow_color = "#000000",
 		window_title = function()

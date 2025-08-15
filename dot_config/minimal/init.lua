@@ -13,6 +13,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.termguicolors = true
 vim.opt.undofile = true
+vim.opt.splitright = true
 vim.opt.signcolumn = "yes:1"
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = '~' }
 vim.opt.list = true
@@ -41,10 +42,12 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.g.mapleader = " "
 
-vim.keymap.del('n', 'Y')
+if vim.fn.maparg('Y', 'n') ~= "" then
+	vim.keymap.del('n', 'Y')
+end
 local map = vim.keymap.set
 map('n', '<leader>v', ':e $MYVIMRC<CR>')
-map('n', '<leader>o', ':update<CR> :source<CR>')
+map('n', '<leader>o', ':update<CR>:source<CR>')
 map('n', '<leader>w', ':write<CR>')
 map('n', '<leader>q', ':quit<CR>')
 map({ 'n', 'v' }, '<leader>y', '"+y')
@@ -70,7 +73,7 @@ require("gruvbox").setup({
 	contrast = "hard",
 })
 vim.cmd("colorscheme gruvbox")
-vim.cmd(":hi statusline guibg=#444444 guifg=White")
+-- vim.cmd(":hi statusline guifg=#3c3836 guibg=White")
 
 require("oil").setup()
 map('n', '-', function() require("oil").open_float() end)

@@ -33,8 +33,9 @@ vim.api.nvim_create_autocmd('FileType', {
 	end,
 })
 
-vim.keymap.del('n', 'Y')
-
+if vim.fn.maparg('Y', 'n') ~= "" then
+	vim.keymap.del('n', 'Y')
+end
 vim.pack.add({
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/stevearc/conform.nvim" },
@@ -45,7 +46,7 @@ vim.pack.add({
 })
 
 vim.cmd("colorscheme lunaperche")
-vim.cmd(":hi statusline guibg=#444444 guifg=White")
+vim.cmd(":hi statusline guifg=#3c3836 guibg=White")
 
 require("oil").setup()
 vim.keymap.set('n', '-', function() require("oil").open_float() end)
