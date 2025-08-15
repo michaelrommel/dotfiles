@@ -25,7 +25,7 @@ return {
 			end,
 		})
 		require("mason-tool-installer").setup({
-			-- language servers go into mason-lspconfig
+			-- these are mason package names
 			ensure_installed = {
 				"bacon",
 				"bacon-ls",

@@ -14,13 +14,13 @@ vim.opt.relativenumber = true
 vim.opt.termguicolors = true
 vim.opt.undofile = true
 vim.opt.signcolumn = "yes:1"
--- vim.opt.listchars = { tab = "» ", trail = "·", nbsp = '~' }
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = '~' }
 vim.opt.list = true
 vim.opt.completeopt = "menuone,noinsert,noselect"
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 vim.opt.autoindent = true
--- vim.opt.showbreak = " 󱞪 "
+vim.opt.showbreak = " ⤷ "
 vim.opt.formatoptions = "jcro/qnp"
 
 vim.api.nvim_create_autocmd('FileType', {

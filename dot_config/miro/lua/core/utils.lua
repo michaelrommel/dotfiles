@@ -1,5 +1,30 @@
 local M = {}
 
+M.make_mason_mapping_table = function()
+	-- build a mapping table between mason names and lsp names
+	local mr = require("mason-registry")
+	local specs = mr.get_all_package_specs()
+	local mapping_table = {}
+	for _, p in ipairs(specs) do
+		local lspconfig = vim.tbl_get(p, "neovim", "lspconfig")
+		if lspconfig then
+			mapping_table[p.name] = lspconfig
+		end
+	end
+	return mapping_table
+end
+
+M.is_lsp_installed = function(server_name)
+	-- check if a mason language server is installed
+	local mr = require("mason-registry")
+	local success, p = pcall(mr.get_package, server_name)
+	if not success then
+		return false
+	else
+		return p:is_installed()
+	end
+end
+
 M.utf8 = function(decimal)
 	local bytemarkers = { { 0x7FF, 192 }, { 0xFFFF, 224 }, { 0x1FFFFF, 240 } }
 	if decimal < 128 then return string.char(decimal) end

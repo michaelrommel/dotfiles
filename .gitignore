@@ -5,3 +5,4 @@ tags
 **/examples/rust/Cargo.lock
 **/examples/rust/target
 **/miro/lazy-lock.json
+zsh-autosuggestions

@@ -69,6 +69,7 @@ function _set_win_title(){
 precmd_functions+=(_set_win_title)
 
 zstyle ':completion:*' completer _extensions _expand_alias _complete _approximate
+zstyle ':completion:*:approximate:::' max-errors 4 numeric
 
 # case insensitive completion - was the only thing I used from oh-my-zsh
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'

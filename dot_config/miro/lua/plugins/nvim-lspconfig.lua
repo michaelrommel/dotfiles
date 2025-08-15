@@ -1,4 +1,4 @@
--- config for language servers not supported by mason-lspconfig
+-- config for language servers
 return {
 	"neovim/nvim-lspconfig",
 	lazy = true,
@@ -41,7 +41,7 @@ return {
 			end
 		end
 		-- now set up all language servers
-		require("lspconfig").bacon_ls.setup({
+		vim.lsp.config("bacon_ls", {
 			filetypes = { "rust" },
 			root_dir = require("lspconfig/util").root_pattern(
 				"Cargo.toml", "rust-project.json"
@@ -56,12 +56,12 @@ return {
 				-- 	createBaconPreferencesFile = true,
 			}
 		})
-		require("lspconfig").bashls.setup({
+		vim.lsp.config("bashls", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 			filetypes = { "sh", "bash", "zsh" },
 		})
-		require("lspconfig").cssls.setup({
+		vim.lsp.config("cssls", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 			filetypes = { "css" },
@@ -76,18 +76,14 @@ return {
 				}
 			}
 		})
-		require("lspconfig").eslint.setup({
+		vim.lsp.config("eslint", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 			root_dir = require("lspconfig/util").root_pattern(
 				"package.json", "eslint.config.*"
 			),
 		})
-		require("lspconfig").graphql.setup({
-			on_attach = on_attach,
-			capabilities = capabilities,
-		})
-		require("lspconfig").harper_ls.setup({
+		vim.lsp.config("harper_ls", {
 			filetypes = { "markdown", "gitcommit", "text" },
 			on_attach = on_attach,
 			capabilities = capabilities,
@@ -115,15 +111,7 @@ return {
 				}
 			}
 		})
-		require("lspconfig").html.setup({
-			on_attach = on_attach,
-			capabilities = capabilities,
-		})
-		require("lspconfig").jedi_language_server.setup({
-			on_attach = on_attach,
-			capabilities = capabilities,
-		})
-		require("lspconfig").jsonls.setup({
+		vim.lsp.config("jsonls", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 			filetypes = { "json", "jsonc", "json5" },
@@ -153,7 +141,7 @@ return {
 				end,
 			},
 		})
-		require("lspconfig").lua_ls.setup({
+		vim.lsp.config("lua_ls", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 			filetypes = { "lua" },
@@ -169,11 +157,7 @@ return {
 				}
 			}
 		})
-		require("lspconfig").ruff.setup({
-			on_attach = on_attach,
-			capabilities = capabilities,
-		})
-		require("lspconfig").rust_analyzer.setup({
+		vim.lsp.config("rust_analyzer", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 			filetypes = { "rust" },
@@ -181,7 +165,7 @@ return {
 			root_dir = require("lspconfig/util").root_pattern(
 				"Cargo.toml", "rust-project.json"
 			),
-			single_file_support = true,
+			single_file_suport = true,
 			settings = {
 				['rust-analyzer'] = {
 					diagnostics = {
@@ -204,17 +188,68 @@ return {
 				}
 			}
 		})
-		require("lspconfig").svelte.setup({
+		vim.lsp.config("ruff", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 		})
-		require("lspconfig").tailwindcss.setup({
+		vim.lsp.config("svelte", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 		})
-		require("lspconfig").ts_ls.setup({
+		vim.lsp.config("tailwindcss", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 		})
+		vim.lsp.config("ts_ls", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+		vim.lsp.config("graphql", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+		vim.lsp.config("html", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+		vim.lsp.config("jedi_language_server", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+
+		-- finally we can start the servers, if they are
+		-- installed and ready
+		local mmt = require("core.utils").make_mason_mapping_table
+		local isi = require("core.utils").is_lsp_installed
+		-- this is verbatim from mason-tool-installer
+		local ensure_installed = {
+			"bacon",
+			"bacon-ls",
+			"bash-language-server",
+			"codelldb",
+			"css-lsp",
+			"eslint-lsp",
+			"graphql-language-service-cli",
+			"harper-ls",
+			"html-lsp",
+			"jedi-language-server",
+			"js-debug-adapter",
+			"json-lsp",
+			"lua-language-server",
+			"prettier",
+			"ruff",
+			"shellcheck",
+			"shfmt",
+			"stylua",
+			"svelte-language-server",
+			"tailwindcss-language-server",
+			"typescript-language-server",
+		}
+		local mapping_table = mmt()
+		for _, server in ipairs(ensure_installed) do
+			if isi(server) then
+				vim.lsp.enable({ mapping_table[server] })
+			end
+		end
 	end
 }
