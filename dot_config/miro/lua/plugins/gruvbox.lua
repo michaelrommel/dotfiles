@@ -27,7 +27,6 @@ return {
 			dim_inactive = false,
 			transparent_mode = true,
 		}
-
 		-- setup must be called before loading the colorscheme
 		require("gruvbox").setup(opts)
 		vim.cmd.colorscheme "gruvbox"

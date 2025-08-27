@@ -247,6 +247,7 @@ return {
 		}
 		local mapping_table = mmt()
 		for _, server in ipairs(ensure_installed) do
+			-- print("checking: " .. server)
 			if isi(server) then
 				vim.lsp.enable({ mapping_table[server] })
 			end
