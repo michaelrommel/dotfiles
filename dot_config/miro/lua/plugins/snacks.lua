@@ -13,26 +13,7 @@ return {
 				return file .. "../../../.." .. src
 			end
 		},
-		picker = { enabled = true },
-		bigfile = { enabled = true },
-		indent = {
-			indent = {
-				enabled = false,
-				priority = 1,
-				char = "▏", -- U+258f
-			},
-			scope = {
-				enabled = false,
-				priority = 200,
-				char = "▎", -- U+258e
-				underline = false,
-				only_current = false,
-			},
-			animate = {
-				duration = {
-					total = 150
-				}
-			}
-		}
+		-- picker = { enabled = true },
+		-- bigfile = { enabled = true },
 	}
 }
