@@ -66,7 +66,35 @@ precmd_functions+=(_fix_cursor)
 function _set_win_title(){
     echo -ne "\033]0;$USER:$PWD\007"
 }
-precmd_functions+=(_set_win_title)
+
+# emit current working directory using osc 7 terminal escape code
+# https://iterm2.com/documentation-escape-codes.html
+# https://github.com/wez/wezterm/discussions/3718
+# https://wezfurlong.org/wezterm/config/lua/config/default_cwd.html
+# https://github.com/wez/wezterm/discussions/4945
+_urlencode() {
+	local length="${#1}"
+	for (( i = 0; i < length; i++ )); do
+		local c="${1:$i:1}"
+		case $c in
+			%) printf '%%%02X' "'$c" ;;
+			*) printf "%s" "$c" ;;
+		esac
+	done
+}
+osc7_cwd() {
+	EP="$(_urlencode "$PWD")"
+	echo -ne "\033]7;file://$HOSTNAME/$EP\033\\"
+}
+
+# execute functions whenever a directory change occurs
+# not used for osc7, because when creating a tmux split, the initial dir is not emitted
+# and the next split lands somewhere...
+# autoload -Uz add-zsh-hook
+# add-zsh-hook -Uz chpwd osc7_cwd
+
+# emit the window title and the cwd via osc 7 escape code every time zsh detects a change in directory
+precmd_functions+=(_set_win_title osc7_cwd)
 
 zstyle ':completion:*' completer _extensions _expand_alias _complete _approximate
 zstyle ':completion:*:approximate:::' max-errors 4 numeric
