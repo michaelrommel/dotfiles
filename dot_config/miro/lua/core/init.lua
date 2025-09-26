@@ -86,6 +86,9 @@ opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,te
 -- these options are necessary for which-key as well
 opt.timeout = true
 opt.timeoutlen = 500
+-- set title string of the terminal. :~ modifier tries to make path relative to HOME
+opt.title = true
+opt.titlestring = "%.20t%( (%.30{expand(\"%:~:h\")})%)"
 -- for minimal tabline
 opt.showtabline = 2
 
