@@ -64,7 +64,8 @@ precmd_functions+=(_fix_cursor)
 
 # set the window title for the shell
 function _set_win_title(){
-    echo -ne "\033]0;$USER:$PWD\007"
+	SHORT_CWD=$(print -P "%20<...<%~%<<")
+    echo -ne "\033]0;$SHORT_CWD\007"
 }
 
 # emit current working directory using osc 7 terminal escape code

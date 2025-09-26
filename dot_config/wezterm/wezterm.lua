@@ -1,26 +1,48 @@
-local wezterm = require 'wezterm'
+local wezterm = require("wezterm")
 local act = wezterm.action
 
 local config = {}
 
-local fontname = 'VictorMono NF'
+local fontname = "VictorMono NF"
 local fontsize = 17
 
-if wezterm.target_triple == 'x86_64-pc-windows-msvc' then
+if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	config.launch_menu = {
 		{
 			label = "cygwin",
 			args = { "cmd.exe", "/c", "c:/cygwin64/bin/bash.exe --login -i" },
-			domain = 'DefaultDomain'
-		}
+			domain = "DefaultDomain",
+		},
+		{
+			label = "SSH bookworm",
+			domain = { DomainName = "SSH.bookworm" },
+		},
+	}
+	config.ssh_domains = {
+		{
+			name = "SSH.bookworm",
+			remote_address = "192.168.140.18",
+			username = "rommel",
+			multiplexing = "None",
+			default_prog = { "zsh" },
+			assume_shell = "Posix",
+		},
+		{
+			name = "SSH.trixie",
+			remote_address = "192.168.140.18",
+			username = "rommel",
+			multiplexing = "None",
+			default_prog = { "zsh" },
+			assume_shell = "Posix",
+		},
 	}
 	-- config.default_cwd = "C:/cygwin64/bin"
 	-- config.default_prog = { "cmd.exe", "/c", "c:/cygwin64/bin/bash.exe --login -i" }
 	-- config.default_domain = 'WSL:neoplain'
 	-- config.default_domain = 'SSH:WSL'
-	config.default_domain = 'WSL:bookworm'
-	config.ssh_backend = "Ssh2"
-	fontname = 'VictorMono NF'
+	config.default_domain = "WSL:bookworm"
+	config.ssh_backend = "LibSsh"
+	fontname = "VictorMono NF"
 	fontsize = 13
 	config.initial_rows = 40
 	config.initial_cols = 120
@@ -33,60 +55,60 @@ else
 	config.initial_cols = 150
 end
 
-config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.use_fancy_tab_bar = true
 config.font = wezterm.font(fontname)
 config.font_rules = {
 	{
-		intensity = 'Normal',
+		intensity = "Normal",
 		italic = false,
-		font = wezterm.font {
+		font = wezterm.font({
 			family = fontname,
-			weight = 'Regular',
-		},
+			weight = "Regular",
+		}),
 	},
 	{
-		intensity = 'Bold',
+		intensity = "Bold",
 		italic = false,
-		font = wezterm.font {
+		font = wezterm.font({
 			family = fontname,
-			weight = 'Medium',
-		},
+			weight = "Medium",
+		}),
 	},
 	{
-		intensity = 'Half',
+		intensity = "Half",
 		italic = false,
-		font = wezterm.font {
+		font = wezterm.font({
 			family = fontname,
-			weight = 'Light',
-		},
+			weight = "Light",
+		}),
 	},
 	{
-		intensity = 'Normal',
+		intensity = "Normal",
 		italic = true,
-		font = wezterm.font {
+		font = wezterm.font({
 			family = fontname,
-			weight = 'Light',
-			style = 'Italic',
-		},
+			weight = "Light",
+			style = "Italic",
+		}),
 	},
 	{
-		intensity = 'Bold',
+		intensity = "Bold",
 		italic = true,
-		font = wezterm.font {
+		font = wezterm.font({
 			family = fontname,
-			weight = 'Medium',
-			style = 'Italic',
-		},
+			weight = "Medium",
+			style = "Italic",
+		}),
 	},
 	{
-		intensity = 'Half',
+		intensity = "Half",
 		italic = true,
-		font = wezterm.font {
+		font = wezterm.font({
 			family = fontname,
-			weight = 'ExtraLight',
-			style = 'Italic',
-		},
+			weight = "ExtraLight",
+			style = "Italic",
+		}),
 	},
 }
 config.font_size = fontsize
@@ -95,16 +117,19 @@ config.line_height = 1.00
 config.bold_brightens_ansi_colors = "No"
 config.audible_bell = "Disabled"
 config.visual_bell = {
-	fade_in_function = 'Linear',
+	fade_in_function = "Linear",
 	fade_in_duration_ms = 20,
-	fade_out_function = 'Linear',
+	fade_out_function = "Linear",
 	fade_out_duration_ms = 20,
 	-- target = "CursorColor",
 }
-config.colors = {
-	visual_bell = '#202324',
-}
 
+config.window_padding = {
+	left = 0,
+	right = 0,
+	top = 3,
+	bottom = 0,
+}
 -- config.debug_key_events = true
 -- we define only the most needed commmands below in the key section
 -- this leaves us with more combinations for the editor/debugger
@@ -127,18 +152,16 @@ config.custom_block_glyphs = true
 -- config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
 config.freetype_load_target = "Light"
 config.freetype_render_target = "Light"
+
+config.colors = {
+	visual_bell = "#202324",
+}
 -- see: https://github.com/dawikur/base16-gruvbox-scheme
 -- config.color_scheme = 'Gruvbox dark, hard (base16)'
-config.color_scheme = 'Gruvbox Dark Hard'
-config.window_padding = {
-	left = 0,
-	right = 0,
-	top = 3,
-	bottom = 0,
-}
+config.color_scheme = "Gruvbox Dark Hard"
 
 config.color_schemes = {
-	['Gruvbox Dark Hard'] = {
+	["Gruvbox Dark Hard"] = {
 		foreground = "#ebdbb2",
 		background = "#151819",
 		-- cursor_bg = "#d5c4a1",
@@ -156,7 +179,7 @@ config.color_schemes = {
 			"#458588",
 			"#b16286",
 			"#689d6a",
-			"#a89984"
+			"#a89984",
 		},
 		brights = {
 			"#928374",
@@ -166,28 +189,171 @@ config.color_schemes = {
 			"#83a598",
 			"#d3869b",
 			"#8ec07c",
-			"#fbf1c7"
-		}
+			"#fbf1c7",
+		},
 	},
 }
 
 config.keys = {
-	{ key = 'Tab', mods = 'CTRL',       action = act.ActivateTabRelative(1) },
-	{ key = 'Tab', mods = 'SHIFT|CTRL', action = act.ActivateTabRelative(-1) },
-	{ key = '-',   mods = 'CTRL',       action = act.DecreaseFontSize },
-	{ key = '0',   mods = 'CTRL',       action = act.ResetFontSize },
-	{ key = '=',   mods = 'CTRL',       action = act.IncreaseFontSize },
-	{ key = 'C',   mods = 'SHIFT|CTRL', action = act.CopyTo 'Clipboard' },
-	{ key = 'L',   mods = 'SHIFT|CTRL', action = act.ShowDebugOverlay },
-	{ key = 'N',   mods = 'SHIFT|CTRL', action = act.SpawnWindow },
-	{ key = 'P',   mods = 'SHIFT|CTRL', action = act.ActivateCommandPalette },
-	{ key = 'T',   mods = 'SHIFT|CTRL', action = act.SpawnTab 'CurrentPaneDomain' },
-	{ key = 'V',   mods = 'SHIFT|CTRL', action = act.PasteFrom 'Clipboard' },
-	{ key = 'c',   mods = 'SHIFT|CTRL', action = act.CopyTo 'Clipboard' },
-	{ key = 'l',   mods = 'SHIFT|CTRL', action = act.ShowDebugOverlay },
-	{ key = 'n',   mods = 'SHIFT|CTRL', action = act.SpawnWindow },
-	{ key = 't',   mods = 'SHIFT|CTRL', action = act.SpawnTab 'CurrentPaneDomain' },
-	{ key = 'v',   mods = 'SHIFT|CTRL', action = act.PasteFrom 'Clipboard' },
+	{ key = "Tab", mods = "CTRL", action = act.ActivateTabRelative(1) },
+	{ key = "Tab", mods = "SHIFT|CTRL", action = act.ActivateTabRelative(-1) },
+	{ key = "-", mods = "CTRL", action = act.DecreaseFontSize },
+	{ key = "0", mods = "CTRL", action = act.ResetFontSize },
+	{ key = "=", mods = "CTRL", action = act.IncreaseFontSize },
+	{ key = "C", mods = "SHIFT|CTRL", action = act.CopyTo("Clipboard") },
+	{ key = "L", mods = "SHIFT|CTRL", action = act.ShowDebugOverlay },
+	{ key = "N", mods = "SHIFT|CTRL", action = act.SpawnWindow },
+	{ key = "P", mods = "SHIFT|CTRL", action = act.ActivateCommandPalette },
+	{ key = "T", mods = "SHIFT|CTRL", action = act.SpawnTab("CurrentPaneDomain") },
+	{ key = "V", mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
+	{ key = "c", mods = "SHIFT|CTRL", action = act.CopyTo("Clipboard") },
+	{ key = "l", mods = "SHIFT|CTRL", action = act.ShowDebugOverlay },
+	{ key = "n", mods = "SHIFT|CTRL", action = act.SpawnWindow },
+	{ key = "t", mods = "SHIFT|CTRL", action = act.SpawnTab("CurrentPaneDomain") },
+	{ key = "v", mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
 }
+
+-- Custom title and icon based on:
+--   https://github.com/wezterm/wezterm/discussions/4945#discussion-6173546
+-- : https://github.com/protiumx/.dotfiles/blob/854d4b159a0a0512dc24cbc840af467ac84085f8/stow/wezterm/.config/wezterm/wezterm.lua#L291-L319
+local process_icons = {
+	["bash"] = wezterm.nerdfonts.cod_terminal_bash,
+	["btm"] = wezterm.nerdfonts.mdi_chart_donut_variant,
+	["cargo"] = wezterm.nerdfonts.dev_rust,
+	["curl"] = wezterm.nerdfonts.mdi_flattr,
+	["docker"] = wezterm.nerdfonts.linux_docker,
+	["docker-compose"] = wezterm.nerdfonts.linux_docker,
+	["gh"] = wezterm.nerdfonts.dev_github_badge,
+	["git"] = wezterm.nerdfonts.fa_git,
+	["go"] = wezterm.nerdfonts.seti_go,
+	["htop"] = wezterm.nerdfonts.mdi_chart_donut_variant,
+	["kubectl"] = wezterm.nerdfonts.linux_docker,
+	["kuberlr"] = wezterm.nerdfonts.linux_docker,
+	["lazydocker"] = wezterm.nerdfonts.linux_docker,
+	["lazygit"] = wezterm.nerdfonts.oct_git_compare,
+	["lua"] = wezterm.nerdfonts.seti_lua,
+	["make"] = wezterm.nerdfonts.seti_makefile,
+	["node"] = wezterm.nerdfonts.mdi_hexagon,
+	["nvim"] = wezterm.nerdfonts.custom_vim,
+	["psql"] = wezterm.nerdfonts.custom_sqldeveloper,
+	["ruby"] = wezterm.nerdfonts.cod_ruby,
+	["stern"] = wezterm.nerdfonts.linux_docker,
+	["sudo"] = wezterm.nerdfonts.fa_hashtag,
+	["usql"] = wezterm.nerdfonts.custom_sqldeveloper,
+	["vim"] = wezterm.nerdfonts.dev_vim,
+	["wget"] = wezterm.nerdfonts.mdi_arrow_down_box,
+	["wslhost.exe"] = wezterm.nerdfonts.custom_windows,
+	["zsh"] = wezterm.nerdfonts.dev_terminal,
+}
+
+-- Return the Tab's current working directory
+local function get_cwd(tab)
+	local pane = tab.active_pane
+	if not pane then
+		return ""
+	end
+	return tab.active_pane.current_working_dir.file_path or ""
+end
+
+-- Remove all path components and return only the last value
+local function remove_abs_path(path)
+	return path:gsub("(.*[/\\])(.*)", "%2")
+end
+
+-- Return the concise name or icon of the running process for display
+local function get_process(tab)
+	if not tab.active_pane or tab.active_pane.foreground_process_name == "" then
+		return "[?]"
+	end
+
+	local process_name = remove_abs_path(tab.active_pane.foreground_process_name)
+	if process_name:find("kubectl") then
+		process_name = "kubectl"
+	end
+
+	return process_icons[process_name] .. " " or string.format("[%s]", process_name)
+end
+
+-- Pretty format the tab title
+local function format_title(tab)
+	local process = get_process(tab)
+
+	local active_title = tab.active_pane.title
+	if active_title:find("- NVIM") then
+		active_title = active_title:gsub("^([^ ]+) .*", "%1")
+	end
+
+	local description = (not active_title) and "~" or active_title
+	return string.format("%s %s", process, description)
+end
+
+-- Returns manually set title (from `tab:set_title()` or `wezterm cli set-tab-title`)
+-- or creates a new one
+local function get_tab_title(tab)
+	local title = tab.tab_title
+	if title and #title > 0 then
+		return title
+	end
+	return format_title(tab)
+end
+
+-- Convert arbitrary strings to a unique hex color value
+-- Based on: https://stackoverflow.com/a/3426956/3219667
+local function string_to_color(str)
+	print(str)
+	-- Convert the string to a unique integer
+	local hash = 0
+	for i = 1, #str do
+		print(hash)
+		print(string.byte(str, i))
+		print(hash << 5)
+		hash = string.byte(str, i) + ((hash << 5) - hash)
+		print(hash)
+	end
+
+	-- Convert the integer to a unique color
+	--local c = string.format("%06X", hash & 0x00FFFFFF)
+	--return "#" .. (string.rep("0", 6 - #c) .. c):upper()
+	local c = wezterm.color.from_hsla(hash & 255, 0.7, 0.2, 1)
+	return c
+end
+
+-- Determine if a tab has unseen output since last visited
+local function has_unseen_output(tab)
+	if not tab.is_active then
+		for _, pane in ipairs(tab.panes) do
+			if pane.has_unseen_output then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+-- On format tab title events, override the default handling to return a custom title
+-- Docs: https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
+---@diagnostic disable-next-line: unused-local
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+	local title = get_tab_title(tab)
+	print(title)
+	local color = string_to_color(get_cwd(tab))
+	print(color)
+
+	if tab.is_active then
+		return {
+			{ Attribute = { Intensity = "Bold" } },
+			{ Background = { Color = color } },
+			{ Foreground = { Color = "#ebdbb2" } },
+			{ Text = title },
+		}
+	end
+	if has_unseen_output(tab) then
+		return {
+			{ Foreground = { Color = "#fabd2f" } },
+			{ Text = title },
+		}
+	end
+	return title
+end)
 
 return config
