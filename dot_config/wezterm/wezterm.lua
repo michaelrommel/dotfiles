@@ -130,6 +130,9 @@ config.window_padding = {
 	top = 3,
 	bottom = 0,
 }
+
+config.max_fps = 120
+
 -- config.debug_key_events = true
 -- we define only the most needed commmands below in the key section
 -- this leaves us with more combinations for the editor/debugger
