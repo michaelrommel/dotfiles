@@ -1,7 +1,9 @@
 local wezterm = require("wezterm")
 local act = wezterm.action
+local mux = wezterm.mux
 
 local config = {}
+local winsize = {}
 
 local fontname = "VictorMono NF"
 local fontsize = 17
@@ -44,15 +46,19 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	config.ssh_backend = "LibSsh"
 	fontname = "VictorMono NF"
 	fontsize = 13
-	config.initial_rows = 40
-	config.initial_cols = 120
 	-- this conflicts with the csi u mode that we need for
 	-- tmux and extended key reporting
 	config.allow_win32_input_mode = false
+	config.initial_rows = 40
+	config.initial_cols = 120
+	winsize.height = 1000
+	winsize.width = 1200
 else
 	config.term = "wezterm"
 	config.initial_rows = 45
 	config.initial_cols = 150
+	winsize.height = 1100
+	winsize.width = 1400
 end
 
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
@@ -292,23 +298,22 @@ local function format_title(tab)
 	local process1 = get_process(tab)
 	if process1 then
 		process1 = format_process(process1)
+	else
+		process1 = ""
 	end
 
 	local active_title = tab.active_pane.title
-	print("active_title: " .. active_title)
 	local process2 = nil
 	local count
 	if active_title then
 		process2, count = string.gsub(active_title, ".*%[(.-)%] .*", "%1")
 	end
 	if count > 0 then
-		print("process2: " .. process2)
 		process2 = format_process(process2)
 		active_title = active_title:gsub(".*%[.-%] (.*)", "%1")
 	else
 		process2 = ""
 	end
-	print("active_title: " .. active_title)
 	local description = (not active_title) and "!" or active_title
 	return string.format("%s %s%s", process1, process2, description)
 end
@@ -333,7 +338,9 @@ local function string_to_color(str)
 	end
 
 	-- Convert the integer to a unique color
-	local c = wezterm.color.from_hsla(hash & 255, 0.7, 0.2, 1)
+	local hue = (hash & 0x1ff) / 512 * 360
+	local saturation = ((hash >> 9) & 255) / 255 * 60
+	local c = wezterm.color.from_hsla(hue, saturation, 0.18, 1)
 	return c
 end
 
@@ -352,7 +359,7 @@ end
 -- On format tab title events, override the default handling to return a custom title
 -- Docs: https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
 ---@diagnostic disable-next-line: unused-local
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+wezterm.on("format-tab-title", function(tab, tabs, panes, cfg, hover, max_width)
 	local title = get_tab_title(tab)
 	local color = string_to_color(get_cwd(tab))
 
@@ -371,6 +378,28 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		}
 	end
 	return title
+end)
+
+wezterm.on("window-config-reloaded", function(window, pane)
+	local main = wezterm.gui.screens().main
+	-- approximately identify this gui window, by using the associated mux id
+	local id = "win_" .. window:window_id()
+	-- maintain a mapping of windows that we have previously seen before in this event handler
+	local seen = wezterm.GLOBAL.seen_windows or {}
+	-- set a flag if we haven't seen this window before
+	local is_new_window = not seen[id]
+	-- and update the mapping
+	seen[id] = true
+	wezterm.GLOBAL.seen_windows = seen
+
+	-- now act upon the flag
+	if is_new_window then
+		-- wezterm.log_info(string.format("[new window] created screen: %sx%s, window: %s, pane: %s",
+		-- main.width, main.height, window, pane))
+		local x = (main.width - winsize.width * main.scale) / 2
+		local y = (main.height - winsize.height * main.scale) / 2
+		window:set_position(x, y)
+	end
 end)
 
 return config
