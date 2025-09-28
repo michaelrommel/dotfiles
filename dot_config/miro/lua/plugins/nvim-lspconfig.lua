@@ -249,7 +249,13 @@ return {
 		for _, server in ipairs(ensure_installed) do
 			-- print("checking: " .. server)
 			if isi(server) then
-				vim.lsp.enable({ mapping_table[server] })
+				-- local mapped = mapping_table[server] or ""
+				-- print("enabling: " .. server .. "(" .. mapped .. ")")
+				if mapping_table[server] then
+					vim.lsp.enable({ mapping_table[server] })
+				else
+					vim.lsp.enable({ server })
+				end
 			end
 		end
 	end
