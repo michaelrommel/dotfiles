@@ -53,12 +53,24 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	config.initial_cols = 120
 	winsize.height = 1000
 	winsize.width = 1200
+	config.window_padding = {
+		left = 0,
+		right = 22,
+		top = 3,
+		bottom = 0,
+	}
 else
 	config.term = "wezterm"
 	config.initial_rows = 45
 	config.initial_cols = 150
 	winsize.height = 1100
 	winsize.width = 1400
+	config.window_padding = {
+		left = 0,
+		right = 22,
+		top = 0,
+		bottom = 0,
+	}
 end
 
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
@@ -130,14 +142,9 @@ config.visual_bell = {
 	-- target = "CursorColor",
 }
 
-config.window_padding = {
-	left = 0,
-	right = 0,
-	top = 3,
-	bottom = 0,
-}
-
-config.max_fps = 120
+config.max_fps = 72
+config.enable_scroll_bar = true
+config.min_scroll_bar_height = "2cell"
 
 -- config.debug_key_events = true
 -- we define only the most needed commmands below in the key section
@@ -164,6 +171,7 @@ config.freetype_render_target = "Light"
 
 config.colors = {
 	visual_bell = "#202324",
+	scrollbar_thumb = wezterm.color.from_hsla(50, 0, 0.6, 0.4)
 }
 -- see: https://github.com/dawikur/base16-gruvbox-scheme
 -- config.color_scheme = 'Gruvbox dark, hard (base16)'
