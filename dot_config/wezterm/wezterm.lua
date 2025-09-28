@@ -235,31 +235,29 @@ config.keys = {
 -- : https://github.com/protiumx/.dotfiles/blob/854d4b159a0a0512dc24cbc840af467ac84085f8/stow/wezterm/.config/wezterm/wezterm.lua#L291-L319
 local process_icons = {
 	["bash"] = wezterm.nerdfonts.dev_terminal,
-	["btm"] = wezterm.nerdfonts.mdi_chart_donut_variant,
 	["cargo"] = wezterm.nerdfonts.dev_rust,
-	["curl"] = wezterm.nerdfonts.mdi_flattr,
+	["curl"] = wezterm.nerdfonts.md_arrow_down_box,
 	["docker"] = wezterm.nerdfonts.linux_docker,
 	["docker-compose"] = wezterm.nerdfonts.linux_docker,
-	["gh"] = wezterm.nerdfonts.dev_github_badge,
+	["gh"] = wezterm.nerdfonts.dev_github,
 	["git"] = wezterm.nerdfonts.md_git,
 	["go"] = wezterm.nerdfonts.seti_go,
-	["htop"] = wezterm.nerdfonts.mdi_chart_donut_variant,
+	["htop"] = wezterm.nerdfonts.cod_graph_line,
 	["kubectl"] = wezterm.nerdfonts.linux_docker,
 	["kuberlr"] = wezterm.nerdfonts.linux_docker,
 	["lazydocker"] = wezterm.nerdfonts.linux_docker,
 	["lazygit"] = wezterm.nerdfonts.oct_git_compare,
 	["lua"] = wezterm.nerdfonts.seti_lua,
 	["make"] = wezterm.nerdfonts.seti_makefile,
-	["node"] = wezterm.nerdfonts.mdi_hexagon,
+	["node"] = wezterm.nerdfonts.md_hexagon_outline,
 	["nvim"] = wezterm.nerdfonts.custom_vim,
 	["psql"] = wezterm.nerdfonts.custom_sqldeveloper,
 	["ruby"] = wezterm.nerdfonts.cod_ruby,
-	["stern"] = wezterm.nerdfonts.linux_docker,
-	["sudo"] = wezterm.nerdfonts.fa_hashtag,
+	["sudo"] = wezterm.nerdfonts.md_death_star,
 	["usql"] = wezterm.nerdfonts.custom_sqldeveloper,
-	["vim"] = wezterm.nerdfonts.dev_vim,
+	["vim"] = wezterm.nerdfonts.custom_vim,
 	["tmux"] = wezterm.nerdfonts.cod_terminal_tmux,
-	["wget"] = wezterm.nerdfonts.mdi_arrow_down_box,
+	["wget"] = wezterm.nerdfonts.md_arrow_down_box,
 	["wslhost.exe"] = wezterm.nerdfonts.custom_windows,
 	["zsh"] = wezterm.nerdfonts.dev_terminal,
 }
@@ -283,12 +281,12 @@ local function remove_abs_path(path)
 end
 
 -- Return the concise name or icon of the running process for display
-local function get_process(tab)
-	if not tab.active_pane or tab.active_pane.foreground_process_name == "" then
-		return nil
-	end
-	return remove_abs_path(tab.active_pane.foreground_process_name)
-end
+-- local function get_process(tab)
+-- 	if not tab.active_pane or tab.active_pane.foreground_process_name == "" then
+-- 		return nil
+-- 	end
+-- 	return remove_abs_path(tab.active_pane.foreground_process_name)
+-- end
 
 local function format_process(process_name)
 	if process_name:find("kubectl") then
@@ -303,27 +301,45 @@ end
 
 -- Pretty format the tab title
 local function format_title(tab)
-	local process1 = get_process(tab)
-	if process1 then
-		process1 = format_process(process1)
+	-- local process1 = get_process(tab)
+	-- if process1 then
+	-- 	process1 = format_process(process1)
+	-- else
+	-- 	process1 = ""
+	-- end
+
+	local apane = tab.active_pane
+	local active_title = apane.title
+	local process2 = nil
+	local count = 0
+	if apane.user_vars.WEZTERM_IN_TMUX == "1" then
+		if active_title then
+			process2, count = string.gsub(active_title, ".*%[(.-)%] .*", "%1")
+		end
+		if count > 0 then
+			process2 = format_process(process2)
+			active_title = active_title:gsub(".*%[.-%] (.*)", "%1")
+		else
+			process2 = ""
+		end
+		process2 = process_icons["tmux"] .. "  " .. process2
 	else
-		process1 = ""
+		process2 = apane.user_vars.WEZTERM_PROG
+		if process2 then
+			process2, count = string.gsub(process2, "([^ ;]+).*", "%1")
+			if count > 0 then
+				process2 = remove_abs_path(process2)
+				process2 = format_process(process2)
+			else
+				process2 = ""
+			end
+		else
+			process2 = ""
+		end
 	end
 
-	local active_title = tab.active_pane.title
-	local process2 = nil
-	local count
-	if active_title then
-		process2, count = string.gsub(active_title, ".*%[(.-)%] .*", "%1")
-	end
-	if count > 0 then
-		process2 = format_process(process2)
-		active_title = active_title:gsub(".*%[.-%] (.*)", "%1")
-	else
-		process2 = ""
-	end
 	local description = (not active_title) and "!" or active_title
-	return string.format("%s %s%s", process1, process2, description)
+	return string.format("%s %s", process2, description)
 end
 
 -- Returns manually set title (from `tab:set_title()` or `wezterm cli set-tab-title`)

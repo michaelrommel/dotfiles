@@ -83,9 +83,43 @@ _urlencode() {
 		esac
 	done
 }
-osc7_cwd() {
+_set_cwd_osc7() {
 	EP="$(_urlencode "$PWD")"
 	echo -ne "\033]7;file://$HOSTNAME/$EP\033\\"
+}
+
+# This function emits an OSC 1337 sequence to set a user var
+# associated with the current terminal pane.
+# It requires the `base64` utility to be available in the path.
+__wezterm_set_user_var() {
+	if hash base64 2>/dev/null; then
+		if [[ -z "${TMUX-}" ]]; then
+			# shellcheck disable=SC2046
+			printf "\033]1337;SetUserVar=%s=%s\007" "$1" $(echo -n "$2" | base64)
+		else
+			# <https://github.com/tmux/tmux/wiki/FAQ#what-is-the-passthrough-escape-sequence-and-how-do-i-use-it>
+			# Note that you ALSO need to add "set -g allow-passthrough on" to your tmux.conf
+			# shellcheck disable=SC2046
+			printf "\033Ptmux;\033\033]1337;SetUserVar=%s=%s\007\033\\" "$1" $(echo -n "$2" | base64)
+		fi
+	fi
+}
+
+_set_wezterm_vars_precmd() {
+	__wezterm_set_user_var "WEZTERM_PROG" "zsh"
+	__wezterm_set_user_var "WEZTERM_USER" "$(id -un)"
+	__wezterm_set_user_var "WEZTERM_HOST" "${WEZTERM_HOSTNAME}"
+	# Indicate whether this pane is running inside tmux or not
+	if [[ -n "${TMUX-}" ]]; then
+		__wezterm_set_user_var "WEZTERM_IN_TMUX" "1"
+	else
+		__wezterm_set_user_var "WEZTERM_IN_TMUX" "0"
+	fi
+}
+
+_set_wezterm_vars_preexec() {
+  # Tell wezterm the full command that is being run
+  __wezterm_set_user_var "WEZTERM_PROG" "$1"
 }
 
 # execute functions whenever a directory change occurs
@@ -95,7 +129,8 @@ osc7_cwd() {
 # add-zsh-hook -Uz chpwd osc7_cwd
 
 # emit the window title and the cwd via osc 7 escape code every time zsh detects a change in directory
-precmd_functions+=(_set_win_title osc7_cwd)
+precmd_functions+=(_set_win_title _set_cwd_osc7 _set_wezterm_vars_precmd)
+preexec_functions+=(_set_wezterm_vars_preexec)
 
 zstyle ':completion:*' completer _extensions _expand_alias _complete _approximate
 zstyle ':completion:*:approximate:::' max-errors 4 numeric
