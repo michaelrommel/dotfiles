@@ -62,18 +62,12 @@ precmd_functions+=(_fix_cursor)
 # }
 # zle -N zle-line-init
 
-# set the window title for the shell
-function _set_win_title(){
-	SHORT_CWD=$(print -P "%20<...<%~%<<")
-    echo -ne "\033]0;$SHORT_CWD\007"
-}
-
 # emit current working directory using osc 7 terminal escape code
 # https://iterm2.com/documentation-escape-codes.html
 # https://github.com/wez/wezterm/discussions/3718
 # https://wezfurlong.org/wezterm/config/lua/config/default_cwd.html
 # https://github.com/wez/wezterm/discussions/4945
-_urlencode() {
+function _urlencode() {
 	local length="${#1}"
 	for (( i = 0; i < length; i++ )); do
 		local c="${1:$i:1}"
@@ -83,15 +77,25 @@ _urlencode() {
 		esac
 	done
 }
-_set_cwd_osc7() {
+function _set_cwd_osc7() {
 	EP="$(_urlencode "$PWD")"
 	echo -ne "\033]7;file://$HOSTNAME/$EP\033\\"
+}
+
+# execute functions whenever a directory change occurs
+autoload -Uz add-zsh-hook
+add-zsh-hook -Uz chpwd _set_cwd_osc7
+
+# set the window title for the shell
+function _set_win_title(){
+	SHORT_CWD=$(print -P "%20<...<%~%<<")
+    echo -ne "\033]0;$SHORT_CWD\007"
 }
 
 # This function emits an OSC 1337 sequence to set a user var
 # associated with the current terminal pane.
 # It requires the `base64` utility to be available in the path.
-__wezterm_set_user_var() {
+function __wezterm_set_user_var() {
 	if hash base64 2>/dev/null; then
 		if [[ -z "${TMUX-}" ]]; then
 			# shellcheck disable=SC2046
@@ -105,7 +109,7 @@ __wezterm_set_user_var() {
 	fi
 }
 
-_set_wezterm_vars_precmd() {
+function _set_wezterm_vars_precmd() {
 	__wezterm_set_user_var "WEZTERM_PROG" "zsh"
 	__wezterm_set_user_var "WEZTERM_USER" "$(id -un)"
 	__wezterm_set_user_var "WEZTERM_HOST" "${WEZTERM_HOSTNAME}"
@@ -117,18 +121,12 @@ _set_wezterm_vars_precmd() {
 	fi
 }
 
-_set_wezterm_vars_preexec() {
-  # Tell wezterm the full command that is being run
-  __wezterm_set_user_var "WEZTERM_PROG" "$1"
+function _set_wezterm_vars_preexec() {
+	# Tell wezterm the full command that is being run
+	__wezterm_set_user_var "WEZTERM_PROG" "$1"
 }
 
-# execute functions whenever a directory change occurs
-# not used for osc7, because when creating a tmux split, the initial dir is not emitted
-# and the next split lands somewhere...
-# autoload -Uz add-zsh-hook
-# add-zsh-hook -Uz chpwd osc7_cwd
-
-# emit the window title and the cwd via osc 7 escape code every time zsh detects a change in directory
+# emit the window title and the cwd via osc 7 escape code
 precmd_functions+=(_set_win_title _set_cwd_osc7 _set_wezterm_vars_precmd)
 preexec_functions+=(_set_wezterm_vars_preexec)
 
@@ -191,3 +189,6 @@ fi
 
 # my personal initialization script 2nd part
 [[ -f "${HOME}/.postinitialization.sh" ]] && source "${HOME}/.postinitialization.sh"
+
+# now also emit the directory, that we are in for the terminal emulator
+_set_cwd_osc7

@@ -262,7 +262,7 @@ local process_icons = {
 	["zsh"] = wezterm.nerdfonts.dev_terminal,
 }
 
--- Return the Tab's current working directory
+-- Return the tab's current working directory
 local function get_cwd(tab)
 	local pane = tab.active_pane
 	if not pane then
