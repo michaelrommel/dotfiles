@@ -171,7 +171,7 @@ config.freetype_render_target = "Light"
 
 config.colors = {
 	visual_bell = "#202324",
-	scrollbar_thumb = wezterm.color.from_hsla(50, 0, 0.6, 0.4)
+	scrollbar_thumb = wezterm.color.from_hsla(50, 0, 0.6, 0.4),
 }
 -- see: https://github.com/dawikur/base16-gruvbox-scheme
 -- config.color_scheme = 'Gruvbox dark, hard (base16)'
@@ -212,22 +212,22 @@ config.color_schemes = {
 }
 
 config.keys = {
-	{ key = "Tab", mods = "CTRL",       action = act.ActivateTabRelative(1) },
+	{ key = "Tab", mods = "CTRL", action = act.ActivateTabRelative(1) },
 	{ key = "Tab", mods = "SHIFT|CTRL", action = act.ActivateTabRelative(-1) },
-	{ key = "-",   mods = "CTRL",       action = act.DecreaseFontSize },
-	{ key = "0",   mods = "CTRL",       action = act.ResetFontSize },
-	{ key = "=",   mods = "CTRL",       action = act.IncreaseFontSize },
-	{ key = "C",   mods = "SHIFT|CTRL", action = act.CopyTo("Clipboard") },
-	{ key = "L",   mods = "SHIFT|CTRL", action = act.ShowDebugOverlay },
-	{ key = "N",   mods = "SHIFT|CTRL", action = act.SpawnWindow },
-	{ key = "P",   mods = "SHIFT|CTRL", action = act.ActivateCommandPalette },
-	{ key = "T",   mods = "SHIFT|CTRL", action = act.SpawnTab("CurrentPaneDomain") },
-	{ key = "V",   mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
-	{ key = "c",   mods = "SHIFT|CTRL", action = act.CopyTo("Clipboard") },
-	{ key = "l",   mods = "SHIFT|CTRL", action = act.ShowDebugOverlay },
-	{ key = "n",   mods = "SHIFT|CTRL", action = act.SpawnWindow },
-	{ key = "t",   mods = "SHIFT|CTRL", action = act.SpawnTab("CurrentPaneDomain") },
-	{ key = "v",   mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
+	{ key = "-", mods = "CTRL", action = act.DecreaseFontSize },
+	{ key = "0", mods = "CTRL", action = act.ResetFontSize },
+	{ key = "=", mods = "CTRL", action = act.IncreaseFontSize },
+	{ key = "C", mods = "SHIFT|CTRL", action = act.CopyTo("Clipboard") },
+	{ key = "L", mods = "SHIFT|CTRL", action = act.ShowDebugOverlay },
+	{ key = "N", mods = "SHIFT|CTRL", action = act.SpawnWindow },
+	{ key = "P", mods = "SHIFT|CTRL", action = act.ActivateCommandPalette },
+	{ key = "T", mods = "SHIFT|CTRL", action = act.SpawnTab("CurrentPaneDomain") },
+	{ key = "V", mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
+	{ key = "c", mods = "SHIFT|CTRL", action = act.CopyTo("Clipboard") },
+	{ key = "l", mods = "SHIFT|CTRL", action = act.ShowDebugOverlay },
+	{ key = "n", mods = "SHIFT|CTRL", action = act.SpawnWindow },
+	{ key = "t", mods = "SHIFT|CTRL", action = act.SpawnTab("CurrentPaneDomain") },
+	{ key = "v", mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
 }
 
 -- Custom title and icon based on:
@@ -397,7 +397,7 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, cfg, hover, max_width)
 	end
 	if has_unseen_output(tab) then
 		return {
-			{ Foreground = { Color = "#fabd2f" } },
+			{ Foreground = { Color = "#d79921" } },
 			{ Text = title },
 		}
 	end
