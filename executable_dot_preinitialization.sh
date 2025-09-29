@@ -17,6 +17,9 @@ OSNAME=$("${UNAME}" -s)
 OSRELEASE=$("${UNAME}" -r)
 export OSNAME OSRELEASE
 
+WEZTERM_HOSTNAME=$(hostname)
+export WEZTERM_HOSTNAME
+
 # LC_ALL would override all settings, do not set that
 # LC_LANG is setting the default. It is set in /etc/default/locale
 if [[ "${OSNAME}" != "Darwin" ]]; then

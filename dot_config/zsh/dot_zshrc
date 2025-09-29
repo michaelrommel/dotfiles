@@ -79,7 +79,7 @@ function _urlencode() {
 }
 function _set_cwd_osc7() {
 	EP="$(_urlencode "$PWD")"
-	echo -ne "\033]7;file://$HOSTNAME/$EP\033\\"
+	printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "${EP}"
 }
 
 # execute functions whenever a directory change occurs

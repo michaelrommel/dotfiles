@@ -6,5 +6,22 @@ if [[ -f "${HOME}/.preinitialization.sh" ]]; then
 else
 	source "${HOME}/.minimalrc"
 fi
+
+function _urlencode() {
+	local length="${#1}"
+	for ((i = 0; i < length; i++)); do
+		local c="${1:$i:1}"
+		case $c in
+		%) printf '%%%02X' "'$c" ;;
+		*) printf "%s" "$c" ;;
+		esac
+	done
+}
+_osc7() {
+	EP="$(_urlencode "$PWD")"
+	printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "${EP}"
+}
+PROMPT_COMMAND="_osc7${PROMPT_COMMAND:+$'\n'$PROMPT_COMMAND}"
+
 # my personal initialization script 2nd part
 [[ -f "${HOME}/.postinitialization.sh" ]] && source "${HOME}/.postinitialization.sh"
