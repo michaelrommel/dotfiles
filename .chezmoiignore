@@ -43,6 +43,7 @@ bin/check_raid.sh
 bin/clean_dotfiles.sh
 bin/convert_cast.sh
 bin/dir_colors.sh
+bin/delete_github_spam_notifications.sh
 bin/emoji.js
 bin/less_colors.sh
 bin/ls_colors.sh
