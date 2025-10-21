@@ -104,11 +104,11 @@ disabled = false
 [username]
 show_always = false
 style_user = 'bg:dark1 fg:light3'
-style_root = 'bg:neutral_yellow fg:neutral_red'
+style_root = 'bg:dark1 fg:bright_orange'
 format = '[$user]($style)'
 
 [hostname]
-ssh_only = true
+ssh_only = false
 style = 'bg:dark1 fg:light3'
 format = '([@$hostname ]($style))'
 
