@@ -140,11 +140,11 @@ echo -n -e '\e[1G\e[2K\e[0m'
 
 # show MOTD once per day
 if [[ "${OSNAME}" == "Darwin" ]]; then
-	LEAVEDATE=$(date -j -f "%Y-%m-%d %H:%M:%S" "2026-10-01 00:00:00" +%s)
+	LEAVEDATE=$(date -j -f "%Y-%m-%d %H:%M:%S" "2026-09-11 00:00:00" +%s)
 	BEGINOFDAY=$(date -j -v0H -v0M -v0S +%s)
 	NOW=$(date -j +%s)
 else
-	LEAVEDATE=$(date -d "2026-10-01" +"%s")
+	LEAVEDATE=$(date -d "2026-09-11" +"%s")
 	BEGINOFDAYSTRING=$(date +"%Y-%m-%d 00:00:00")
 	BEGINOFDAY=$(date -d "${BEGINOFDAYSTRING}" +"%s")
 	NOW=$(date +"%s")

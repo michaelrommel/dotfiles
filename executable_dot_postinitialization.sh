@@ -10,6 +10,7 @@ alias gst='git status'
 alias gco='git commit'
 
 alias fd='fd -H'
+alias rp='resticprofile'
 alias grep='grep --colour=auto'
 
 if [[ "${OSNAME}" == "Darwin" ]]; then

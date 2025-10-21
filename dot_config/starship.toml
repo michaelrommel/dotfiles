@@ -73,27 +73,27 @@ disabled = false
 style = 'bg:dark1 fg:light3'
 
 [os.symbols]
-Windows = '󰍲  '
-Ubuntu = '󰕈  '
-SUSE = '  '
-Raspbian = '󰐿  '
-Mint = '󰣭  '
-Macos = '󰀵  '
+Windows = '󰍲 '
+Ubuntu = '󰕈 '
+SUSE = ' '
+Raspbian = '󰐿 '
+Mint = '󰣭 '
+Macos = '󰀵 '
 Manjaro = '  '
-Linux = '󰌽  '
-Gentoo = '󰣨  '
-Fedora = '󰣛  '
-Alpine = '  '
-Amazon = '  '
-Android = '  '
-Arch = '󰣇  '
-Artix = '󰣇  '
-EndeavourOS = '  '
-CentOS = '  '
-Debian = '󰣚  '
-Redhat = '󱄛  '
-RedHatEnterprise = '󱄛  '
-Pop = '  '
+Linux = '󰌽 '
+Gentoo = '󰣨 '
+Fedora = '󰣛 '
+Alpine = ' '
+Amazon = ' '
+Android = ' '
+Arch = '󰣇 '
+Artix = '󰣇 '
+EndeavourOS = ' '
+CentOS = ' '
+Debian = '󰣚 '
+Redhat = '󱄛 '
+RedHatEnterprise = '󱄛 '
+Pop = ' '
 
 [env_var]
 variable = 'WSL_DISTRO_NAME'
@@ -102,7 +102,7 @@ format = "[󰍲 $env_value ]($style)"
 disabled = false
 
 [username]
-show_always = false
+show_always = true
 style_user = 'bg:dark1 fg:light3'
 style_root = 'bg:dark1 fg:bright_orange'
 format = '[$user]($style)'
