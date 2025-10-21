@@ -9,7 +9,6 @@ $username\
 $hostname\
 $directory\
 [](fg:dark1)\
-$sudo\
 $git_branch\
 $git_status\
 $git_state\
