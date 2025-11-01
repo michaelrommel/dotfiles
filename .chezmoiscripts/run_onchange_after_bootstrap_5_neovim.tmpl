@@ -83,7 +83,7 @@ if ! is_mac && [[ "${VERSION_CODENAME}" == "buster" ]]; then
 	cd "${HOME}/software/" || exit
 	git clone --filter=tree:0 https://github.com/neovim/neovim neovim_src
 	cd neovim_src || exit
-	git checkout stable
+	git checkout nightly
 	make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=${HOME}/software/neovim"
 	make install
 	# ln -sf "${HOME}/software/neovim/bin/nvim" "${HOME}/bin/nvim"
