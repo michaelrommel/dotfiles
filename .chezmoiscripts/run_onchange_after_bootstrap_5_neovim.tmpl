@@ -76,7 +76,7 @@ if ! rustup -V >/dev/null 2>&1; then
 	source "${HOME}/bin/install_rust.sh"
 fi
 
-if [[ ! is_mac && "${VERSION_CODENAME}" == "buster" ]]; then
+if ! is_mac && [[ "${VERSION_CODENAME}" == "buster" ]]; then
 	echo "Compiling and installing neovim"
 	cd "${HOME}" || exit
 	mkdir -p "${HOME}/software/"
@@ -86,7 +86,7 @@ if [[ ! is_mac && "${VERSION_CODENAME}" == "buster" ]]; then
 	git checkout stable
 	make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=${HOME}/software/neovim"
 	make install
-	ln -sf "${HOME}/software/neovim/bin/nvim" "${HOME}/bin/nvim"
+	# ln -sf "${HOME}/software/neovim/bin/nvim" "${HOME}/bin/nvim"
 else
 	if ! bob --version >/dev/null 2>&1; then
 		echo "Installing bob (neovim version manager)"
