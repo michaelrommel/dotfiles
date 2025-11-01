@@ -8,7 +8,6 @@ exit 0
 {{ end -}}
 
 source "${HOME}/bin/helper.sh"
-
 blue "bootstrap neovim"
 
 if is_mac; then
@@ -21,6 +20,7 @@ if is_mac; then
 		brew install "${missing[@]}"
 	fi
 else
+	source "/etc/os-release"
 	{{- if eq .global.neovim "full" }}
 		# cmake is needed for some neovim plugins
 		# build-essential (at least C compiler) for tree-sitter
@@ -76,16 +76,29 @@ if ! rustup -V >/dev/null 2>&1; then
 	source "${HOME}/bin/install_rust.sh"
 fi
 
-if ! bob --version >/dev/null 2>&1; then
-	echo "Installing bob (neovim version manager)"
-	# Unfortunately, binary versions have the wrong GLIBC
-	#source "${HOME}/bin/update_bob.sh"
-	cargo install --locked bob-nvim
-fi
+if [[ ! is_mac && "${VERSION_CODENAME}" == "buster" ]]; then
+	echo "Compiling and installing neovim"
+	cd "${HOME}" || exit
+	mkdir -p "${HOME}/software/"
+	cd "${HOME}/software/" || exit
+	git clone --filter=tree:0 https://github.com/neovim/neovim neovim_src
+	cd neovim_src || exit
+	git checkout stable
+	make CMAKE_BUILD_TYPE=Release CMAKE_EXTRA_FLAGS="-DCMAKE_INSTALL_PREFIX=${HOME}/software/neovim"
+	make install
+	ln -sf "${HOME}/software/neovim/bin/nvim" "${HOME}/bin/nvim"
+else
+	if ! bob --version >/dev/null 2>&1; then
+		echo "Installing bob (neovim version manager)"
+		# Unfortunately, binary versions have the wrong GLIBC
+		#source "${HOME}/bin/update_bob.sh"
+		cargo install --locked bob-nvim
+	fi
 
-if ! nvim --version >/dev/null 2>&1; then
-	echo "Installing neovim (nightly)"
-	bob use nightly
+	if ! nvim --version >/dev/null 2>&1; then
+		echo "Installing neovim (nightly)"
+		bob use nightly
+	fi
 fi
 
 if ! tree-sitter -V >/dev/null 2>&1; then
