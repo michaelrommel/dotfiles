@@ -3,8 +3,22 @@ return {
 	"neovim/nvim-lspconfig",
 	lazy = true,
 	ft = {
-		"sh", "bash", "zsh", "css", "gitcommit", "graphql", "html", "javascript",
-		"json", "json5", "lua", "markdown", "python", "rust", "svelte", "text"
+		"sh",
+		"bash",
+		"zsh",
+		"css",
+		"gitcommit",
+		"graphql",
+		"html",
+		"javascript",
+		"json",
+		"json5",
+		"lua",
+		"markdown",
+		"python",
+		"rust",
+		"svelte",
+		"text",
 	},
 	dependencies = {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -15,12 +29,13 @@ return {
 	},
 	config = function()
 		-- set up border around the LspInfo window
-		require("lspconfig.ui.windows").default_options.border = 'rounded'
+		require("lspconfig.ui.windows").default_options.border = "rounded"
 		-- set the time before a lsp hover window appears
 		vim.g.cursorhold_updatetime = 500
 		-- set up generic handlers and capabilities
 		local on_attach = require("configs.conf_lsp").on_attach
-		local capabilities = vim.tbl_deep_extend("force",
+		local capabilities = vim.tbl_deep_extend(
+			"force",
 			vim.lsp.protocol.make_client_capabilities(),
 			require("blink.cmp").get_lsp_capabilities({}, false)
 		)
@@ -41,11 +56,9 @@ return {
 			end
 		end
 		-- now set up all language servers
-		vim.lsp.config("bacon_ls", {
+		vim.lsp.config("bacon-ls", {
 			filetypes = { "rust" },
-			root_dir = require("lspconfig/util").root_pattern(
-				"Cargo.toml", "rust-project.json"
-			),
+			root_dir = require("lspconfig/util").root_pattern("Cargo.toml", "rust-project.json"),
 			on_attach = on_attach,
 			capabilities = capabilities,
 			settings = {
@@ -54,7 +67,7 @@ return {
 				updateOnChange = true,
 				-- 	runBaconInBackground = true,
 				-- 	createBaconPreferencesFile = true,
-			}
+			},
 		})
 		vim.lsp.config("bashls", {
 			on_attach = on_attach,
@@ -71,17 +84,15 @@ return {
 					-- 	"/tmp/tailwind.css-data.json"
 					-- },
 					lint = {
-						unknownAtRules = 'ignore'
-					}
-				}
-			}
+						unknownAtRules = "ignore",
+					},
+				},
+			},
 		})
 		vim.lsp.config("eslint", {
 			on_attach = on_attach,
 			capabilities = capabilities,
-			root_dir = require("lspconfig/util").root_pattern(
-				"package.json", "eslint.config.*"
-			),
+			root_dir = require("lspconfig/util").root_pattern("package.json", "eslint.config.*"),
 		})
 		vim.lsp.config("harper_ls", {
 			filetypes = { "markdown", "gitcommit", "text" },
@@ -100,16 +111,16 @@ return {
 						ToDoHyphen = false,
 					},
 					codeActions = {
-						ForceStable = false
+						ForceStable = false,
 					},
 					markdown = {
-						IgnoreLinkTitle = false
+						IgnoreLinkTitle = false,
 					},
 					diagnosticSeverity = "hint",
 					isolateEnglish = false,
-					dialect = "British"
-				}
-			}
+					dialect = "British",
+				},
+			},
 		})
 		vim.lsp.config("jsonls", {
 			on_attach = on_attach,
@@ -130,10 +141,8 @@ return {
 				end,
 				-- this is the pull diagnostics method, in spec since 3.17.0
 				["textDocument/diagnostic"] = function(err, result, ctx, config)
-					local extension = vim.fn.fnamemodify(
-						vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()),
-						":e"
-					)
+					local extension =
+						vim.fn.fnamemodify(vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf()), ":e")
 					if string.match(extension, "json5$", -6) and result.items ~= nil then
 						_suppress(result.items, { 521, 519 })
 					end
@@ -149,25 +158,23 @@ return {
 				Lua = {
 					diagnostics = {
 						-- Get the language server to recognize the `vim` global
-						globals = { 'vim' },
+						globals = { "vim" },
 					},
 					telemetry = {
 						enable = false,
 					},
-				}
-			}
+				},
+			},
 		})
 		vim.lsp.config("rust_analyzer", {
 			on_attach = on_attach,
 			capabilities = capabilities,
 			filetypes = { "rust" },
 			cmd = { "rust-analyzer" },
-			root_dir = require("lspconfig/util").root_pattern(
-				"Cargo.toml", "rust-project.json"
-			),
+			root_dir = require("lspconfig/util").root_pattern("Cargo.toml", "rust-project.json"),
 			single_file_suport = true,
 			settings = {
-				['rust-analyzer'] = {
+				["rust-analyzer"] = {
 					diagnostics = {
 						enable = true,
 					},
@@ -175,18 +182,22 @@ return {
 						allFeatures = true,
 						buildScripts = {
 							enable = true,
-						}
+						},
 					},
 					checkOnSave = {
 						enable = true,
 						allFeatures = true,
 						overrideCommand = {
-							'cargo', 'clippy', '--workspace', '--message-format=json',
-							'--all-targets', '--all-features'
-						}
+							"cargo",
+							"clippy",
+							"--workspace",
+							"--message-format=json",
+							"--all-targets",
+							"--all-features",
+						},
 					},
-				}
-			}
+				},
+			},
 		})
 		vim.lsp.config("ruff", {
 			on_attach = on_attach,
@@ -258,5 +269,5 @@ return {
 				end
 			end
 		end
-	end
+	end,
 }

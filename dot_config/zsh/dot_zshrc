@@ -88,7 +88,7 @@ add-zsh-hook -Uz chpwd _set_cwd_osc7
 
 # set the window title for the shell
 function _set_win_title(){
-	SHORT_CWD=$(print -P "%20<...<%~%<<")
+	SHORT_CWD=$(print -P "%40<...<%~%<<")
     echo -ne "\033]0;$SHORT_CWD\007"
 }
 
