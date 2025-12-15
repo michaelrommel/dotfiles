@@ -2,9 +2,14 @@
   (defcfg
     process-unmapped-keys yes
     concurrent-tap-hold yes
-    ;; macos-dev-names-exclude (
-    ;;   "MX Master"
-    ;; )
+    macos-dev-names-exclude (
+      "MX Master"
+    )
+    macos-dev-names-include (
+      "0xD4359520DA829EC8"
+      "0x34B64C212EC30ED0"
+      "0x8C5F862EB168907A"
+    )
   )
 )
 
