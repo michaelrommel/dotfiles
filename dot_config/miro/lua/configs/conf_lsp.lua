@@ -6,8 +6,8 @@ local utf8 = require("core.utils").utf8
 -- needs to be a global to be used also as formatexpr
 function LspRangeFormat()
 	local range = {
-		['start'] = { row = vim.v.lnum, col = 0 },
-		['end'] = { row = vim.v.lnum + vim.v.count, col = 0 },
+		["start"] = { row = vim.v.lnum, col = 0 },
+		["end"] = { row = vim.v.lnum + vim.v.count, col = 0 },
 	}
 	vim.lsp.buf.format({ range = range })
 end
@@ -30,7 +30,8 @@ function LspFormat(bufnr)
 end
 
 M.on_attach = function(client, bufnr)
-	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+	print(string.format("on_attach: %s", client.name))
+	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
 	-- disable the semantic tokens
 	-- client.server_capabilities.semanticTokensProvider = nil
@@ -39,7 +40,7 @@ M.on_attach = function(client, bufnr)
 	if client:supports_method("textDocument/formatting") then
 		local deprecated = false
 		for _, n in ipairs(deprecatedFormatters) do
-			local _, _, c, f = string.find(n, '(.*)/(.*)')
+			local _, _, c, f = string.find(n, "(.*)/(.*)")
 			if c then
 				-- there was a complex combination given
 				deprecated = deprecated or (client.name == c and f == vim.bo.filetype)
@@ -63,10 +64,10 @@ M.on_attach = function(client, bufnr)
 			-- we can use the lsp formatter also for gq commands
 			if client:supports_method("textDocument/rangeFormatting") then
 				-- print(client.name .. " can range format")
-				vim.api.nvim_buf_set_option(bufnr, "formatexpr", 'v:lua.LspRangeFormat()')
+				vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.LspRangeFormat()")
 			else
 				-- print(client.name .. " cannot range format")
-				vim.api.nvim_buf_set_option(bufnr, "formatexpr", 'v:lua.LspFormat()')
+				vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.LspFormat()")
 			end
 		end
 	end
@@ -78,12 +79,12 @@ M.on_attach = function(client, bufnr)
 				focusable = false,
 				close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
 				-- border = 'rounded',
-				source = 'always',
-				prefix = utf8(0xf082d) .. ' ',
-				scope = 'cursor',
+				source = "always",
+				prefix = utf8(0xf082d) .. " ",
+				scope = "cursor",
 			}
 			vim.diagnostic.open_float(nil, opts)
-		end
+		end,
 	})
 
 	require("core.mappings").lsp_mappings(bufnr)
