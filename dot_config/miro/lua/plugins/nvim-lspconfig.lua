@@ -58,16 +58,9 @@ return {
 		-- now set up all language servers
 		vim.lsp.config("bacon-ls", {
 			filetypes = { "rust" },
-			root_dir = require("lspconfig/util").root_pattern("Cargo.toml", "rust-project.json"),
+			root_markers = { "Cargo.toml", "rust-project.json" },
 			on_attach = on_attach,
 			capabilities = capabilities,
-			settings = {
-				-- 	updateOnSave = true,
-				-- 	updateOnSaveWaitMillis = 1000,
-				updateOnChange = true,
-				-- 	runBaconInBackground = true,
-				-- 	createBaconPreferencesFile = true,
-			},
 		})
 		vim.lsp.config("bashls", {
 			on_attach = on_attach,
@@ -92,7 +85,7 @@ return {
 		vim.lsp.config("eslint", {
 			on_attach = on_attach,
 			capabilities = capabilities,
-			root_dir = require("lspconfig/util").root_pattern("package.json", "eslint.config.*"),
+			root_markers = { "package.json", "eslint.config.*" },
 		})
 		vim.lsp.config("harper_ls", {
 			filetypes = { "markdown", "gitcommit", "text" },
@@ -166,38 +159,54 @@ return {
 				},
 			},
 		})
+		local ra_capabilities = vim.tbl_deep_extend("force", capabilities, {
+			general = {
+				positionEncodings = { "utf-16" },
+			},
+		})
 		vim.lsp.config("rust_analyzer", {
 			on_attach = on_attach,
-			capabilities = capabilities,
+			capabilities = ra_capabilities,
 			filetypes = { "rust" },
 			cmd = { "rust-analyzer" },
-			root_dir = require("lspconfig/util").root_pattern("Cargo.toml", "rust-project.json"),
-			single_file_suport = true,
 			settings = {
 				["rust-analyzer"] = {
 					diagnostics = {
 						enable = true,
 					},
-					cargo = {
-						allFeatures = true,
-						buildScripts = {
-							enable = true,
-						},
-					},
-					checkOnSave = {
-						enable = true,
-						allFeatures = true,
-						overrideCommand = {
-							"cargo",
-							"clippy",
-							"--workspace",
-							"--message-format=json",
-							"--all-targets",
-							"--all-features",
-						},
-					},
 				},
 			},
+		})
+		-- 	single_file_suport = true,
+		-- 	settings = {
+		-- 		["rust-analyzer"] = {
+		-- 			diagnostics = {
+		-- 				enable = true,
+		-- 			},
+		-- 			cargo = {
+		-- 				allFeatures = true,
+		-- 				buildScripts = {
+		-- 					enable = true,
+		-- 				},
+		-- 			},
+		-- 			checkOnSave = {
+		-- 				enable = true,
+		-- 				allFeatures = true,
+		-- 				overrideCommand = {
+		-- 					"cargo",
+		-- 					"clippy",
+		-- 					"--workspace",
+		-- 					"--message-format=json",
+		-- 					"--all-targets",
+		-- 					"--all-features",
+		-- 				},
+		-- 			},
+		-- 		},
+		-- 	},
+		-- })
+		vim.lsp.config("codelldb", {
+			on_attach = on_attach,
+			capabilities = capabilities,
 		})
 		vim.lsp.config("ruff", {
 			on_attach = on_attach,
@@ -227,6 +236,26 @@ return {
 			on_attach = on_attach,
 			capabilities = capabilities,
 		})
+		vim.lsp.config("js-debug-adapter", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+		vim.lsp.config("prettier", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+		vim.lsp.config("shellcheck", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+		vim.lsp.config("shfmt", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+		vim.lsp.config("", {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
 
 		-- finally we can start the servers, if they are
 		-- installed and ready
@@ -234,8 +263,8 @@ return {
 		local isi = require("core.utils").is_lsp_installed
 		-- this is verbatim from mason-tool-installer
 		local ensure_installed = {
-			"bacon",
 			"bacon-ls",
+			"rust_analyzer",
 			"bash-language-server",
 			"codelldb",
 			"css-lsp",
@@ -267,6 +296,15 @@ return {
 				else
 					vim.lsp.enable({ server })
 				end
+			end
+		end
+		local non_mason = {
+			"rust_analyzer",
+		}
+		for _, server in ipairs(non_mason) do
+			-- print("checking: " .. server)
+			if vim.fn.executable("rg") == 1 then
+				vim.lsp.enable({ server })
 			end
 		end
 	end,
