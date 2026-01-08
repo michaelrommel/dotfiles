@@ -2,7 +2,10 @@ local M = {}
 
 M.opts = {
 	ui = {
-		border = "rounded"
+		border = "rounded",
+	},
+	rocks = {
+		hererocks = false,
 	},
 	performance = {
 		rtp = {
