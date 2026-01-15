@@ -23,24 +23,40 @@ if ! satisfied "3.5" "${TMUX_VERSION}"; then
 			brew install "${missing[@]}"
 		fi
 	else
-		# gawk needed for plugins
-		desired=(build-essential autoconf automake pkg-config
-			libevent-dev libutf8proc-dev
-			libutf8proc2 byacc gawk)
-		eval "$(grep VERSION_ID /etc/os-release)"
-		if [[ ${VERSION_ID} -ge 13 ]]; then
-			desired+=(libncurses-dev )
-		else
-			desired+=(libncurses5-dev )
+		if is_amzn; then
+			# additional default packages for amazon linux versions
+			desired=(autoconf automake
+				libevent-devel utf8proc-devel
+				libutf8proc byacc)
+			missing=()
+			check_dnfed "missing" "${desired[@]}"
+			if [[ "${#missing[@]}" -gt 0 ]]; then
+				echo "(apt) installing ${missing[*]}"
+				sudo dnf -y makecache
+				sudo dnf -y install "${missing[@]}"
+			fi
+			if ! dnf group list --installed | grep -qFx "Development Tools"; then
+				sudo dnf -y groupinstall "Development Tools"
+			fi
+		else 
+			# gawk needed for plugins
+			desired=(build-essential autoconf automake pkg-config
+				libevent-dev libutf8proc-dev
+				libutf8proc2 byacc gawk)
+			eval "$(grep VERSION_ID /etc/os-release)"
+			if [[ ${VERSION_ID} -ge 13 ]]; then
+				desired+=(libncurses-dev )
+			else
+				desired+=(libncurses5-dev )
+			fi
+			missing=()
+			check_dpkged "missing" "${desired[@]}"
+			if [[ "${#missing[@]}" -gt 0 ]]; then
+				echo "(apt) installing ${missing[*]}"
+				sudo apt-get -y update
+				sudo apt-get -y install "${missing[@]}"
+			fi
 		fi
-		missing=()
-		check_dpkged "missing" "${desired[@]}"
-		if [[ "${#missing[@]}" -gt 0 ]]; then
-			echo "(apt) installing ${missing[*]}"
-			sudo apt-get -y update
-			sudo apt-get -y install "${missing[@]}"
-		fi
-
 	fi
 	echo "Recompiling tmux"
 	mkdir -p "${HOME}/software"

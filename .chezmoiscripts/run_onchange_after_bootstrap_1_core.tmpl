@@ -28,7 +28,6 @@ else
 		desired=(git zsh
 			unzip sysstat ctags socat
 			librsvg2 ImageMagick)
-		eval "$(grep VERSION_ID /etc/os-release)"
 		missing=()
 		check_dnfed "missing" "${desired[@]}"
 		if [[ "${#missing[@]}" -gt 0 ]]; then
