@@ -15,7 +15,7 @@ cd "${HOME}" || exit
 
 if is_mac; then
 	desired=(jq mosh keychain ncurses gawk autoconf automake pkg-config 
-		coreutils imagemagick fzf)
+		coreutils imagemagick fd@8.7 fzf)
 	missing=()
 	check_brewed "missing" "${desired[@]}"
 	if [[ "${#missing[@]}" -gt 0 ]]; then
@@ -40,6 +40,21 @@ else
 			echo "Installing keychain"
 			cd "${HOME}" || exit
 			sudo curl -sL "https://github.com/danielrobbins/keychain/releases/download/2.9.8/keychain" -o /usr/bin/keychain
+		fi
+		if ! fd -V >/dev/null 2>&1; then
+			echo "Installing fd from github"
+			# provides faster find version
+			cd "${HOME}" || exit
+			mkdir -p "${HOME}/software/archives"
+			cd "${HOME}/software/archives" || exit
+			curl -OL https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-${ARCH}-unknown-linux-gnu.tar.gz 
+			cd "${HOME}/software" || exit
+			tar xf archives/fd-v10.3.0-${ARCH}-unknown-linux-gnu.tar.gz
+			cd "fd-v10.3.0-${ARCH}-unknown-linux-gnu" || exit
+			sudo cp fd /usr/bin/fd
+			sudo cp fd.1 /usr/share/man/man1/fd.1
+			sudo cp autocomplete/_fd /usr/share/zsh/vendor-completions/_fd
+			sudo cp autocomplete/fd.bash /usr/share/bash-completion/completions/fd
 		fi
 	else
 		# default packages for all debian versions
