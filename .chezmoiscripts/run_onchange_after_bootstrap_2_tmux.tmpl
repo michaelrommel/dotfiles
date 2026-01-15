@@ -31,7 +31,7 @@ if ! satisfied "3.5" "${TMUX_VERSION}"; then
 			missing=()
 			check_dnfed "missing" "${desired[@]}"
 			if [[ "${#missing[@]}" -gt 0 ]]; then
-				echo "(apt) installing ${missing[*]}"
+				echo "(dnf) installing ${missing[*]}"
 				sudo dnf -y makecache
 				sudo dnf -y install "${missing[@]}"
 			fi

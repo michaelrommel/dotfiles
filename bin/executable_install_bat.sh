@@ -11,7 +11,7 @@ if ! bat -V >/dev/null 2>&1; then
 		cd "${HOME}" || exit
 		mkdir -p "${HOME}/software/archives"
 		cd "${HOME}/software/archives" || exit
-		curl -OL https://github.com/sharkdp/bat/releases/download/${latest}/bat-${latest}-${ARCH}-unknown-linux-gnu.tar.gz
+		curl -sOL https://github.com/sharkdp/bat/releases/download/${latest}/bat-${latest}-${ARCH}-unknown-linux-gnu.tar.gz
 		cd "${HOME}/software" || exit
 		tar xf archives/bat-${latest}-${ARCH}-unknown-linux-gnu.tar.gz
 		cd "bat-${latest}-${ARCH}-unknown-linux-gnu" || exit
@@ -35,7 +35,7 @@ if ! bat -V >/dev/null 2>&1; then
 			echo "unsupported architecture: $arch"
 			exit 1
 		fi
-		curl -OL "https://github.com/sharkdp/bat/releases/download/${latest}/bat_${latest}_${arch}.deb"
+		curl -sOL "https://github.com/sharkdp/bat/releases/download/${latest}/bat_${latest}_${arch}.deb"
 		sudo dpkg -i "${HOME}/software/archives/bat_${latest}_${arch}.deb"
 	fi
 fi

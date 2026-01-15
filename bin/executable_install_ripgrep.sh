@@ -21,7 +21,7 @@ if ! rg -V >/dev/null 2>&1; then
 			echo "unsupported architecture: $arch"
 			exit 1
 		fi
-		curl -OL https://github.com/BurntSushi/ripgrep/releases/download/${latest}/ripgrep-${latest}-${ARCH}-unknown-linux-${libc}.tar.gz
+		curl -sOL https://github.com/BurntSushi/ripgrep/releases/download/${latest}/ripgrep-${latest}-${ARCH}-unknown-linux-${libc}.tar.gz
 		cd "${HOME}/software" || exit
 		tar xf archives/ripgrep-${latest}-${ARCH}-unknown-linux-${libc}.tar.gz
 		cd "ripgrep-${latest}-${ARCH}-unknown-linux-${libc}" || exit
@@ -46,7 +46,7 @@ if ! rg -V >/dev/null 2>&1; then
 			echo "unsupported architecture: $arch"
 			exit 1
 		fi
-		curl -OL "https://github.com/BurntSushi/ripgrep/releases/download/${latest}/ripgrep_${latest}_${arch}.deb"
+		curl -sOL "https://github.com/BurntSushi/ripgrep/releases/download/${latest}/ripgrep_${latest}_${arch}.deb"
 		sudo dpkg -i "${HOME}/software/archives/ripgrep_${latest}_${arch}.deb"
 	fi
 fi

@@ -21,28 +21,55 @@ if is_mac; then
 	fi
 else
 	source "/etc/os-release"
-	{{- if eq .global.neovim "full" }}
-		# cmake is needed for some neovim plugins
-		# build-essential (at least C compiler) for tree-sitter
-		# lib* are needed for compiling silicon
-		desired=(curl jq git unzip build-essential cmake fontconfig
-			libfontconfig1-dev
-			libx11-xcb-dev
-			libxcb-render0-dev 
-			libxcb-shape0-dev 
-			libxcb-xfixes0-dev 
-			libharfbuzz-dev)
-	{{ else }}
-		# unfortunately we need the C compiler from build-essential
-		# to compile the treesitter parsers for languages
-		desired=(curl jq git unzip gcc)
-	{{ end }}
-	missing=()
-	check_dpkged "missing" "${desired[@]}"
-	if [[ "${#missing[@]}" -gt 0 ]]; then
-		echo "(apt) installing ${missing[*]}"
-		sudo apt-get -y update
-		sudo apt-get -y install "${missing[@]}"
+	if is_amzn; then
+		{{- if eq .global.neovim "full" }}
+			# cmake is needed for some neovim plugins
+			# build-essential (at least C compiler) for tree-sitter
+			# lib* are needed for compiling silicon
+			desired=(cmake fontconfig
+				fontconfig-devel
+				libX11-xcb libX11-devel
+				libxcb-devel
+				harfbuzz-devel)
+			if ! dnf group list --installed | grep -qFx "Development Tools"; then
+				sudo dnf -y groupinstall "Development Tools"
+			fi
+		{{ else }}
+			# unfortunately we need the C compiler from build-essential
+			# to compile the treesitter parsers for languages
+			desired=(gcc)
+		{{ end }}
+		missing=()
+		check_dnfed "missing" "${desired[@]}"
+		if [[ "${#missing[@]}" -gt 0 ]]; then
+			echo "(dnf) installing ${missing[*]}"
+			sudo dnf -y makecache
+			sudo dnf -y install "${missing[@]}"
+		fi
+	else
+		{{- if eq .global.neovim "full" }}
+			# cmake is needed for some neovim plugins
+			# build-essential (at least C compiler) for tree-sitter
+			# lib* are needed for compiling silicon
+			desired=(curl jq git unzip build-essential cmake fontconfig
+				libfontconfig1-dev
+				libx11-xcb-dev
+				libxcb-render0-dev 
+				libxcb-shape0-dev 
+				libxcb-xfixes0-dev 
+				libharfbuzz-dev)
+		{{ else }}
+			# unfortunately we need the C compiler from build-essential
+			# to compile the treesitter parsers for languages
+			desired=(curl jq git unzip gcc)
+		{{ end }}
+		missing=()
+		check_dpkged "missing" "${desired[@]}"
+		if [[ "${#missing[@]}" -gt 0 ]]; then
+			echo "(apt) installing ${missing[*]}"
+			sudo apt-get -y update
+			sudo apt-get -y install "${missing[@]}"
+		fi
 	fi
 fi
 

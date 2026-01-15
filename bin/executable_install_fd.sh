@@ -12,7 +12,7 @@ if ! fd -V >/dev/null 2>&1; then
 		cd "${HOME}" || exit
 		mkdir -p "${HOME}/software/archives"
 		cd "${HOME}/software/archives" || exit
-		curl -OL https://github.com/sharkdp/fd/releases/download/${latest}/fd-${latest}-${ARCH}-unknown-linux-gnu.tar.gz
+		curl -sOL https://github.com/sharkdp/fd/releases/download/${latest}/fd-${latest}-${ARCH}-unknown-linux-gnu.tar.gz
 		cd "${HOME}/software" || exit
 		tar xf archives/fd-${latest}-${ARCH}-unknown-linux-gnu.tar.gz
 		cd "fd-${latest}-${ARCH}-unknown-linux-gnu" || exit
@@ -37,7 +37,7 @@ if ! fd -V >/dev/null 2>&1; then
 			echo "unsupported architecture: $arch"
 			exit 1
 		fi
-		curl -OL "https://github.com/sharkdp/fd/releases/download/${latest}/fd_${latest}_${arch}.deb"
+		curl -sOL "https://github.com/sharkdp/fd/releases/download/${latest}/fd_${latest}_${arch}.deb"
 		sudo dpkg -i "${HOME}/software/archives/fd_${latest}_${arch}.deb"
 	fi
 fi
