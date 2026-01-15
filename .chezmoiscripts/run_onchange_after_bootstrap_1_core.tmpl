@@ -53,6 +53,7 @@ else
 			cd "fd-v10.3.0-${ARCH}-unknown-linux-gnu" || exit
 			sudo cp fd /usr/bin/fd
 			sudo cp fd.1 /usr/share/man/man1/fd.1
+			sudo mkdir -p /usr/share/zsh/vendor-completions
 			sudo cp autocomplete/_fd /usr/share/zsh/vendor-completions/_fd
 			sudo cp autocomplete/fd.bash /usr/share/bash-completion/completions/fd
 		fi
