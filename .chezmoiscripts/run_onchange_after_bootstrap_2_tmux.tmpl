@@ -25,7 +25,7 @@ if ! satisfied "3.5" "${TMUX_VERSION}"; then
 	else
 		if is_amzn; then
 			# additional default packages for amazon linux versions
-			desired=(autoconf automake
+			desired=(autoconf automake ncurses-devel
 				libevent-devel utf8proc-devel
 				utf8proc byacc)
 			missing=()
