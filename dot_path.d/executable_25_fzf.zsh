@@ -2,7 +2,11 @@
 
 ARCH=$(uname -m)
 OS=$(uname -s)
-FD=$(which fd)
+
+FD=$(which 2>/dev/null --skip-alias fd)
+if [[ $? -gt 0 && -x "${HOME}/bin/fd" ]]; then
+	FD="${HOME}/bin/fd"
+fi
 
 if [[ "${OS}" == "Darwin" ]]; then
 	if [[ "${ARCH}" == "arm64" ]]; then
