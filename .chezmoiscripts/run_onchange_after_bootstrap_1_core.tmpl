@@ -40,6 +40,7 @@ else
 			echo "Installing keychain"
 			cd "${HOME}" || exit
 			sudo curl -sL "https://github.com/danielrobbins/keychain/releases/download/2.9.8/keychain" -o /usr/bin/keychain
+			sudo chmod 755 /usr/bin/keychain
 		fi
 		if ! fd -V >/dev/null 2>&1; then
 			echo "Installing fd from github"
