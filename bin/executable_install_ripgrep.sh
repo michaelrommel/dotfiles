@@ -2,7 +2,7 @@
 
 source "${HOME}/bin/helper.sh"
 
-if ! fd -V >/dev/null 2>&1; then
+if ! rg -V >/dev/null 2>&1; then
 	latest=$(curl -sL https://api.github.com/repos/BurntSushi/ripgrep/releases | jq -r ".[0].tag_name") || exit 1
 
 	if is_amzn; then
