@@ -1,22 +1,22 @@
 #! /usr/bin/env bash
 
 red() {
-  echo -e "\033[31m$1\033[0m"
+	echo -e "\033[31m$1\033[0m"
 }
 green() {
-  echo -e "\033[32m$1\033[0m"
+	echo -e "\033[32m$1\033[0m"
 }
 yellow() {
-  echo -e "\033[33m$1\033[0m"
+	echo -e "\033[33m$1\033[0m"
 }
 blue() {
-  echo -e "\033[34m$1\033[0m"
+	echo -e "\033[34m$1\033[0m"
 }
 purple() {
-  echo -e "\033[35m$1\033[0m"
+	echo -e "\033[35m$1\033[0m"
 }
 aqua() {
-  echo -e "\033[36m$1\033[0m"
+	echo -e "\033[36m$1\033[0m"
 }
 
 is_zsh() {
@@ -86,6 +86,10 @@ is_mac() {
 
 is_wsl() {
 	if [[ "${OSRELEASE}" =~ "-microsoft-" ]]; then return 0; else return 1; fi
+}
+
+is_amzn() {
+	if [[ "${OSRELEASE}" =~ ".amzn" ]]; then return 0; else return 1; fi
 }
 
 is_in() {
@@ -173,10 +177,24 @@ check_dpkged() {
 	shift
 	local desired=("$@")
 	local packages
-	mapfile -t packages < <(dpkg-query --list | sed -ne 's/^ii *\([^ :]\{1,\}\).* .*\([^ ]\{1,\}\) .*/\1@\2/;t nap;d;:nap;p')
+	mapfile -t packages < <(dpkg-query --list | sed -ne 's/^ii *\([^ :]\{1,\}\)[^ ]\{1,\} \{1,\}\([^ ]\{1,\}\) .*/\1@\2/;t nap;d;:nap;p')
 	for n in "${desired[@]}"; do
 		if ! has_version "$n" "${packages[@]}"; then
 			b+=("${n}")
+		fi
+	done
+}
+
+check_dnfed() {
+	# mutate the named array of the caller
+	local -n c=$1
+	shift
+	local desired=("$@")
+	local packages
+	mapfile -t packages < <(dnf list --installed | sed -ne 's/^\([^ .]\{1,\}\)[^ ]\{1,\} \{1,\}\([^ ]\{1,\}\) .*/\1@\2/;t nap;d;:nap;p')
+	for n in "${desired[@]}"; do
+		if ! has_version "$n" "${packages[@]}"; then
+			c+=("${n}")
 		fi
 	done
 }

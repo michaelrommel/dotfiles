@@ -23,22 +23,47 @@ if is_mac; then
 		brew install "${missing[@]}"
 	fi
 else
-	# default packages for all debian versions
-	desired=(curl git jq vim mosh keychain zsh ncurses-bin apt-file file
-		unzip sysstat net-tools  bc gawk universal-ctags socat
-		librsvg2-bin imagemagick)
-	eval "$(grep VERSION_ID /etc/os-release)"
-	if [[ ${VERSION_ID} -ge 13 ]]; then
-		desired+=(bind9-dnsutils)
+	if is_amzn; then
+		# additional default packages for amazon linux versions
+		desired=(git mosh keychain zsh
+			unzip sysstat ctags socat
+			librsvg2 ImageMagick)
+		eval "$(grep VERSION_ID /etc/os-release)"
+		if [[ ${VERSION_ID} -ge 13 ]]; then
+			desired+=(bind9-dnsutils)
+		else
+			desired+=(dnsutils software-properties-common)
+		fi
+		missing=()
+		check_dnfed "missing" "${desired[@]}"
+		if [[ "${#missing[@]}" -gt 0 ]]; then
+			echo "(apt) installing ${missing[*]}"
+			sudo dnf -y makecache
+			sudo dnf -y install "${missing[@]}"
+		fi
+		if [[ ! -x "/usr/bin/keychain" ]]; then
+			echo "Installing keychain"
+			cd "${HOME}" || exit
+			sudo curl -sL "https://github.com/danielrobbins/keychain/releases/download/2.9.8/keychain" -o /usr/bin/keychain
+		fi
 	else
-		desired+=(dnsutils software-properties-common)
-	fi
-	missing=()
-	check_dpkged "missing" "${desired[@]}"
-	if [[ "${#missing[@]}" -gt 0 ]]; then
-		echo "(apt) installing ${missing[*]}"
-		sudo apt-get -y update
-		sudo apt-get -y install "${missing[@]}"
+		# default packages for all debian versions
+		desired=(curl git jq vim mosh keychain zsh ncurses-bin apt-file file
+			unzip sysstat net-tools  bc gawk universal-ctags socat
+			librsvg2-bin imagemagick)
+		eval "$(grep VERSION_ID /etc/os-release)"
+		if [[ ${VERSION_ID} -ge 13 ]]; then
+			desired+=(bind9-dnsutils)
+		else
+			desired+=(dnsutils software-properties-common)
+		fi
+		missing=()
+		check_dpkged "missing" "${desired[@]}"
+		if [[ "${#missing[@]}" -gt 0 ]]; then
+			echo "(apt) installing ${missing[*]}"
+			sudo apt-get -y update
+			sudo apt-get -y install "${missing[@]}"
+		fi
 	fi
 
 	if [[ ! -x "${HOME}/.fzf/bin/fzf" ]]; then
