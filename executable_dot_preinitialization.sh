@@ -55,6 +55,8 @@ fi
 # shellcheck source=/home/rommel/bin/set_gruvbox_colors.sh
 [[ -s "${HOME}/bin/set_gruvbox_colors.sh" ]] && "${HOME}/bin/set_gruvbox_colors.sh"
 
+# additional manual pages
+export MANPATH="${HOME}/.local/share/man:${MANPATH}"
 # color for less and man
 export MANPAGER='less -r -s -M +Gg'
 # shellcheck source=./bin/less_colors.sh

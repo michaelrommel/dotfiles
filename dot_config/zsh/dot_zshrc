@@ -162,6 +162,9 @@ zstyle ':completion:*:*:kill:*' insert-ids menu
 # Git
 zstyle ':completion:*:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 
+# custome completions directory
+fpath=("${HOME}/.local/share/zsh/completions" ${fpath})
+
 # automatically load bash completion functions
 autoload -U +X bashcompinit && bashcompinit
 

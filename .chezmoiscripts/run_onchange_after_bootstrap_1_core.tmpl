@@ -13,6 +13,10 @@ blue "bootstrap core"
 
 cd "${HOME}" || exit
 
+mkdir -p ${HOME}/.local/share/man/man1
+mkdir -p ${HOME}/.local/share/bash-completion/completions
+mkdir -p ${HOME}/.local/share/zsh/completions
+
 if is_mac; then
 	desired=(jq mosh keychain ncurses gawk autoconf automake pkg-config 
 		coreutils imagemagick fd@8.7 fzf)
@@ -41,26 +45,10 @@ else
 			sudo curl -sL "https://github.com/danielrobbins/keychain/releases/download/2.9.8/keychain" -o /usr/bin/keychain
 			sudo chmod 755 /usr/bin/keychain
 		fi
-		if ! fd -V >/dev/null 2>&1; then
-			echo "Installing fd from github"
-			# provides faster find version
-			cd "${HOME}" || exit
-			mkdir -p "${HOME}/software/archives"
-			cd "${HOME}/software/archives" || exit
-			curl -OL https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-${ARCH}-unknown-linux-gnu.tar.gz 
-			cd "${HOME}/software" || exit
-			tar xf archives/fd-v10.3.0-${ARCH}-unknown-linux-gnu.tar.gz
-			cd "fd-v10.3.0-${ARCH}-unknown-linux-gnu" || exit
-			sudo cp fd /usr/bin/fd
-			sudo cp fd.1 /usr/share/man/man1/fd.1
-			sudo mkdir -p /usr/share/zsh/vendor-completions
-			sudo cp autocomplete/_fd /usr/share/zsh/vendor-completions/_fd
-			sudo cp autocomplete/fd.bash /usr/share/bash-completion/completions/fd
-		fi
 	else
 		# default packages for all debian versions
 		desired=(curl git jq vim mosh keychain zsh ncurses-bin apt-file file
-			unzip sysstat net-tools  bc gawk universal-ctags socat
+			unzip sysstat net-tools bc gawk universal-ctags socat
 			librsvg2-bin imagemagick)
 		eval "$(grep VERSION_ID /etc/os-release)"
 		if [[ ${VERSION_ID} -ge 13 ]]; then
@@ -75,6 +63,10 @@ else
 			sudo apt-get -y update
 			sudo apt-get -y install "${missing[@]}"
 		fi
+	fi
+
+	if ! fd -V >/dev/null 2>&1; then
+		"${HOME}/bin/install_fd.sh"
 	fi
 
 	if [[ ! -x "${HOME}/.fzf/bin/fzf" ]]; then
