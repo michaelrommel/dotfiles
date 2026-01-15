@@ -25,15 +25,10 @@ if is_mac; then
 else
 	if is_amzn; then
 		# additional default packages for amazon linux versions
-		desired=(git mosh keychain zsh
+		desired=(git zsh
 			unzip sysstat ctags socat
 			librsvg2 ImageMagick)
 		eval "$(grep VERSION_ID /etc/os-release)"
-		if [[ ${VERSION_ID} -ge 13 ]]; then
-			desired+=(bind9-dnsutils)
-		else
-			desired+=(dnsutils software-properties-common)
-		fi
 		missing=()
 		check_dnfed "missing" "${desired[@]}"
 		if [[ "${#missing[@]}" -gt 0 ]]; then
