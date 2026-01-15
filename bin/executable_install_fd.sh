@@ -3,7 +3,7 @@
 source "${HOME}/bin/helper.sh"
 
 if ! fd -V >/dev/null 2>&1; then
-	latest=$(curl -sL https://api.github.com/repos/jdx/mise/releases | jq -r ".[0].tag_name") || exit 1
+	latest=$(curl -sL https://api.github.com/repos/sharkdb/fd/releases | jq -r ".[0].tag_name") || exit 1
 
 	if is_amzn; then
 		echo "Installing fd locally from github"
