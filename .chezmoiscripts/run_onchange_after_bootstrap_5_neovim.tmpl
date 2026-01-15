@@ -165,7 +165,7 @@ fi
 
 if ! tree-sitter --version >/dev/null 2>&1; then
 	echo "Installing tree-sitter-cli via node"
-	npm install -g tree-sitter-cli
+	npm install -g tree-sitter-cli@0.25.10
 fi
 
 {{ end }}
