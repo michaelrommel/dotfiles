@@ -18,7 +18,8 @@ fi
 
 # Auto-completion
 # ---------------
-if [[ $- == *i* && -d "${HOME}/.config/completions/rust" ]]; then
-	source "${HOME}/.config/completions/rust/completion_rustup.bash" 2>/dev/null
-	source "${HOME}/.config/completions/rust/completion_cargo.bash" 2>/dev/null
-fi
+# manual sourcing should no longer be necessary since this dir should be automatically searched
+# if [[ $- == *i* && -d "${HOME}/.local/share/bash-completions/completions/rustup" ]]; then
+# 	source "${HOME}/.local/share/bash-completions/completions/rustup" 2>/dev/null
+# 	source "${HOME}/.local/share/bash-completions/completions/cargo" 2>/dev/null
+# fi

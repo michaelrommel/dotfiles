@@ -18,6 +18,7 @@ fi
 
 # Auto-completion
 # ---------------
-if [[ $- == *i* && -d "${HOME}/.config/completions/rust" ]]; then
-	fpath=(${HOME}/.config/completions/rust $fpath)
-fi
+# manual sourcing should no longer be necessary since this dir should be automatically searched
+# if [[ $- == *i* && -d "${HOME}/.local/share/zsh/completions/" ]]; then
+# 	fpath=(${HOME}/.local/share/zsh/completions/ $fpath)
+# fi

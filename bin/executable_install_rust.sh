@@ -10,7 +10,8 @@ eval "$(${MISE} hook-env)"
 rustup component add rust-analyzer
 # install shell completions
 mkdir -p "${HOME}/.rust/shell"
-rustup completions bash >"${HOME}/.config/completions/rust/completion_rustup.bash"
-rustup completions bash cargo >"${HOME}/.config/completions/rust/completion_cargo.bash"
-rustup completions zsh >"${HOME}/.config/completions/rust/_rustup"
-rustup completions zsh cargo >"${HOME}/.config/completions/rust/_cargo"
+rustup completions bash >"${HOME}/.local/share/bash-completion/completions/rustup"
+rustup completions bash cargo >"${HOME}/.local/share/bash-completion/completions/cargo"
+rustup completions zsh >"${HOME}/.local/share/zsh/completions/_rustup"
+rustup completions zsh cargo >"${HOME}/.local/share/zsh/completions/_cargo"
+chmod 755 "${HOME}/.local/share/zsh/completions/*"

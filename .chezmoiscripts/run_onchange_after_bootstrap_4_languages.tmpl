@@ -24,6 +24,18 @@ source "${HOME}/.path.d/50_mise.bash"
 source "${HOME}/.path.d/99_default.sh"
 eval "$(mise hook-env)"
 
+if is_amzn; then
+	# additional default packages for amazon linux versions
+	desired=( gnupg2-full )
+	missing=()
+	check_dnfed "missing" "${desired[@]}"
+	if [[ "${#missing[@]}" -gt 0 ]]; then
+		echo "(dnf) installing ${missing[*]}"
+		sudo dnf -y makecache
+		sudo dnf -y install --allowerasing "${missing[@]}"
+	fi
+fi
+
 if ! rustup -V >/dev/null 2>&1; then
 	source "${HOME}/bin/install_rust.sh"
 fi

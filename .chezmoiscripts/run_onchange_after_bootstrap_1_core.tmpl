@@ -35,15 +35,15 @@ else
 		missing=()
 		check_dnfed "missing" "${desired[@]}"
 		if [[ "${#missing[@]}" -gt 0 ]]; then
-			echo "(apt) installing ${missing[*]}"
+			echo "(dnf) installing ${missing[*]}"
 			sudo dnf -y makecache
 			sudo dnf -y install "${missing[@]}"
 		fi
 		if [[ ! -x "/usr/bin/keychain" ]]; then
 			echo "Installing keychain"
 			cd "${HOME}" || exit
-			sudo curl -sL "https://github.com/danielrobbins/keychain/releases/download/2.9.8/keychain" -o /usr/bin/keychain
-			sudo chmod 755 /usr/bin/keychain
+			curl -sL "https://github.com/danielrobbins/keychain/releases/download/2.9.8/keychain" -o "${HOME}/bin/keychain"
+			chmod 755 "${HOME}/bin/keychain"
 		fi
 	else
 		# default packages for all debian versions
