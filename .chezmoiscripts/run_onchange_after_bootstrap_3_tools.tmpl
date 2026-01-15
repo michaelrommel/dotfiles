@@ -69,35 +69,15 @@ else
 	fi
 
 	if ! rg -V >/dev/null 2>&1; then
-		echo "Installing ripgrep from github"
-		cd "${HOME}" || exit
-		mkdir -p "${HOME}/software/archives"
-		cd "${HOME}/software/archives" || exit
-		curl -OL https://github.com/BurntSushi/ripgrep/releases/download/13.0.0/ripgrep_13.0.0_amd64.deb
-		sudo dpkg -i "${HOME}/software/archives/ripgrep_13.0.0_amd64.deb"
+		"${HOME}/bin/install_rg.sh"
 	fi
-
 
 	if ! fd -V >/dev/null 2>&1; then
 		"${HOME}/bin/install_fd.sh"
 	fi
 
-	if ! shfmt --version >/dev/null 2>&1; then
-		echo "Installing shell formatter shfmt via go"
-		if ! go version >/dev/null 2>&1; then
-			source "${HOME}/bin/install_go.sh"
-		fi
-		go install mvdan.cc/sh/v3/cmd/shfmt@latest
-	fi
-
 	if ! bat -V >/dev/null 2>&1; then
-		echo "Installing bat from github"
-		# provides syntax highlighting pager
-		cd "${HOME}" || exit
-		mkdir -p "${HOME}/software/archives"
-		cd "${HOME}/software/archives" || exit
-		curl -OL https://github.com/sharkdp/bat/releases/download/v0.23.0/bat_0.23.0_amd64.deb
-		sudo dpkg -i "${HOME}/software/archives/bat_0.23.0_amd64.deb"
+		"${HOME}/bin/install_bat.sh"
 	fi
 
 	if [[ ! -f "${HOME}/software/bat/bin/batman" ]]; then
@@ -107,6 +87,14 @@ else
 		git clone --depth 1 https://github.com/eth-p/bat-extras.git "${HOME}/software/bat"
 		cd "${HOME}/software/bat" || exit
 		./build.sh --no-manuals --no-verify
+	fi
+
+	if ! shfmt --version >/dev/null 2>&1; then
+		echo "Installing shell formatter shfmt via go"
+		if ! go version >/dev/null 2>&1; then
+			source "${HOME}/bin/install_go.sh"
+		fi
+		go install mvdan.cc/sh/v3/cmd/shfmt@latest
 	fi
 
 	if ! shellcheck -V >/dev/null 2>&1; then
