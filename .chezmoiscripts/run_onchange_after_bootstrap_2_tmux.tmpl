@@ -27,7 +27,7 @@ if ! satisfied "3.5" "${TMUX_VERSION}"; then
 			# additional default packages for amazon linux versions
 			desired=(autoconf automake
 				libevent-devel utf8proc-devel
-				libutf8proc byacc)
+				utf8proc byacc)
 			missing=()
 			check_dnfed "missing" "${desired[@]}"
 			if [[ "${#missing[@]}" -gt 0 ]]; then
