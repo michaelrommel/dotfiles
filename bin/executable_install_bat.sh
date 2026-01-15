@@ -17,7 +17,7 @@ if ! bat -V >/dev/null 2>&1; then
 		cd "bat-${latest}-${ARCH}-unknown-linux-gnu" || exit
 		cp bat "${HOME}/bin/bat"
 		cp bat.1 "${HOME}/.local/share/man/man1/bat.1"
-		cp autocomplete/_bat "${HOME}/.local/share/zsh/completions/_bat"
+		cp autocomplete/bat.zsh "${HOME}/.local/share/zsh/completions/_bat"
 		chmod 755 "${HOME}/.local/share/zsh/completions/_bat"
 		cp autocomplete/bat.bash "${HOME}/.local/share/bash-completion/completions/bat"
 	else
