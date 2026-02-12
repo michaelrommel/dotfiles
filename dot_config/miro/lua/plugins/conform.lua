@@ -21,21 +21,21 @@ return {
 			},
 			formatters = {
 				shfmt = {
-					prepend_args = { "-i", "4" }
+					prepend_args = { "-i", "4" },
 				},
 				rustfmt = {
-					prepend_args = { "--edition", "2021" }
+					-- prepend_args = { "--edition", "2021" }
 				},
 				prettier = {
 					ft_parsers = {
 						json = "json",
 						jsonc = "json",
 						json5 = "json",
-					}
-				}
+					},
+				},
 			},
 			log_level = vim.log.levels.DEBUG,
-			notify_on_error = false
+			notify_on_error = false,
 		})
 		local prettier = require("conform.formatters.prettier")
 		local default_args_func = prettier.args
@@ -43,16 +43,15 @@ return {
 			local default_args = default_args_func(self, ctx)
 			local ft = vim.bo[ctx.buf].filetype
 			if ft == "json5" then
-				local newargs = vim.list_extend(default_args,
-					{ "--use-tabs", "--quote-props", "preserve" }
-				)
+				local newargs = vim.list_extend(default_args, { "--use-tabs", "--quote-props", "preserve" })
 				return newargs
 			else
-				local newargs = vim.list_extend(default_args,
+				local newargs = vim.list_extend(
+					default_args,
 					{ "--use-tabs", "--semi", "--single-quote", "--trailing-comma", "none" }
 				)
 				return newargs
 			end
 		end
-	end
+	end,
 }
