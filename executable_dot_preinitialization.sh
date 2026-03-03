@@ -55,8 +55,6 @@ fi
 # shellcheck source=/home/rommel/bin/set_gruvbox_colors.sh
 [[ -s "${HOME}/bin/set_gruvbox_colors.sh" ]] && "${HOME}/bin/set_gruvbox_colors.sh"
 
-# additional manual pages
-export MANPATH="${HOME}/.local/share/man:${MANPATH}"
 # color for less and man
 export MANPAGER='less -r -s -M +Gg'
 # shellcheck source=./bin/less_colors.sh
@@ -155,9 +153,10 @@ fi
 MOTDSHOWN=${MOTDSHOWN:-0}
 DIFF=$((NOW - MOTDSHOWN))
 if [[ ${DIFF} -gt 86400 ]]; then
-	# calculat
+	# calculate time to retirement
 	echo "${BEGINOFDAY}" >"${HOME}/.motd_shown"
 	# Count down the days of working for others
 	WEEKSLEFT=$(((LEAVEDATE - NOW) / (7 * 24 * 3600)))
-	echo -e "Weeks to work: \e[94m${WEEKSLEFT}\e[0m"
+	DAYSLEFT=$(((LEAVEDATE - NOW) / (24 * 3600)))
+	echo -e "Weeks to work: \e[94m${WEEKSLEFT} (${DAYSLEFT} days)\e[0m"
 fi

@@ -8,6 +8,7 @@ alias ff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gst='git status'
 alias gco='git commit'
+alias lg='lazygit'
 
 alias fd='fd -H'
 alias rp='resticprofile'
