@@ -35,7 +35,7 @@ if ! bat -V >/dev/null 2>&1; then
 			echo "unsupported architecture: $arch"
 			exit 1
 		fi
-		curl -sOL "https://github.com/sharkdp/bat/releases/download/${latest}/bat_${latest}_${arch}.deb"
-		sudo dpkg -i "${HOME}/software/archives/bat_${latest}_${arch}.deb"
+		curl -sOL "https://github.com/sharkdp/bat/releases/download/${latest}/bat_${latest#v}_${arch}.deb"
+		sudo dpkg -i "${HOME}/software/archives/bat_${latest#v}_${arch}.deb"
 	fi
 fi

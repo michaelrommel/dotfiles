@@ -46,7 +46,7 @@ if ! rg -V >/dev/null 2>&1; then
 			echo "unsupported architecture: $arch"
 			exit 1
 		fi
-		curl -sOL "https://github.com/BurntSushi/ripgrep/releases/download/${latest}/ripgrep_${latest}_${arch}.deb"
-		sudo dpkg -i "${HOME}/software/archives/ripgrep_${latest}_${arch}.deb"
+		curl -sOL "https://github.com/BurntSushi/ripgrep/releases/download/${latest}-1/ripgrep_${latest}_${arch}.deb"
+		sudo dpkg -i "${HOME}/software/archives/ripgrep_${latest}-1_${arch}.deb"
 	fi
 fi
