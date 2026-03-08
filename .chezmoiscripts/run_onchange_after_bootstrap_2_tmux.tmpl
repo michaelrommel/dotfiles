@@ -42,12 +42,12 @@ if ! satisfied "3.5" "${TMUX_VERSION}"; then
 			# gawk needed for plugins
 			desired=(build-essential autoconf automake pkg-config
 				libevent-dev libutf8proc-dev
-				libutf8proc2 byacc gawk)
+				byacc gawk)
 			eval "$(grep VERSION_ID /etc/os-release)"
 			if [[ ${VERSION_ID} -ge 13 ]]; then
-				desired+=(libncurses-dev )
+				desired+=(libncurses-dev libutf8proc3 )
 			else
-				desired+=(libncurses5-dev )
+				desired+=(libncurses5-dev libutf8proc2 )
 			fi
 			missing=()
 			check_dpkged "missing" "${desired[@]}"

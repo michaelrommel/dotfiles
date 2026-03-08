@@ -37,7 +37,7 @@ if ! fd -V >/dev/null 2>&1; then
 			echo "unsupported architecture: $arch"
 			exit 1
 		fi
-		curl -sOL "https://github.com/sharkdp/fd/releases/download/${latest}/fd_${latest}_${arch}.deb"
-		sudo dpkg -i "${HOME}/software/archives/fd_${latest}_${arch}.deb"
+		curl -sOL "https://github.com/sharkdp/fd/releases/download/${latest}/fd_${latest#v}_${arch}.deb"
+		sudo dpkg -i "${HOME}/software/archives/fd_${latest#v}_${arch}.deb"
 	fi
 fi
