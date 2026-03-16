@@ -39,11 +39,6 @@ return {
 					{ active_lsps, padding = { left = 0, right = 0 } },
 				},
 				lualine_y = { "searchcount", "selectioncount", "progress" },
-				lualine_z = {
-					{
-						require("opencode").statusline,
-					},
-				},
 			},
 		})
 	end,
