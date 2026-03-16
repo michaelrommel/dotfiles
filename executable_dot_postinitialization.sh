@@ -9,6 +9,7 @@ alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gst='git status'
 alias gco='git commit'
 alias lg='lazygit'
+alias oc='opencode --port'
 
 alias fd='fd -H'
 alias rp='resticprofile'
