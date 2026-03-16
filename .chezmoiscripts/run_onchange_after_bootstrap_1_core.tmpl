@@ -18,8 +18,8 @@ mkdir -p ${HOME}/.local/share/bash-completion/completions
 mkdir -p ${HOME}/.local/share/zsh/completions
 
 if is_mac; then
-	desired=(jq mosh keychain ncurses gawk autoconf automake pkg-config 
-		coreutils imagemagick fd@8.7 fzf git delta)
+	desired=(jq mosh keychain ncurses gawk autoconf automake pkgconf 
+		coreutils imagemagick fd@8.7 fzf git git-delta)
 	missing=()
 	check_brewed "missing" "${desired[@]}"
 	if [[ "${#missing[@]}" -gt 0 ]]; then
