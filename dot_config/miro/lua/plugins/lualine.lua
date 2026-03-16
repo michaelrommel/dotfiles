@@ -24,25 +24,30 @@ return {
 			options = {
 				ignore_focus = {
 					"neo-tree",
-				}
+				},
 			},
 			sections = {
 				lualine_b = {
-					{ 'branch', icon = '\u{f062c}' },
-					'diff',
-					'diagnostics'
+					{ "branch", icon = "\u{f062c}" },
+					"diff",
+					"diagnostics",
 				},
 				lualine_x = {
-					'encoding',
-					{ 'fileformat', padding = { left = 0, right = 1 } },
-					{ 'filetype',   padding = { left = 1, right = 0 }, separator = "", },
-					{ active_lsps,  padding = { left = 0, right = 0 } },
+					"encoding",
+					{ "fileformat", padding = { left = 0, right = 1 } },
+					{ "filetype", padding = { left = 1, right = 0 }, separator = "" },
+					{ active_lsps, padding = { left = 0, right = 0 } },
 				},
-				lualine_y = { "searchcount", "selectioncount", "progress" }
-			}
+				lualine_y = { "searchcount", "selectioncount", "progress" },
+				lualine_z = {
+					{
+						require("opencode").statusline,
+					},
+				},
+			},
 		})
 	end,
 	dependencies = {
 		"nvim-tree/nvim-web-devicons",
-	}
+	},
 }

@@ -12,13 +12,8 @@ M.std_mappings = function()
 	local flsh = require("flash")
 	local oil = require("oil")
 	local tts = require("nvim-treesitter-textobjects.select")
+	local oc = require("opencode")
 
-	local ttc = require("configs.conf_toggleterm")
-	local term = require("toggleterm.terminal").Terminal
-	local miniterm = term:new(ttc.miniterm_opts)
-	local function miniterm_toggle()
-		miniterm:toggle()
-	end
 	local function insert_datetime()
 		local output = vim.fn.systemlist("date -Iseconds")
 		local pos = vim.api.nvim_win_get_cursor(0)[2]
@@ -125,17 +120,24 @@ M.std_mappings = function()
 		{ "<C-l>", "<Right>", desc = "Move 1 char right" },
 	})
 	wk.add({
-		{
-			"<C-c>",
-			function()
-				miniterm_toggle()
-			end,
-			desc = "Toggle Mini Terminal",
-		},
 		{ "<C-h>", "<C-w>h", desc = "Left split" },
 		{ "<C-j>", "<C-w>j", desc = "Lower split" },
 		{ "<C-k>", "<C-w>k", desc = "Upper split" },
 		{ "<C-l>", "<C-w>l", desc = "Right split" },
+		{
+			"<S-C-u>",
+			function()
+				oc.command("session.half.page.up")
+			end,
+			desc = "Scroll opencode up",
+		},
+		{
+			"<S-C-d>",
+			function()
+				oc.command("session.half.page.down")
+			end,
+			desc = "Scroll opencode down",
+		},
 		{
 			"[t",
 			function()
@@ -161,17 +163,50 @@ M.std_mappings = function()
 	wk.add({
 		-- ['/'] = { function() flsh.jump() end, "Search with flash" },
 		-- x = visual mode only, o = operator pending mode
+		mode = { "n", "x" },
+		{
+			"<C-c>",
+			function()
+				oc.ask("@this: ", { submit = true })
+			end,
+			desc = "Ask opencode",
+		},
+		{
+			"<C-x>",
+			function()
+				oc.select()
+			end,
+			desc = "Execute opencode action",
+		},
+		{
+			"<C-.>",
+			function()
+				oc.toggle()
+			end,
+			desc = "Toggle opencode",
+		},
+		{ "ga", group = "AI Opencode", remap = false },
+		{
+			"gav",
+			function()
+				return oc.operator("@this: ")
+			end,
+			desc = "Add visual range to opencode",
+		},
+		{
+			"gal",
+			function()
+				return oc.operator("@this: ") .. "_"
+			end,
+			desc = "Add line to opencode",
+		},
 		{
 			"S",
 			function()
 				flsh.treesitter()
 			end,
 			desc = "Search Treesitter tags with flash",
-			mode = { "n", "x" },
 		},
-	})
-	wk.add({
-		{ "<C-q>", "<C-\\><C-n>", desc = "Put terminal in Normal mode", mode = "t" },
 	})
 	wk.add({
 		mode = { "v" },
