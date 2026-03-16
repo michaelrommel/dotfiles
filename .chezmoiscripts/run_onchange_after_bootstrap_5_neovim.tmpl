@@ -12,7 +12,7 @@ blue "bootstrap neovim"
 
 if is_mac; then
 	desired=(cmake shellcheck@0.9 shfmt@1.33 universal-ctags wordnet
-		fontconfig@2.14)
+		fontconfig@2.14 anomalyco/tap/opencode)
 	missing=()
 	check_brewed "missing" "${desired[@]}"
 	if [[ "${#missing[@]}" -gt 0 ]]; then
@@ -93,7 +93,7 @@ if ! grep -qs python ~/.config/mise/config.toml; then
 	source "${HOME}/bin/install_python.sh"
 fi
 
-# node is needed to install tree-sitter binaries
+# node is needed to install tree-sitter binaries and opencode
 if ! node --version >/dev/null 2>&1; then
 	source "${HOME}/bin/install_node.sh"
 fi
@@ -147,6 +147,11 @@ fi
 if ! nvr --version >/dev/null 2>&1; then
 	echo "Installing neovim-remote"
 	python3 -mpip install neovim-remote
+fi
+
+if ! opencode --version >/dev/null 2>&1; then
+	echo "Installing opencode"
+	npm install -g opencode-ai
 fi
 
 if ! is_mac; then
