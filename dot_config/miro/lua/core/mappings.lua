@@ -5,9 +5,9 @@ local diagnostic = vim.diagnostic
 
 M.std_mappings = function()
 	local wk = require("which-key")
-	local ts = require("telescope")
-	local tb = require("telescope.builtin")
-	local tsc = require("configs.conf_telescope")
+	-- local ts = require("telescope")
+	-- local tb = require("telescope.builtin")
+	local snacks = require("snacks")
 	local tc = require("todo-comments")
 	local flsh = require("flash")
 	local oil = require("oil")
@@ -27,7 +27,6 @@ M.std_mappings = function()
 
 	wk.add({
 		mode = { "x", "o" },
-		-- moves the cursor left and right in insert mode
 		{
 			"a=",
 			function()
@@ -112,6 +111,10 @@ M.std_mappings = function()
 			end,
 			desc = "inside function",
 		},
+	})
+	wk.add({
+		mode = { "t" },
+		{ "<Esc>", [[<C-\><C-n>]], desc = "Exit terminal mode" },
 	})
 	wk.add({
 		mode = { "i", "v" },
@@ -234,64 +237,49 @@ M.std_mappings = function()
 		},
 	})
 	wk.add({
-		{ "<leader>b", group = "Browse" },
-		{
-			"<leader>bd",
-			function()
-				require("browse.devdocs").search()
-			end,
-			desc = "DevDocs",
-		},
-		{
-			"<leader>bg",
-			function()
-				require("browse").input_search()
-			end,
-			desc = "Google",
-		},
-		-- find functions with telescope
 		{ "<leader>f", group = "Find" },
 		{
 			"<leader>fb",
 			function()
-				tb.buffers()
+				snacks.picker.buffers()
 			end,
 			desc = "Find buffers",
 		},
 		{
 			"<leader>fc",
 			function()
-				ts.extensions.neoclip.default()
+				snacks.picker.yankbank()
 			end,
 			desc = "Find clipboard",
 		},
 		{
 			"<leader>fd",
 			function()
-				tb.diagnostics()
+				snacks.picker.diagnostics()
 			end,
 			desc = "Find diagnostics",
 		},
 		{
 			"<leader>ff",
 			function()
-				tb.find_files({
-					find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
-				})
+				snacks.picker.files()
+				-- .find_files({
+				-- 	find_command = { "rg", "--files", "--hidden", "-g", "!.git" },
+				-- })
 			end,
 			desc = "Find files",
 		},
 		{
 			"<leader>fg",
 			function()
-				tb.live_grep()
+				snacks.picker.grep()
 			end,
 			desc = "Live grep",
 		},
 		{
 			"<leader>fp",
 			function()
-				tsc.find_files_from_project_git_root()
+				snacks.picker.git_files()
 			end,
 			desc = "Find files in project",
 		},

@@ -5,7 +5,7 @@ return {
 	branch = "main",
 	lazy = false,
 	dependencies = {
-		"nvim-treesitter/nvim-treesitter-textobjects"
+		"nvim-treesitter/nvim-treesitter-textobjects",
 	},
 	event = { "BufEnter", "BufReadPre", "BufNewFile" },
 	build = ":TSUpdate",
@@ -13,9 +13,19 @@ return {
 	-- 	require("nvim-treesitter.install").update({ with_sync = true })
 	-- end,
 	config = function()
-		require("nvim-treesitter").install({ "c", "lua", "vim", "vimdoc", "query",
-			"python", "rust", "javascript", "markdown" })
-		vim.api.nvim_create_autocmd('FileType', {
+		require("nvim-treesitter").install({
+			"c",
+			"lua",
+			"vim",
+			"vimdoc",
+			"query",
+			"python",
+			"regex",
+			"rust",
+			"javascript",
+			"markdown",
+		})
+		vim.api.nvim_create_autocmd("FileType", {
 			pattern = { "*" },
 			callback = function()
 				local ok, parser = pcall(vim.treesitter.get_parser, 0, vim.bo.filetype)
@@ -24,5 +34,5 @@ return {
 				end
 			end,
 		})
-	end
+	end,
 }

@@ -2,9 +2,9 @@
 return {
 	"MeanderingProgrammer/render-markdown.nvim",
 	dependencies = { "nvim-treesitter/nvim-treesitter" },
-	ft = { "markdown", "codecompanion" },
+	ft = { "markdown" },
 	opts = {
-		file_types = { "markdown", "codecompanion" },
+		file_types = { "markdown" },
 		bullet = {
 			icons = { "●", "○", "◆", "◇" },
 		},
