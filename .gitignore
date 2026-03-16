@@ -8,3 +8,4 @@ tags
 zsh-autosuggestions
 .zcompdump
 dot_zcompdump
+node_modules
