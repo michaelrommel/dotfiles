@@ -114,7 +114,7 @@ M.std_mappings = function()
 	})
 	wk.add({
 		mode = { "t" },
-		{ "<Esc>", [[<C-\><C-n>]], desc = "Exit terminal mode" },
+		{ "<Esc><Esc>", [[<C-\><C-n>]], desc = "Exit terminal mode" },
 	})
 	wk.add({
 		mode = { "i", "v" },
@@ -167,42 +167,6 @@ M.std_mappings = function()
 		-- ['/'] = { function() flsh.jump() end, "Search with flash" },
 		-- x = visual mode only, o = operator pending mode
 		mode = { "n", "x" },
-		{
-			"<C-c>",
-			function()
-				oc.ask("@this: ", { submit = true })
-			end,
-			desc = "Ask opencode",
-		},
-		{
-			"<C-x>",
-			function()
-				oc.select()
-			end,
-			desc = "Execute opencode action",
-		},
-		{
-			"<C-.>",
-			function()
-				oc.toggle()
-			end,
-			desc = "Toggle opencode",
-		},
-		{ "ga", group = "AI Opencode", remap = false },
-		{
-			"gav",
-			function()
-				return oc.operator("@this: ")
-			end,
-			desc = "Add visual range to opencode",
-		},
-		{
-			"gal",
-			function()
-				return oc.operator("@this: ") .. "_"
-			end,
-			desc = "Add line to opencode",
-		},
 		{
 			"S",
 			function()
@@ -294,6 +258,56 @@ M.std_mappings = function()
 		},
 		{ "<leader>s", group = "Shortcuts" },
 		{ "<leader>sd", insert_datetime, desc = "Insert a ISO DateTimestamp" },
+	})
+	wk.add({
+		mode = { "n", "x" },
+		{ "<leader>o", group = "Opencode" },
+		{
+			"<leader>oa",
+			function()
+				oc.ask("@this: ", { submit = true })
+			end,
+			desc = "Ask opencode",
+		},
+		{
+			"<leader>os",
+			function()
+				oc.select()
+			end,
+			desc = "Execute opencode action",
+		},
+		{
+			"<leader>ot",
+			function()
+				oc.toggle()
+			end,
+			desc = "Toggle opencode",
+		},
+		{
+			"<leader>oc",
+			function()
+				oc.command("agent.cycle")
+			end,
+			desc = "Cycle opencode agents",
+		},
+	})
+	wk.add({
+		mode = { "x" },
+		{ "<leader>o", group = "Opencode" },
+		{
+			"<leader>ov",
+			function()
+				return oc.operator("@this: ")
+			end,
+			desc = "Add visual range to opencode",
+		},
+		{
+			"<leader>ol",
+			function()
+				return oc.operator("@this: ") .. "_"
+			end,
+			desc = "Add line to opencode",
+		},
 	})
 end
 

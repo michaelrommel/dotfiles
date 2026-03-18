@@ -20,6 +20,9 @@
 				},
 				"zai-org/glm-4.7-flash": {
 					"name": "zai-org/glm-4.7-flash"
+				},
+				"allenai/olmo-3-32b-think": {
+					"name": "allenai/olmo-3-32b-think"
 				}
 			}
 		}

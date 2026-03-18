@@ -173,6 +173,7 @@ return {
 				["rust-analyzer"] = {
 					diagnostics = {
 						enable = true,
+						disabled = { "unlinked-file" },
 					},
 				},
 			},
