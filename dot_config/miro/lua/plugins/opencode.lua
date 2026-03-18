@@ -13,7 +13,9 @@ return {
 			server = {
 				port = nil,
 				start = function()
-					require("opencode.terminal").start("opencode --port 4096")
+					require("opencode.terminal").start("opencode --port 4096", {
+						width = math.max(128, math.floor(vim.o.columns * 0.35)),
+					})
 				end,
 				stop = function()
 					require("opencode.terminal").stop()
