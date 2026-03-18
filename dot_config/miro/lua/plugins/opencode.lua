@@ -21,7 +21,9 @@ return {
 					require("opencode.terminal").stop()
 				end,
 				toggle = function()
-					require("opencode.terminal").toggle("opencode attach http://localhost:4096")
+					require("opencode.terminal").toggle("opencode attach http://localhost:4096", {
+						width = math.max(128, math.floor(vim.o.columns * 0.35)),
+					})
 				end,
 			},
 		}
