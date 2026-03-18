@@ -8,12 +8,23 @@
 	excludesfile = ~/.gitignore
 	editor = vim
 	pager = delta
+[diff]
+	colorMoved = default
 [interactive]
 	diffFilter = delta --color-only
 [delta]
 	navigate = true
 	dark = true
 	syntax-theme = gruvbox
+	side-by-side = true
+	minus-style = "syntax #281818"
+	plus-style = "syntax #102820"
+	features = decorations
+[delta "decorations"]
+	commit-decoration-style = bold yellow box ul
+    file-style = bold yellow
+    file-decoration-style = yellow box
+    hunk-header-decoration-style = none
 [hub]
 	protocol = https
 [alias]
