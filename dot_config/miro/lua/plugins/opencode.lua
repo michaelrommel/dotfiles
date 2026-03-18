@@ -10,6 +10,18 @@ return {
 			lsp = {
 				enabled = true,
 			},
+			server = {
+				port = nil,
+				start = function()
+					require("opencode.terminal").start("opencode --port 4096")
+				end,
+				stop = function()
+					require("opencode.terminal").stop()
+				end,
+				toggle = function()
+					require("opencode.terminal").toggle("opencode attach http://localhost:4096")
+				end,
+			},
 		}
 		vim.o.autoread = true -- Required for `opts.events.reload`
 	end,

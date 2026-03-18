@@ -5,8 +5,6 @@ local diagnostic = vim.diagnostic
 
 M.std_mappings = function()
 	local wk = require("which-key")
-	-- local ts = require("telescope")
-	-- local tb = require("telescope.builtin")
 	local snacks = require("snacks")
 	local tc = require("todo-comments")
 	local flsh = require("flash")
@@ -313,9 +311,18 @@ end
 
 M.gitsigns_mappings = function(bufnr)
 	local wk = require("which-key")
+	local snacks = require("snacks")
 	local gs = package.loaded.gitsigns
 	wk.add({
 		{ "<leader>g", group = "Git" },
+		{
+			"<leader>gl",
+			function()
+				snacks.lazygit.open()
+			end,
+			buffer = bufnr,
+			desc = "Lazygit",
+		},
 		{
 			"<leader>gD",
 			function()
@@ -336,14 +343,13 @@ M.gitsigns_mappings = function(bufnr)
 		},
 		{ "<leader>gd", gs.diffthis, buffer = bufnr, desc = "Diff" },
 		{ "<leader>gp", gs.preview_hunk, buffer = bufnr, desc = "Preview hunk" },
-		{ "<leader>gr", gs.reset_hunk, buffer = bufnr, desc = "Reset hunk" },
-		{ "<leader>gs", gs.stage_hunk, buffer = bufnr, desc = "Stage hunk" },
 		{ "<leader>gt", group = "Toggles" },
 		{ "<leader>gtb", gs.toggle_current_line_blame, buffer = bufnr, desc = "Toggle blame" },
 		{ "<leader>gtd", gs.toggle_deleted, buffer = bufnr, desc = "Toggle deleted" },
 		{ "<leader>gu", gs.undo_stage_hunk, buffer = bufnr, desc = "Undo stage hunk" },
 	})
 	wk.add({
+		mode = { "n", "v" },
 		{
 			"<leader>gr",
 			function()
@@ -351,7 +357,6 @@ M.gitsigns_mappings = function(bufnr)
 			end,
 			buffer = bufnr,
 			desc = "Reset hunk",
-			mode = "v",
 		},
 		{
 			"<leader>gs",
@@ -360,7 +365,6 @@ M.gitsigns_mappings = function(bufnr)
 			end,
 			buffer = bufnr,
 			desc = "Stage hunk",
-			mode = "v",
 		},
 	})
 	wk.add({
@@ -398,7 +402,8 @@ M.gitsigns_mappings = function(bufnr)
 		},
 	})
 	wk.add({
-		{ "ih", buffer = bufnr, desc = ":<C-U>Gitsigns select_hunk<cr>", mode = { "o", "x" } },
+		mode = { "o", "x" },
+		{ "ih", buffer = bufnr, desc = ":<C-U>Gitsigns select_hunk<cr>" },
 	})
 end
 

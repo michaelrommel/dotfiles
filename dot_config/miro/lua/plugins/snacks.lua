@@ -23,6 +23,7 @@ return {
 		},
 		bigfile = { enabled = true },
 		quickfile = { enabled = true },
+		lazygit = {},
 
 		dashboard = { enabled = false },
 		explorer = { enabled = false },
