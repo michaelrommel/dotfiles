@@ -166,7 +166,7 @@ M.std_mappings = function()
 		-- x = visual mode only, o = operator pending mode
 		mode = { "n", "x" },
 		{
-			"S",
+			"F",
 			function()
 				flsh.treesitter()
 			end,
@@ -273,6 +273,13 @@ M.std_mappings = function()
 				oc.select()
 			end,
 			desc = "Execute opencode action",
+		},
+		{
+			"<leader>oS",
+			function()
+				oc.start()
+			end,
+			desc = "Start opencode",
 		},
 		{
 			"<leader>ot",
