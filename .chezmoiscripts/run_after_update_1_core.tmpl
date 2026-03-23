@@ -24,12 +24,8 @@ if { ! is_mac && [[ ! -f "${HOME}/.terminfo/w/wezterm" ]]; } ||
    {   is_mac && [[ ! -f "${HOME}/.terminfo/77/wezterm" ]]; } then
 	echo -n "(Re-)creating current terminfo files: "
 	for t in tmux mintty xterm-ghostty wezterm xterm-kitty; do 
-		echo -n "${t} "
-		if is_mac; then
-			if ! infocmp ${t} 2>/dev/null 1>&2; then
-				/usr/bin/tic -x "${HOME}/.config/.terminfo_src/${t}.terminfo" 2>/dev/null
-			fi
-		else
+		if ! infocmp ${t} 2>/dev/null 1>&2; then
+			echo -n "${t} "
 			/usr/bin/tic -x "${HOME}/.config/.terminfo_src/${t}.terminfo" 2>/dev/null
 		fi
 	done
