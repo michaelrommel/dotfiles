@@ -29,6 +29,61 @@ function LspFormat(bufnr)
 	})
 end
 
+M.lsp_cursorhold = function(updatetime)
+	-- based upon https://github.com/antoinemadec/FixCursorHold.nvim
+	-- guard against double initialisation
+	if vim.g.loaded_lsp_cursorhold_nvim then
+		return
+	end
+	vim.g.loaded_lsp_cursorhold_nvim = 1
+
+	-- Disable native events
+	vim.opt.eventignore:append({ "CursorHold", "CursorHoldI" })
+
+	local function cursor_hold_cb(event)
+		return function()
+			if vim.v.exiting ~= vim.NIL then
+				return
+			end
+
+			vim.opt.eventignore:remove(event)
+			vim.api.nvim_exec_autocmds(event, { modeline = false })
+			vim.opt.eventignore:append(event)
+		end
+	end
+
+	local timer = vim.loop.new_timer()
+
+	local function stop_timer()
+		if timer:is_active() then
+			timer:stop()
+		end
+	end
+
+	local function start_timer(event)
+		stop_timer()
+		timer:start(updatetime, 0, vim.schedule_wrap(cursor_hold_cb(event)))
+	end
+
+	local group = vim.api.nvim_create_augroup("ls_cursorhold_nvim", { clear = true })
+
+	vim.api.nvim_create_autocmd("CursorMoved", {
+		group = group,
+		callback = function()
+			if vim.api.nvim_get_mode().mode == "n" then
+				start_timer("CursorHold")
+			end
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("CursorMovedI", {
+		group = group,
+		callback = function()
+			start_timer("CursorHoldI")
+		end,
+	})
+end
+
 M.on_attach = function(client, bufnr)
 	print(string.format("on_attach: %s", client.name))
 	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")

@@ -24,14 +24,13 @@ return {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		"saghen/blink.cmp",
 		"aznhe21/actions-preview.nvim",
-		-- separates the update intervals of lsp from autosaved files/buffers
-		"antoinemadec/FixCursorHold.nvim",
 	},
 	config = function()
 		-- set up border around the LspInfo window
 		require("lspconfig.ui.windows").default_options.border = "rounded"
-		-- set the time before a lsp hover window appears
-		vim.g.cursorhold_updatetime = 500
+		-- set the time in ms before a lsp hover window appears
+		local lsp_cursorhold = require("configs.conf_lsp").lsp_cursorhold
+		lsp_cursorhold(300)
 		-- set up generic handlers and capabilities
 		local on_attach = require("configs.conf_lsp").on_attach
 		local capabilities = vim.tbl_deep_extend(
