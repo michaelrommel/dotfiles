@@ -20,7 +20,8 @@ fi
 
 cd "${HOME}" || exit
 
-if [[ ! -f "${HOME}/.terminfo/w/wezterm" ]]; then
+if { ! is_mac && [[ ! -f "${HOME}/.terminfo/w/wezterm" ]]; } ||
+   {   is_mac && [[ ! -f "${HOME}/.terminfo/77/wezterm" ]]; } then
 	echo -n "(Re-)creating current terminfo files: "
 	for t in tmux mintty xterm-ghostty wezterm xterm-kitty; do 
 		echo -n "${t} "
