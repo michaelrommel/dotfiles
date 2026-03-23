@@ -15,7 +15,7 @@
 [delta]
 	navigate = true
 	dark = true
-	syntax-theme = gruvbox
+	syntax-theme = gruvbox-dark-hard
 	side-by-side = true
 	minus-style = "syntax #281818"
 	plus-style = "syntax #102820"

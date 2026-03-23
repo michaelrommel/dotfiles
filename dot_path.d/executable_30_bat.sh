@@ -1,3 +1,3 @@
 #! /usr/bin/env bash
 
-export BAT_THEME=gruvbox-dark-medium
+export BAT_THEME=gruvbox-dark-hard
