@@ -6,17 +6,17 @@ return {
 	},
 	lazy = true,
 	config = function()
-		require('mason').setup({})
-		vim.api.nvim_create_autocmd('User', {
-			pattern = 'MasonToolsStartingInstall',
+		require("mason").setup({})
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "MasonToolsStartingInstall",
 			callback = function()
 				vim.schedule(function()
-					print 'mason-tool-installer starting...'
+					print("mason-tool-installer starting...")
 				end)
 			end,
 		})
-		vim.api.nvim_create_autocmd('User', {
-			pattern = 'MasonToolsUpdateCompleted',
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "MasonToolsUpdateCompleted",
 			callback = function(e)
 				vim.schedule(function()
 					print("mason-tool-installer finished.")
@@ -31,6 +31,7 @@ return {
 				"bacon-ls",
 				"bash-language-server",
 				"codelldb",
+				"codespell",
 				"css-lsp",
 				"eslint-lsp",
 				"graphql-language-service-cli",
@@ -75,5 +76,5 @@ return {
 			-- Default: nil
 			debounce_hours = 5, -- at least 5 hours between attempts to install/update
 		})
-	end
+	end,
 }

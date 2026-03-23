@@ -14,6 +14,7 @@ return {
 				json5 = { "prettier" },
 				shell = { "shfmt" },
 				rust = { "rustfmt" },
+				["*"] = { "codespell" },
 			},
 			format_on_save = {
 				timeout_ms = 500,
