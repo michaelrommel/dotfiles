@@ -5,6 +5,9 @@ tags
 **/examples/rust/Cargo.lock
 **/examples/rust/target
 **/miro/lazy-lock.json
+dot_config/pi/sessions
+dot_config/pi/pi-debug.log
+dot_config/pi/private_auth.json
 zsh-autosuggestions
 .zcompdump
 dot_zcompdump

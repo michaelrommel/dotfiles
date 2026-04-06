@@ -1,0 +1,140 @@
+{
+	"providers": {
+		"seagull": {
+			"baseUrl": "http://seagull.layer-7.net:11434/v1",
+			"api": "openai-completions",
+			"apiKey": "seagull",
+			"models": [{ "id": "llama3.2:1b" }]
+		},
+		"ollama": {
+			"baseUrl": "http://192.168.13.187:11434/v1",
+			"api": "openai-completions",
+			"apiKey": "ollama",
+			"models": [
+				{
+					"id": "qwen3.5:35b-a3b-coding-nvfp4",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
+				{
+					"id": "qwen3.5:35b-a3b-q8_0",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				}
+			]
+		},
+		"lmstudio": {
+			"baseUrl": "http://192.168.13.187:1234/v1",
+			"api": "openai-completions",
+			"apiKey": "lmstudio",
+			"models": [
+				{
+					"id": "mlx-community/Qwen3.5-35B-A3B-6bit",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template",
+						"reasoningEffortMap": {
+							"medium": "medium"
+						}
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
+				{
+					"id": "qwen3.5-35b-a3b-ud-mlx",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
+				{
+					"id": "qwen/qwen3.5-35b-a3b",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
+				{
+					"id": "google/gemma-4-26b-a4b",
+					"reasoning": true,
+					"contextWindow": 65535,
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
+				{
+					"id": "allenai/olmo-3-32b-think",
+					"reasoning": true,
+					"contextWindow": 65535,
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
+				{
+					"id": "mistralai/devstral-small-2-2512",
+					"input": ["text", "image"],
+					"contextWindow": 393216,
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,16 @@
+{
+	"lastChangelogVersion": "0.65.2",
+	"defaultProvider": "lmstudio",
+	"defaultModel": "qwen/qwen3.5-35b-a3b",
+	"hideThinkingBlock": false,
+	"autocompleteMaxVisible": 10,
+	"theme": "gruvbox-dark-hard",
+	"verbose": true,
+	"debug": {
+		"httpRequests": true,
+		"modelMessages": true
+	},
+	"defaultThinkingLevel": "medium",
+	"packages": []
+}
+
