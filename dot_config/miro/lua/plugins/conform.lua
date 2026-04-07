@@ -8,13 +8,12 @@ return {
 		local cfm = require("conform")
 		cfm.setup({
 			formatters_by_ft = {
-				python = { "ruff_format" },
-				javascript = { "prettier" },
-				json = { "prettier" },
-				json5 = { "prettier" },
-				shell = { "shfmt" },
-				rust = { "rustfmt" },
-				["*"] = { "codespell" },
+				python = { "ruff_format", "codespell" },
+				javascript = { "prettier", "codespell" },
+				json = { "prettier", "codespell" },
+				json5 = { "prettier", "codespell" },
+				shell = { "shfmt", "codespell" },
+				rust = { "rustfmt", "codespell" },
 			},
 			format_on_save = {
 				timeout_ms = 500,
