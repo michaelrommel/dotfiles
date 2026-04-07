@@ -14,10 +14,10 @@ g.mapleader = " "
 -- by the smartyank lua plugin
 if is_wsl then
 	g.clipboard = {
-		name = 'WSLClipboard',
+		name = "WSLClipboard",
 		copy = { ["+"] = { "clip.exe" }, ["*"] = { "clip.exe" } },
 		paste = { ["+"] = { "nvim_paste.sh" }, ["*"] = { "nvim_paste.sh" } },
-		cache_enabled = true
+		cache_enabled = true,
 	}
 end
 
@@ -37,7 +37,7 @@ opt.signcolumn = "yes:1"
 -- globally set new border
 opt.winborder = "rounded"
 -- display certain invisible characters
-opt.listchars = { tab = utf8(0xBB) .. ' ', trail = utf8(0xB7), nbsp = '~' }
+opt.listchars = { tab = utf8(0xBB) .. " ", trail = utf8(0xB7), nbsp = "~" }
 opt.list = true
 -- disable showing the vim mode in the statusline
 opt.showmode = false
@@ -88,7 +88,7 @@ opt.timeout = true
 opt.timeoutlen = 500
 -- set title string of the terminal. :~ modifier tries to make path relative to HOME
 opt.title = true
-opt.titlestring = "%.20t%( (%.30{expand(\"%:~:h\")})%)"
+opt.titlestring = '%.20t%( (%.30{expand("%:~:h")})%)'
 -- for minimal tabline
 opt.showtabline = 2
 
@@ -98,8 +98,14 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
 	command = "silent! set filetype=sh",
 })
 
+-- auto-reload buffer more aggressively
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+	pattern = "*",
+	command = "if mode() != 'c' | checktime | endif",
+})
+
 -- disable some default providers
-for _, provider in ipairs { "node", "perl", "ruby" } do
+for _, provider in ipairs({ "node", "perl", "ruby" }) do
 	g["loaded_" .. provider .. "_provider"] = 0
 end
 
