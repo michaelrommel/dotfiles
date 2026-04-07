@@ -22,9 +22,9 @@
 	features = decorations
 [delta "decorations"]
 	commit-decoration-style = bold yellow box ul
-    file-style = bold yellow
-    file-decoration-style = yellow box
-    hunk-header-decoration-style = none
+	file-style = bold yellow
+	file-decoration-style = yellow box
+	hunk-header-decoration-style = none
 [hub]
 	protocol = https
 [alias]

@@ -1,0 +1,10 @@
+git:
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never --side-by-side
+gui:
+  theme:
+    # This color applies to the selected line in the diff/hunk pane
+    selectedLineBgColor:
+      - '#212829'  # Example: A darker grey (or use 'black' or 'default')
+
