@@ -29,8 +29,6 @@ alias lr="${LS} -lahtr --color --hyperlink=never"
 
 if [[ "${OSNAME}" == "Darwin" ]]; then
 	alias cat='gcat'
-else
-	alias cat='cat'
 fi
 
 logtail() {
