@@ -27,6 +27,12 @@ alias l="${LS} -lah --color --hyperlink=never"
 alias ll="${LS} -lah --color --hyperlink=never"
 alias lr="${LS} -lahtr --color --hyperlink=never"
 
+if [[ "${OSNAME}" == "Darwin" ]]; then
+	alias cat='gcat'
+else
+	alias cat='cat'
+fi
+
 logtail() {
 	tail -f "$@" | bat --paging=never -l log
 }
