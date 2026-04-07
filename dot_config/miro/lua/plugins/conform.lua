@@ -12,8 +12,9 @@ return {
 				javascript = { "prettier", "codespell" },
 				json = { "prettier", "codespell" },
 				json5 = { "prettier", "codespell" },
-				shell = { "shfmt", "codespell" },
 				rust = { "rustfmt", "codespell" },
+				shell = { "shfmt", "codespell" },
+				typescript = { "prettier", "codespell" },
 			},
 			format_on_save = {
 				timeout_ms = 500,

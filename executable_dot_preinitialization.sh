@@ -9,6 +9,8 @@ export GPG_TTY
 export EDITOR=vim
 export VISUAL=vim
 export MOSH_ESCAPE_KEY='~'
+export PI_CONFIG_DIR=${HOME}/.config/pi
+export PI_CODING_AGENT_DIR=${HOME}/.config/pi/agent
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"

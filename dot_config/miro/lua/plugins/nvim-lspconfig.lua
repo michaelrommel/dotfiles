@@ -19,6 +19,7 @@ return {
 		"rust",
 		"svelte",
 		"text",
+		"typescript",
 	},
 	dependencies = {
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
