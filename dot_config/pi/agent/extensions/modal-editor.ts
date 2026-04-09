@@ -9,11 +9,14 @@
  * - ctrl+c, ctrl+d, etc. work in both modes
  */
 
-import { CustomEditor, type ExtensionAPI } from '@mariozechner/pi-coding-agent';
+import { CustomEditor, type ExtensionAPI, type Theme } from '@mariozechner/pi-coding-agent';
 import {
 	CURSOR_MARKER,
+	type EditorTheme,
+	type KeybindingsManager,
 	matchesKey,
 	truncateToWidth,
+	type TUI,
 	visibleWidth
 } from '@mariozechner/pi-tui';
 
@@ -53,6 +56,12 @@ const CURSOR_INSERT_SEQ = '\x1b[4m'; // underline      → bar
 class ModalEditor extends CustomEditor {
 	private mode: 'normal' | 'insert' = 'insert';
 	private pendingKey: string | null = null;
+	private appTheme: Theme;
+
+	constructor(tui: TUI, editorTheme: EditorTheme, kb: KeybindingsManager, appTheme: Theme) {
+		super(tui, editorTheme, kb);
+		this.appTheme = appTheme;
+	}
 
 	private setCursorStyle(_mode: 'normal' | 'insert'): void {
 		// no-op: cursor shape is handled in render() via line post-processing
@@ -148,11 +157,15 @@ class ModalEditor extends CustomEditor {
 		}
 
 		// Add mode indicator to bottom border
-		const label = this.mode === 'normal' ? ' NORMAL ' : ' INSERT ';
+		const text   = this.mode === 'normal' ? ' NORMAL ' : ' INSERT ';
+		const label  = this.mode === 'normal'
+			? '\x1b[7m' + this.appTheme.fg('muted',  text) + '\x1b[27m'
+			: '\x1b[7m' + this.appTheme.fg('accent', text) + '\x1b[27m';
+		const labelWidth = visibleWidth(text); // measure raw text, not styled
 		const last = lines.length - 1;
-		if (visibleWidth(lines[last]!) >= label.length) {
+		if (visibleWidth(lines[last]!) >= labelWidth) {
 			lines[last] =
-				truncateToWidth(lines[last]!, width - label.length, '') + label;
+				truncateToWidth(lines[last]!, width - labelWidth, '') + label;
 		}
 		return lines;
 	}
@@ -161,7 +174,7 @@ class ModalEditor extends CustomEditor {
 export default function (pi: ExtensionAPI) {
 	pi.on('session_start', (_event, ctx) => {
 		ctx.ui.setEditorComponent(
-			(tui, theme, kb) => new ModalEditor(tui, theme, kb)
+			(tui, editorTheme, kb) => new ModalEditor(tui, editorTheme, kb, ctx.ui.theme)
 		);
 	});
 }
