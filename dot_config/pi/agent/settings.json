@@ -12,7 +12,7 @@
   },
   "defaultThinkingLevel": "medium",
   "packages": [
-    "npm:pi-tool-display",
-    "npm:pi-mermaid"
+    "npm:pi-mermaid",
+    "git:git@github.com:michaelrommel/pi-tool-display"
   ]
 }
