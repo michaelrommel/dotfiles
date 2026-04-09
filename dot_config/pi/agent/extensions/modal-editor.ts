@@ -9,7 +9,11 @@
  * - ctrl+c, ctrl+d, etc. work in both modes
  */
 
-import { CustomEditor, type ExtensionAPI, type Theme } from '@mariozechner/pi-coding-agent';
+import {
+	CustomEditor,
+	type ExtensionAPI,
+	type Theme
+} from '@mariozechner/pi-coding-agent';
 import {
 	CURSOR_MARKER,
 	type EditorTheme,
@@ -23,11 +27,11 @@ import {
 // Two-key combo mappings in normal mode: 'xy' -> { seq, insert? }
 const COMBO_KEYS: Record<string, { seq: string; insert?: boolean }> = {
 	dw: { seq: '\x1bd' }, // delete word forward (Meta+D)
-	cw: { seq: '\x1bd', insert: true }, // delete word forward + insert mode
+	cw: { seq: '\x1bd', insert: true } // delete word forward + insert mode
 };
 
 // Keys that start a combo (derived from COMBO_KEYS)
-const COMBO_PREFIXES = new Set(Object.keys(COMBO_KEYS).map(k => k[0]!));
+const COMBO_PREFIXES = new Set(Object.keys(COMBO_KEYS).map((k) => k[0]!));
 
 // Normal mode key mappings: key -> escape sequence (or null for mode switch)
 const NORMAL_KEYS: Record<string, string | null> = {
@@ -50,7 +54,7 @@ const NORMAL_KEYS: Record<string, string | null> = {
 // Cursor style sequences within rendered lines:
 // Normal mode: inverse video block (default editor style)
 // Insert mode: replace inverse block with underline to mimic a bar cursor
-const CURSOR_BLOCK_SEQ  = '\x1b[7m'; // inverse video  → block
+const CURSOR_BLOCK_SEQ = '\x1b[7m'; // inverse video  → block
 const CURSOR_INSERT_SEQ = '\x1b[4m'; // underline      → bar
 
 class ModalEditor extends CustomEditor {
@@ -58,13 +62,14 @@ class ModalEditor extends CustomEditor {
 	private pendingKey: string | null = null;
 	private appTheme: Theme;
 
-	constructor(tui: TUI, editorTheme: EditorTheme, kb: KeybindingsManager, appTheme: Theme) {
+	constructor(
+		tui: TUI,
+		editorTheme: EditorTheme,
+		kb: KeybindingsManager,
+		appTheme: Theme
+	) {
 		super(tui, editorTheme, kb);
 		this.appTheme = appTheme;
-	}
-
-	private setCursorStyle(_mode: 'normal' | 'insert'): void {
-		// no-op: cursor shape is handled in render() via line post-processing
 	}
 
 	handleInput(data: string): void {
@@ -72,9 +77,7 @@ class ModalEditor extends CustomEditor {
 		if (matchesKey(data, 'escape')) {
 			if (this.mode === 'insert') {
 				this.mode = 'normal';
-				this.setCursorStyle('normal');
 			} else {
-				this.setCursorStyle('insert'); // restore before handing off
 				super.handleInput(data); // abort agent, etc.
 			}
 			return;
@@ -95,7 +98,6 @@ class ModalEditor extends CustomEditor {
 				super.handleInput(seq);
 				if (insert) {
 					this.mode = 'insert';
-					this.setCursorStyle('insert');
 				}
 			}
 			// unrecognized combo: silently discard
@@ -113,18 +115,14 @@ class ModalEditor extends CustomEditor {
 			const seq = NORMAL_KEYS[data];
 			if (data === 'i') {
 				this.mode = 'insert';
-				this.setCursorStyle('insert');
 			} else if (data === 'a') {
 				this.mode = 'insert';
-				this.setCursorStyle('insert');
 				super.handleInput('\x1b[C'); // move right first
 			} else if (data === 'A') {
 				this.mode = 'insert';
-				this.setCursorStyle('insert');
 				super.handleInput('\x05'); // move to end of line first
 			} else if (data === 'C') {
 				this.mode = 'insert';
-				this.setCursorStyle('insert');
 				super.handleInput('\x0b'); // delete to end of line first
 			} else if (seq) {
 				super.handleInput(seq);
@@ -157,11 +155,18 @@ class ModalEditor extends CustomEditor {
 		}
 
 		// Add mode indicator to bottom border
-		const text   = this.mode === 'normal' ? ' NORMAL ' : ' INSERT ';
-		const label  = this.mode === 'normal'
-			? '\x1b[7m' + this.appTheme.fg('muted',  text) + '\x1b[27m'
-			: '\x1b[7m' + this.appTheme.fg('accent', text) + '\x1b[27m';
-		const labelWidth = visibleWidth(text); // measure raw text, not styled
+		const text = this.mode === 'normal' ? ' NORMAL ' : ' INSERT ';
+		const label =
+			this.mode === 'normal'
+				? this.appTheme.fg('muted', '') +
+					'\x1b[7m' +
+					this.appTheme.fg('muted', text) +
+					'\x1b[27m'
+				: this.appTheme.fg('accent', '') +
+					'\x1b[7m' +
+					this.appTheme.fg('accent', text) +
+					'\x1b[27m';
+		const labelWidth = visibleWidth(text) + 1; // not styled, but with triangle
 		const last = lines.length - 1;
 		if (visibleWidth(lines[last]!) >= labelWidth) {
 			lines[last] =
@@ -174,7 +179,8 @@ class ModalEditor extends CustomEditor {
 export default function (pi: ExtensionAPI) {
 	pi.on('session_start', (_event, ctx) => {
 		ctx.ui.setEditorComponent(
-			(tui, editorTheme, kb) => new ModalEditor(tui, editorTheme, kb, ctx.ui.theme)
+			(tui, editorTheme, kb) =>
+				new ModalEditor(tui, editorTheme, kb, ctx.ui.theme)
 		);
 	});
 }
