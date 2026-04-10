@@ -53,9 +53,9 @@ const NORMAL_KEYS: Record<string, string | null> = {
 
 // Cursor style sequences within rendered lines:
 // Normal mode: inverse video block (default editor style)
-// Insert mode: replace inverse block with underline to mimic a bar cursor
+// Insert mode: replace inverse block with bold + colored bright white underline
 const CURSOR_BLOCK_SEQ = '\x1b[7m'; // inverse video  → block
-const CURSOR_INSERT_SEQ = '\x1b[4m'; // underline      → bar
+const CURSOR_INSERT_SEQ = '\x1b[1;4:2m\x1b[58:2::254:128:25m'; // bold + orange underline → bar
 
 class ModalEditor extends CustomEditor {
 	private mode: 'normal' | 'insert' = 'insert';

@@ -1,7 +1,7 @@
 {
   "lastChangelogVersion": "0.66.1",
-  "defaultProvider": "github-copilot",
-  "defaultModel": "claude-sonnet-4.6",
+  "defaultProvider": "lmstudio",
+  "defaultModel": "qwen/qwen3.5-35b-a3b",
   "hideThinkingBlock": false,
   "autocompleteMaxVisible": 10,
   "theme": "gruvbox-dark-hard",

@@ -18,8 +18,8 @@
 		"text": "#ebdbb2",
 		"muted": "#bdae93",
 		"dim": "#928374",
-		"toolSuccessBg": "#374528",
-		"toolErrorBg": "#4b2f2f"
+		"toolSuccessBg": "#152319",
+		"toolErrorBg": "#251819"
 	},
 	"colors": {
 		"accent": "accent",

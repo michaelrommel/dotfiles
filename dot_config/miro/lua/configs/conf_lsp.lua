@@ -85,7 +85,7 @@ M.lsp_cursorhold = function(updatetime)
 end
 
 M.on_attach = function(client, bufnr)
-	print(string.format("on_attach: %s", client.name))
+	print(string.format("attaching %s", client.name))
 	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
 	-- disable the semantic tokens
