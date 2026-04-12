@@ -10,6 +10,7 @@ alias gst='git status'
 alias gco='git commit'
 alias lg='lazygit'
 alias oc='opencode --port'
+alias pis='OLLAMA_API_KEY=$(pass show ollama-api-key) pi'
 
 alias fd='fd -H'
 alias rp='resticprofile'

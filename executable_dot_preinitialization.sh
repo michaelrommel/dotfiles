@@ -11,6 +11,7 @@ export VISUAL=vim
 export MOSH_ESCAPE_KEY='~'
 export PI_CONFIG_DIR=${HOME}/.config/pi
 export PI_CODING_AGENT_DIR=${HOME}/.config/pi/agent
+export SEQUOIA_HOME=${HOME}/.local/share/sequoia
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"
