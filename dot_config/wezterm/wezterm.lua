@@ -157,10 +157,17 @@ config.enable_csi_u_key_encoding = true
 -- config.enable_kitty_keyboard = true
 
 config.treat_east_asian_ambiguous_width_as_wide = false
-config.unicode_version = 9
+-- chanced on 2026-04-12
+config.unicode_version = 14
 -- config.normalize_output_to_unicode_nfc = true
 config.allow_square_glyphs_to_overflow_width = "Always"
--- config.allow_square_glyphs_to_overflow_width = "never"
+-- config.allow_square_glyphs_to_overflow_width = "never
+
+-- adjust position and thickness to still see underscores
+-- in underlined lines
+config.underline_position = "180%"
+config.underline_thickness = "180%"
+
 -- this is needed because otherwise box drawing characters can overlap
 -- e.g. when displaying a tree which causes brightness variations
 config.custom_block_glyphs = true

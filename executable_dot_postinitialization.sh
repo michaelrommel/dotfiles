@@ -10,7 +10,7 @@ alias gst='git status'
 alias gco='git commit'
 alias lg='lazygit'
 alias oc='opencode --port'
-alias pis='OLLAMA_API_KEY=$(pass show ollama-api-key) pi'
+alias pis='OLLAMA_API_KEY=$(bw get password "ollama-api-key") pi -e ${HOME}/.config/pi/agent/git/github.com/mcollina/pi-ollama-web-search'
 
 alias fd='fd -H'
 alias rp='resticprofile'

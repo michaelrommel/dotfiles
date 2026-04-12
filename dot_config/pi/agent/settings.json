@@ -13,6 +13,17 @@
   "defaultThinkingLevel": "medium",
   "packages": [
     "npm:pi-mermaid",
-    "git:git@github.com:michaelrommel/pi-tool-display"
+    {
+      "source": "git:git@github.com:michaelrommel/pi-tool-display",
+      "extensions": [
+        "+index.ts"
+      ]
+    },
+    {
+      "source": "git:git@github.com/mcollina/pi-ollama-web-search",
+      "extensions": [
+        "-extensions/ollama-web-search.ts"
+      ]
+    }
   ]
 }
