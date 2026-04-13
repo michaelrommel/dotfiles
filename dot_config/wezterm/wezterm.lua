@@ -45,7 +45,7 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	config.default_domain = "WSL:bookworm"
 	config.ssh_backend = "LibSsh"
 	fontname = "VictorMono NF"
-	fontsize = 13
+	fontsize = 14
 	-- this conflicts with the csi u mode that we need for
 	-- tmux and extended key reporting
 	config.allow_win32_input_mode = false

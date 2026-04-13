@@ -29,24 +29,5 @@
 				}
 			}
 		}
-	},
-	"command": {
-		"tool:list": {
-			"template": "List all currently available tools and their descriptions.",
-			"description": "Show available tools",
-			"agent": "plan"
-		}
-	},
-	"mcp": {
-		"git": {
-			"type": "local",
-			"command": ["uvx", "mcp-server-git"],
-			"enabled": true
-		}
-	},
-	"permission": {
-		"git_git_add": "ask",
-		"git_git_reset": "ask",
-		"git_git_commit": "ask"
 	}
 }
