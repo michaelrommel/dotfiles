@@ -94,8 +94,8 @@ opt.showtabline = 2
 
 -- treat zsh like bash
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
-	pattern = { "*.sh", "*.zsh" },
-	command = "silent! set filetype=sh",
+	pattern = { "*.sh", "*.bash", "*.zsh" },
+	command = "silent! set filetype=bash",
 })
 
 -- auto-reload buffer more aggressively

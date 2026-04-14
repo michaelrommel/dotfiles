@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.66.1",
-  "defaultProvider": "lmstudio",
-  "defaultModel": "qwen/qwen3.5-35b-a3b",
+  "lastChangelogVersion": "0.67.1",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-sonnet-4.6",
   "hideThinkingBlock": false,
   "autocompleteMaxVisible": 10,
   "theme": "gruvbox-dark-hard",
@@ -25,5 +25,7 @@
         "-extensions/ollama-web-search.ts"
       ]
     }
-  ]
+  ],
+  "collapseChangelog": true,
+  "quietStartup": true
 }

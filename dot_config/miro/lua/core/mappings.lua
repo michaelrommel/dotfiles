@@ -10,7 +10,6 @@ M.std_mappings = function()
 	local flsh = require("flash")
 	local oil = require("oil")
 	local tts = require("nvim-treesitter-textobjects.select")
-	local oc = require("opencode")
 
 	local function insert_datetime()
 		local output = vim.fn.systemlist("date -Iseconds")
@@ -125,20 +124,6 @@ M.std_mappings = function()
 		{ "<C-j>", "<C-w>j", desc = "Lower split" },
 		{ "<C-k>", "<C-w>k", desc = "Upper split" },
 		{ "<C-l>", "<C-w>l", desc = "Right split" },
-		{
-			"<S-C-u>",
-			function()
-				oc.command("session.half.page.up")
-			end,
-			desc = "Scroll opencode up",
-		},
-		{
-			"<S-C-d>",
-			function()
-				oc.command("session.half.page.down")
-			end,
-			desc = "Scroll opencode down",
-		},
 		{
 			"[t",
 			function()
@@ -256,63 +241,6 @@ M.std_mappings = function()
 		},
 		{ "<leader>s", group = "Shortcuts" },
 		{ "<leader>sd", insert_datetime, desc = "Insert a ISO DateTimestamp" },
-	})
-	wk.add({
-		mode = { "n", "x" },
-		{ "<leader>o", group = "Opencode" },
-		{
-			"<leader>oa",
-			function()
-				oc.ask("@this: ", { submit = true })
-			end,
-			desc = "Ask opencode",
-		},
-		{
-			"<leader>os",
-			function()
-				oc.select()
-			end,
-			desc = "Execute opencode action",
-		},
-		{
-			"<leader>oS",
-			function()
-				oc.start()
-			end,
-			desc = "Start opencode",
-		},
-		{
-			"<leader>ot",
-			function()
-				oc.toggle()
-			end,
-			desc = "Toggle opencode",
-		},
-		{
-			"<leader>oc",
-			function()
-				oc.command("agent.cycle")
-			end,
-			desc = "Cycle opencode agents",
-		},
-	})
-	wk.add({
-		mode = { "x" },
-		{ "<leader>o", group = "Opencode" },
-		{
-			"<leader>ov",
-			function()
-				return oc.operator("@this: ")
-			end,
-			desc = "Add visual range to opencode",
-		},
-		{
-			"<leader>ol",
-			function()
-				return oc.operator("@this: ") .. "_"
-			end,
-			desc = "Add line to opencode",
-		},
 	})
 end
 

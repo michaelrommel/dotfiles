@@ -14,6 +14,7 @@ return {
 	-- end,
 	config = function()
 		require("nvim-treesitter").install({
+			"bash",
 			"c",
 			"lua",
 			"vim",
