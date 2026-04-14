@@ -168,10 +168,10 @@ class ModalEditor extends CustomEditor {
 					this.appTheme.fg('accent', text) +
 					'\x1b[27m';
 		const labelWidth = visibleWidth(text) + 1; // not styled, but with triangle
-		const last = lines.length - 1;
-		if (visibleWidth(lines[last]!) >= labelWidth) {
-			lines[last] =
-				truncateToWidth(lines[last]!, width - labelWidth, '') + label;
+		//const num = last;
+		const num = 0;
+		if (visibleWidth(lines[num]!) >= labelWidth) {
+			lines[num] = truncateToWidth(lines[num]!, width - labelWidth, '') + label;
 		}
 		return lines;
 	}
