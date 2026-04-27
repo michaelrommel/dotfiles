@@ -12,7 +12,7 @@ return {
 			max_entries = 20,
 			sep = "-----",
 			num_behavior = "jump",
-			focus_gain_poll = true,
+			focus_gain_poll = false,
 			persist_type = "sqlite",
 			keymaps = {
 				paste = "<CR>",

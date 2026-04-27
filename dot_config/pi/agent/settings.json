@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.67.1",
+  "lastChangelogVersion": "0.70.2",
   "defaultProvider": "github-copilot",
   "defaultModel": "claude-sonnet-4.6",
   "hideThinkingBlock": false,
@@ -13,12 +13,6 @@
   "defaultThinkingLevel": "medium",
   "packages": [
     "npm:pi-mermaid",
-    {
-      "source": "git:git@github.com:michaelrommel/pi-tool-display",
-      "extensions": [
-        "+index.ts"
-      ]
-    },
     {
       "source": "git:git@github.com/mcollina/pi-ollama-web-search",
       "extensions": [

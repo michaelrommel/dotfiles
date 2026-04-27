@@ -5,6 +5,7 @@
 alias sha="shasum -a 256"
 alias ff="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 
+alias iftop='sudo LC_CTYPE=C iftop'
 alias gll='git log --graph --pretty=oneline --abbrev-commit'
 alias gst='git status'
 alias gco='git commit'

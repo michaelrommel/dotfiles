@@ -258,6 +258,7 @@ local process_icons = {
 	["make"] = wezterm.nerdfonts.seti_makefile,
 	["node"] = wezterm.nerdfonts.md_hexagon_outline,
 	["nvim"] = wezterm.nerdfonts.custom_vim,
+	["pi"] = wezterm.nerdfonts.fae_pi,
 	["psql"] = wezterm.nerdfonts.custom_sqldeveloper,
 	["ruby"] = wezterm.nerdfonts.cod_ruby,
 	["sudo"] = wezterm.nerdfonts.md_death_star,
