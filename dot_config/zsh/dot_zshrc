@@ -31,6 +31,8 @@ bindkey -M vicmd ^K up-line-or-beginning-search
 bindkey -M vicmd ^J down-line-or-beginning-search
 bindkey -M viins ^U backward-word
 bindkey -M viins ^D forward-word
+bindkey -M viins '^[[127;2u' backward-delete-char
+bindkey -sM viins '^[[32;2u' ' '
 zmodload zsh/complist
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history

@@ -1,22 +1,12 @@
 [[plugin.deps]]
-use = "Reledia/hexyl"
-rev = "016a09b"
-hash = "50da29476e744dba37d77fb209328fd1"
-
-[[plugin.deps]]
-use = "michaelrommel/svg-preview"
-rev = "8e6bc59"
-hash = "c7def932c17ea482b9f94d2a00c7fd1a"
+use = "yazi-rs/plugins:toggle-pane"
+rev = "ac82af3"
+hash = "4c0260feb50ea2437380690ffc241da7"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:zoom"
-rev = "de53d90"
-hash = "4a47a9cd4d8b3a963cb4cc593664b77e"
-
-[[plugin.deps]]
-use = "yazi-rs/plugins:toggle-pane"
-rev = "de53d90"
-hash = "d6f60c24d8c0cf57a855bf46115b2502"
+rev = "ac82af3"
+hash = "fa268cb59989a87780605fdcfb8d99a9"
 
 [flavor]
 deps = []
