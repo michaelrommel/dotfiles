@@ -155,6 +155,57 @@
 					}
 				}
 			]
+		},
+		"macbooklms": {
+			"baseUrl": "http://192.168.13.228:1234/v1",
+			"api": "openai-completions",
+			"apiKey": "lmstudio",
+			"timeout": 600000,
+			"models": [
+				{
+					"id": "qwen/qwen3.6-35b-a3b",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
+				{
+					"id": "qwen/qwen3.5-35b-a3b",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
+				{
+					"id": "google/gemma-4-26b-a4b",
+					"reasoning": true,
+					"contextWindow": 262144,
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				}
+			]
 		}
 	}
 }
