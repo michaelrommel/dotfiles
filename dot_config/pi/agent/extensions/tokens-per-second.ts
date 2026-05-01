@@ -80,9 +80,6 @@ export default function (pi: ExtensionAPI) {
 			if (rateText != '') {
 				ctx.ui.setStatus('tokens-s', theme.fg('success', rateText));
 			}
-			setTimeout(() => {
-				ctx.ui.setStatus('tokens-s', theme.fg('dim', rateText));
-			}, 30000);
 		}
 		reset();
 	}
