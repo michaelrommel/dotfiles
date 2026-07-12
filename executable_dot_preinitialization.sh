@@ -4,14 +4,23 @@ export DEBUG=false
 
 source "${HOME}/.minimalrc"
 
+# password prompts for GPG
 GPG_TTY=$(tty)
 export GPG_TTY
+# standard settings
 export EDITOR=vim
 export VISUAL=vim
 export MOSH_ESCAPE_KEY='~'
+# AI coding harness
 export PI_CONFIG_DIR=${HOME}/.config/pi
 export PI_CODING_AGENT_DIR=${HOME}/.config/pi/agent
+# model directory for various engines
+export LLAMA_CACHE="/Volumes/DataMirror/Software/ai-models/"
+export HF_HOME="/Volumes/DataMirror/Software/ai-models/"
+# GPG like encryption tools
 export SEQUOIA_HOME=${HOME}/.local/share/sequoia
+# Virtualized Machines
+export TART_HOME="/Volumes/Datamirror/Containers/tart"
 
 [[ -x "/usr/bin/uname" ]] && UNAME="/usr/bin/uname"
 [[ -x "/bin/uname" ]] && UNAME="/bin/uname"

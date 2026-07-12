@@ -31,23 +31,37 @@ import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-
-// import * as fs from 'fs';
-// import * as os from 'os';
-// import * as path from 'path';
-
+import * as os from 'os';
+import * as path from 'path';
+import { appendFileSync } from 'node:fs';
 import { writeFile, unlink } from 'node:fs/promises';
 
-// const DEBUG_LOG = '/tmp/tits-debug.log';
-// function dbg(msg: string): void {
-// 	appendFileSync_(DEBUG_LOG, `${new Date().toISOString()} ${msg}\n`);
-// }
+// ─── Debug Logging ───────────────────────────────────────────────────────────
 
-// ─── Configuration ────────────────────────────────────────────────────────────
+/**
+ * Set to true to write a per-session chunk + filter log to /tmp.
+ * Each session creates a file like /tmp/pi-chunks-<timestamp>.log containing:
+ *   --- chunk N ---     raw LLM delta (ev.delta)
+ *   --- filter:in ---   text passed into filterForTTS() inside scan()
+ *   --- filter:out ---  text returned by filterForTTS()
+ *   --- sentence ---    sentence emitted to the TTS pipeline
+ */
+const CHUNK_LOGGING = false;
+
+/** Module-level path so TextAccumulator.scan() can write without a closure. */
+let _dbgLog: string | null = null;
+
+function dbgAppend(line: string): void {
+	if (_dbgLog) appendFileSync(_dbgLog, line);
+}
+
+// ─── Configuration ───────────────────────────────────────────────────────────
 
 const TTS_BASE_URL = 'http://localhost:3600';
-const TTS_VOICE = 'bf_lily.4+bf_emma.6';
+// const TTS_VOICE = 'sf_misspunnypennie';
+const TTS_VOICE = 'bf_isabella.5+bf_emma.5';
 const TTS_SPEED = 1.3;
+const TTS_LANG = 'en-GB-x-rp';
 const STATUS_KEY = 'tits';
 
 /**
@@ -55,6 +69,22 @@ const STATUS_KEY = 'tits';
  * Prevents synthesizing single-word orphans like "Sure." or "Yes."
  */
 const MIN_SENTENCE_WORDS = 5;
+
+/**
+ * Minimum accumulated raw-text size (in characters) before filterForTTS() is
+ * invoked inside TextAccumulator.scan().
+ *
+ * LLMs often stream 3–10 character deltas, which means a pattern like
+ * `^#{1,6}\s+` (ATX header) or `\`code\`` can arrive split across several
+ * consecutive chunks.  By deferring the filter call until either:
+ *   (a) the unprocessed raw buffer has grown past this threshold, OR
+ *   (b) it contains a newline (needed immediately for line-level patterns)
+ * we ensure the regex always sees a meaningful slice of text.
+ *
+ * Latency impact: at ~5 chars/chunk the first filter call fires after ~16
+ * deltas (~80 ms at typical streaming rates) — well within synthesis latency.
+ */
+const MIN_FILTER_CHUNK = 80;
 
 /**
  * Backtick-span substitutions applied before any other filtering.
@@ -106,11 +136,17 @@ function filterForTTS(text: string): string {
 	text = text.replace(/```[\s\S]*?```/g, ' ');
 	text = text.replace(/~~~[\s\S]*?~~~/g, ' ');
 
+	// 1.5. Complete think blocks (both angle-bracket and escaped variants)
+	text = text.replace(/<think>[\s\S]*?<\/think>/gi, ' ');
+	text = text.replace(/&lt;think&gt;[\s\S]*?&lt;\/think&gt;/gi, ' ');
+
 	// 2. Inline code:
 	//    Single-word backtick spans (no whitespace) are spoken — e.g. `sox`, `null`, `git`.
+	//    Functions are spoken — e.g. `fetch()`.
 	//    Multi-word spans (contain whitespace) are removed — e.g. `npm install foo`.
 	text = text.replace(/`([^\s`\n]+)`/g, '$1');
-	text = text.replace(/`[^`\n]+`/g, ' ');
+	text = text.replace(/`([^\s`\n]+\(\))`/g, 'function $1');
+	//text = text.replace(/`[^`\n]+`/g, ' ');
 
 	// 3. Markdown images
 	text = text.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ');
@@ -156,7 +192,17 @@ function filterForTTS(text: string): string {
 	// 9. Horizontal rules
 	text = text.replace(/^[-*_]{3,}\s*$/gm, ' ');
 
-	// 10. Blockquote markers
+	// 10. Blockquote markers — inject a sentence break before each blockquote
+	//     line, mirroring step 6.5 for list items.  Without this, a line like
+	//     "> Note:" would run straight onto the previous sentence with no pause.
+	//     When the preceding line already ends with punctuation, just capitalise.
+	text = text.replace(/(\S)\n\s*>\s*(\S)/g, (_, prev, first) =>
+		/[.!?:]/.test(prev)
+			? `${prev} ${first.toUpperCase()}`
+			: `${prev}. ${first.toUpperCase()}`
+	);
+	// Strip any remaining > markers (first line of a block, or chunk-split cases
+	// handled cross-chunk by startsNewListItem).
 	text = text.replace(/^>\s*/gm, '');
 
 	// 11. Strip any list markers still present (first item, or items whose
@@ -171,54 +217,77 @@ function filterForTTS(text: string): string {
 }
 
 /**
- * Returns true if `text` ends inside an unclosed fenced code block.
+ * Returns true if `text` ends inside an unclosed fenced code block or
+ * think block.
  *
- * Scans linearly for ``` and ~~~ triple-character sequences.
- * Each fence toggles the open/closed state; the language-specifier line
- * after an opening fence is skipped so its content does not trigger a
- * spurious close.
+ * Scans linearly for ``` / ~~~ triple-character sequences and
+ * <think> / &lt;think&gt; think-tag sequences.  Each fence toggles the
+ * open/closed state; the language-specifier line after an opening code
+ * fence is skipped so its content does not trigger a spurious close.
  *
  * Used by TextAccumulator.scan() to defer processing until the block closes.
  */
 function isInsideIncompleteCodeBlock(text: string): boolean {
 	let inBlock = false;
+	let inThink = false;
 	let pos = 0;
 
 	while (pos < text.length) {
+		// Find the earliest fence or think-tag start
 		const tb = text.indexOf('```', pos);
 		const tt = text.indexOf('~~~', pos);
+		const th = text.indexOf('<think>', pos);
+		const thEsc = text.indexOf('&lt;think&gt;', pos);
 
-		// Pick the earlier fence, ignoring -1 (not found)
-		let next: number;
-		if (tb === -1 && tt === -1) break;
-		else if (tb === -1) next = tt;
-		else if (tt === -1) next = tb;
-		else next = Math.min(tb, tt);
+		// Collect candidates (ignore -1 = not found)
+		const candidates: number[] = [];
+		if (tb !== -1) candidates.push(tb);
+		if (tt !== -1) candidates.push(tt);
+		if (th !== -1) candidates.push(th);
+		if (thEsc !== -1) candidates.push(thEsc);
+		if (candidates.length === 0) break;
 
-		// Only treat as a fence when ``` / ~~~ appears at the start of a line
+		const next = Math.min(...candidates);
+
+		// Only treat ``` / ~~~ as fences when at the start of a line
 		// (at most 3 spaces/tabs of indent — CommonMark rule).
-		// Without this, ` ``` ` inside an inline span (e.g. in a table cell)
-		// is misdetected as a real fence, freezing lastScanPos and collapsing
-		// all subsequent text into one giant synthesis chunk.
-		const lineStart = text.lastIndexOf('\n', next - 1) + 1;
-		const indent = text.slice(lineStart, next);
-		if (!/^[ \t]{0,3}$/.test(indent)) {
-			pos = next + 3; // mid-line — not a real fence, skip
-			continue;
+		// <think> / &lt;think&gt; tags are treated as fences regardless of
+		// position (they are XML-style self-contained tags, not line-based).
+		const isFence = tb === next || tt === next;
+		if (isFence) {
+			const lineStart = text.lastIndexOf('\n', next - 1) + 1;
+			const indent = text.slice(lineStart, next);
+			if (!/^[ \t]{0,3}$/.test(indent)) {
+				pos = next + (tb === next ? 3 : 3);
+				continue;
+			}
 		}
 
-		inBlock = !inBlock;
-		pos = next + 3;
-
-		// After an opening fence, skip the optional language-specifier line
-		// (e.g. "```python\n") so its text doesn't toggle the state again.
-		if (inBlock) {
-			const nl = text.indexOf('\n', pos);
-			if (nl !== -1) pos = nl + 1;
+		// Determine which kind of block was found and toggle state
+		if (tb === next) {
+			inBlock = !inBlock;
+			pos = next + 3;
+			if (inBlock) {
+				const nl = text.indexOf('\n', pos);
+				if (nl !== -1) pos = nl + 1;
+			}
+		} else if (tt === next) {
+			inBlock = !inBlock;
+			pos = next + 3;
+			if (inBlock) {
+				const nl = text.indexOf('\n', pos);
+				if (nl !== -1) pos = nl + 1;
+			}
+		} else if (th === next) {
+			inThink = !inThink;
+			pos = next + '<think>'.length;
+		} else if (thEsc === next) {
+			inThink = !inThink;
+			pos = next + '&lt;think&gt;'.length;
 		}
 	}
 
-	return inBlock;
+	return inBlock || inThink;
 }
 
 // ─── Text Accumulator ─────────────────────────────────────────────────────────
@@ -318,6 +387,14 @@ class TextAccumulator {
 		const newChunk = this.rawBuffer.slice(this.lastScanPos);
 		if (!newChunk) return [];
 
+		// Defer filtering until we have enough raw text to satisfy multi-token
+		// regex patterns (e.g. `^#{1,6}\s+` needs "###" + the following space).
+		// Exception: process immediately when a newline is present, because
+		// line-level patterns (headers, list items, blockquotes) need it to fire.
+		if (newChunk.length < MIN_FILTER_CHUNK && !newChunk.includes('\n')) {
+			return [];
+		}
+
 		// Inject a list-item sentence break for cross-chunk boundaries.
 		// filterForTTS step 6.5 handles the case where both the end of the previous
 		// item and the start of the next are in the same chunk.  When the \n lands
@@ -331,7 +408,9 @@ class TextAccumulator {
 		}
 
 		// Filter the newly available raw text and accumulate into pendingClean
+		dbgAppend(`\n--- filter:in ---\n${JSON.stringify(newChunk)}\n`);
 		const cleaned = filterForTTS(newChunk);
+		dbgAppend(`--- filter:out ---\n${JSON.stringify(cleaned)}\n`);
 		this.pendingClean += cleaned;
 		this.lastScanPos = this.rawBuffer.length;
 
@@ -387,7 +466,10 @@ class TextAccumulator {
 	 *          the \n, so step 6.5's (\S)\n pattern can't match it.
 	 */
 	private startsNewListItem(newChunk: string): boolean {
-		const marker = /^[ \t]{0,3}(?:[-*+]|\d+\.)\s/;
+		// Matches unordered/ordered list markers AND blockquote markers so that
+		// cross-chunk blockquote boundaries get the same punctuation injection
+		// as list items (mirrors filterForTTS step 10).
+		const marker = /^[ \t]{0,3}(?:[-*+]|\d+\.|>)\s/;
 		// Case B1
 		const prevChar =
 			this.lastScanPos > 0 ? this.rawBuffer[this.lastScanPos - 1] : '';
@@ -422,8 +504,9 @@ async function synthesizeText(
 			model: 'tts-1',
 			input: text,
 			voice: TTS_VOICE,
-			response_format: 'wav',
-			speed: TTS_SPEED
+			lang_code: TTS_LANG,
+			speed: TTS_SPEED,
+			response_format: 'wav'
 		}),
 		signal
 	});
@@ -651,8 +734,7 @@ export default function (pi: ExtensionAPI) {
 	// Global enable flag — false until a successful connectivity check
 	let enabled = false;
 
-	// let chunkLogPath: string | null = null;
-	// let chunkIndex = 0;
+	let chunkIndex = 0;
 
 	// setStatus is wired up in session_start once ctx is available
 	let setUiStatus: ((text: string | undefined) => void) | null = null;
@@ -708,24 +790,29 @@ export default function (pi: ExtensionAPI) {
 			'Text to speech is online. I will speak responses as they stream in.'
 		);
 
-		// const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-		// chunkLogPath = path.join(os.tmpdir(), `pi-chunks-${timestamp}.log`);
-		// chunkIndex = 0;
-		// fs.writeFileSync(
-		// 	chunkLogPath,
-		// 	`=== pi chunk log — session started ${new Date().toISOString()} ===\n`
-		// );
-		// ctx.ui.setStatus(
-		// 	'chunk-log',
-		// 	theme.fg('dim', `sentences → ${chunkLogPath}`)
-		// );
+		if (CHUNK_LOGGING) {
+			const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+			_dbgLog = path.join(os.tmpdir(), `pi-chunks-${timestamp}.log`);
+			chunkIndex = 0;
+			appendFileSync(
+				_dbgLog,
+				`=== pi chunk log — session started ${new Date().toISOString()} ===\n`
+			);
+			ctx.ui.setStatus('chunk-log', theme.fg('dim', `chunks → ${_dbgLog}`));
+		}
 	});
 
 	pi.on('session_shutdown', async (_event, ctx) => {
 		enabled = false;
+		// Null out setUiStatus FIRST so any still-running onState callback
+		// (e.g. runPlay's finally block firing after the clip finishes) hits
+		// null via optional chaining instead of a now-stale ctx.
+		setUiStatus = null;
 		pipeline.clear();
 		accumulator.reset();
+		_dbgLog = null;
 		ctx.ui.setStatus(STATUS_KEY, undefined);
+		if (CHUNK_LOGGING) ctx.ui.setStatus('chunk-log', undefined);
 	});
 
 	// ── Message streaming ──────────────────────────────────────────────────────
@@ -745,17 +832,12 @@ export default function (pi: ExtensionAPI) {
 		const ev = event.assistantMessageEvent;
 
 		if (ev.type === 'text_delta') {
-			// if (chunkLogPath) {
-			// 	chunkIndex++;
-			// 	const header = `\n--- chunk ${chunkIndex} ---\n`;
-			// 	fs.appendFileSync(chunkLogPath, header + ev.delta);
-			// }
+			dbgAppend(
+				`\n--- chunk ${++chunkIndex} ---\n${JSON.stringify(ev.delta)}\n`
+			);
 			const sentences = accumulator.feed(ev.delta);
 			for (const sentence of sentences) {
-				// if (chunkLogPath) {
-				// 	const header = `\n--- sentence ---\n`;
-				// 	fs.appendFileSync(chunkLogPath, header + sentence);
-				// }
+				dbgAppend(`\n--- sentence ---\n${JSON.stringify(sentence)}\n`);
 				speak(sentence, ctx.signal);
 			}
 			return;
@@ -768,10 +850,7 @@ export default function (pi: ExtensionAPI) {
 		if (ev.type === 'toolcall_start') {
 			const remaining = accumulator.flush();
 			for (const sentence of remaining) {
-				// if (chunkLogPath) {
-				// 	const header = `\n--- sentence ---\n`;
-				// 	fs.appendFileSync(chunkLogPath, header + sentence);
-				// }
+				dbgAppend(`\n--- sentence ---\n${JSON.stringify(sentence)}\n`);
 				speak(sentence, ctx.signal);
 			}
 		}
@@ -784,10 +863,7 @@ export default function (pi: ExtensionAPI) {
 		// Flush any sentence fragment that didn't end with a boundary
 		const remaining = accumulator.flush();
 		for (const sentence of remaining) {
-			// if (chunkLogPath) {
-			// 	const header = `\n--- sentence ---\n`;
-			// 	fs.appendFileSync(chunkLogPath, header + sentence);
-			// }
+			dbgAppend(`\n--- sentence ---\n${JSON.stringify(sentence)}\n`);
 			speak(sentence, ctx.signal);
 		}
 	});

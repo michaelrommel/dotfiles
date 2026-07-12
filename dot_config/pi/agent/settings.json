@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.70.2",
-  "defaultProvider": "github-copilot",
-  "defaultModel": "claude-sonnet-4.6",
+  "lastChangelogVersion": "0.80.6",
+  "defaultProvider": "llama.cpp",
+  "defaultModel": "Qwen3.6-27B",
   "hideThinkingBlock": false,
   "autocompleteMaxVisible": 10,
   "theme": "gruvbox-dark-hard",
@@ -10,6 +10,12 @@
     "httpRequests": true,
     "modelMessages": true
   },
+  "retry": {
+    "provider": {
+      "timeoutMs": 3600000
+    }
+  },
+  "httpIdleTimeoutMs": 0,
   "defaultThinkingLevel": "medium",
   "packages": [
     "npm:pi-mermaid",

@@ -6,11 +6,63 @@
 			"apiKey": "seagull",
 			"models": [{ "id": "llama3.2:1b" }]
 		},
+		"unsloth": {
+			"baseUrl": "http://192.168.13.187:8088/v1",
+			"api": "openai-completions",
+			"apiKey": "sk-unsloth-187c2aed2b263ae89aacff3970be86f1",
+			"timeout": 3600000,
+			"models": [
+				{
+					"id": "Qwen3.6-27B-MTP-GGUF",
+					"input": ["text"],
+					"contextWindow": 131072
+				},
+				{
+					"id": "Qwen3.6-35B-MTP-GGUF",
+					"input": ["text"],
+					"contextWindow": 131072
+				}
+			]
+		},
+		"llama.cpp": {
+			"baseUrl": "http://192.168.13.187:8081/v1",
+			"api": "openai-completions",
+			"apiKey": "llamacpp",
+			"timeout": 3600000,
+			"models": [
+				{
+					"id": "Qwen3.6-27B",
+					"input": ["text"],
+					"contextWindow": 131072
+				},
+				{
+					"id": "Qwen3.6-35B",
+					"input": ["text"],
+					"contextWindow": 131072
+				}
+			]
+		},
 		"ollama": {
 			"baseUrl": "http://192.168.13.187:11434/v1",
 			"api": "openai-completions",
 			"apiKey": "ollama",
 			"models": [
+				{
+					"id": "north-mini-code-1.0:latest",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
 				{
 					"id": "qwen3.5:35b-a3b-coding-nvfp4",
 					"reasoning": true,
@@ -42,6 +94,22 @@
 						"cacheWrite": 6.25,
 						"cacheRead": 0.5
 					}
+				},
+				{
+					"id": "qwen3.6:27b-coding-mxfp8",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 262144,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
 				}
 			]
 		},
@@ -51,6 +119,22 @@
 			"apiKey": "lmstudio",
 			"timeout": 600000,
 			"models": [
+				{
+					"id": "qwen/qwen3.6-35b-a3b",
+					"reasoning": true,
+					"input": ["text", "image"],
+					"contextWindow": 128000,
+					"compat": {
+						"supportsDeveloperRole": false,
+						"thinkingFormat": "qwen-chat-template"
+					},
+					"cost": {
+						"input": 5,
+						"output": 25,
+						"cacheWrite": 6.25,
+						"cacheRead": 0.5
+					}
+				},
 				{
 					"id": "google/gemma-4-31b",
 					"reasoning": true,

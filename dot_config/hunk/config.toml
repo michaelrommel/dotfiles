@@ -1,0 +1,19 @@
+theme = "custom"
+agent_notes = true
+watch = false
+wrap_lines = true
+# transparent_background = true
+
+[custom_theme]
+base = "gruvbox-dark-hard"
+background = "#151819"
+panel = "#191b1c"
+panelAlt = "#212425"
+addedBg = "#152a19"
+removedBg = "#2a1819"
+movedAddedBg = "#153a19"
+movedRemovedBg = "#3a1919"
+addedContentBg = "#154619"
+removedContentBg = "#4a1819"
+selectedHunk = "#0000ff"
+
