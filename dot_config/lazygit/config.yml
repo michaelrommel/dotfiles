@@ -1,6 +1,7 @@
 git:
   pagers:
     - colorArg: always
+      # pager: hunk pager --mode split
       pager: delta --dark --paging=never --side-by-side
 gui:
   theme:

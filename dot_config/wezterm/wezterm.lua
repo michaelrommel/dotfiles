@@ -6,7 +6,7 @@ local config = {}
 local winsize = {}
 
 local fontname = "VictorMono NF"
-local fontsize = 17
+local fontsize = 18
 
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	config.launch_menu = {
@@ -175,6 +175,9 @@ config.custom_block_glyphs = true
 -- config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
 config.freetype_load_target = "Light"
 config.freetype_render_target = "Light"
+
+-- selection of graphics protocols
+config.enable_kitty_graphics = true
 
 config.colors = {
 	visual_bell = "#202324",
