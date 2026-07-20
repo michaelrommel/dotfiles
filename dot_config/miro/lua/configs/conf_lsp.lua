@@ -103,7 +103,9 @@ M.on_attach = function(client, bufnr)
 				deprecated = deprecated or client.name == n
 			end
 		end
-		if deprecated then
+		-- temporarily trying out to rely on conform only
+		-- if deprecated then
+		if true then
 			client.server_capabilities.documentFormattingProvider = false
 			client.server_capabilities.documentRangeFormattingProvider = false
 		else

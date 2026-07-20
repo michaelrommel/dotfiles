@@ -5,6 +5,26 @@ return {
 	event = { "BufWritePre" },
 	cmd = { "ConformInfo" },
 	config = function()
+		vim.api.nvim_create_user_command("FormatDisable", function(args)
+			if args.bang then
+				-- FormatDisable! targets the active buffer
+				vim.b.disable_autoformat = true
+				print("Autoformat disabled for this buffer")
+			else
+				vim.g.disable_autoformat = true
+				print("Autoformat disabled globally")
+			end
+		end, {
+			desc = "Disable autoformat-on-save",
+			bang = true,
+		})
+		vim.api.nvim_create_user_command("FormatEnable", function()
+			vim.b.disable_autoformat = false
+			vim.g.disable_autoformat = false
+			print("Autoformat enabled")
+		end, {
+			desc = "Re-enable autoformat-on-save",
+		})
 		local cfm = require("conform")
 		cfm.setup({
 			formatters_by_ft = {
@@ -12,14 +32,22 @@ return {
 				javascript = { "prettier", "codespell" },
 				json = { "prettier", "codespell" },
 				json5 = { "prettier", "codespell" },
+				lua = { "stylua" },
 				rust = { "rustfmt", "codespell" },
 				shell = { "shfmt", "codespell" },
+				svelte = { "prettier", "codespell" },
 				typescript = { "prettier", "codespell" },
 			},
-			format_on_save = {
-				timeout_ms = 500,
-				lsp_fallback = true,
-			},
+			format_on_save = function(bufnr)
+				-- Check global flag or check active buffer flag
+				if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+					return
+				end
+				return {
+					timeout_ms = 500,
+					lsp_fallback = true,
+				}
+			end,
 			formatters = {
 				shfmt = {
 					prepend_args = { "-i", "4" },

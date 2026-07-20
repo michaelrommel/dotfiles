@@ -7,7 +7,7 @@ llama-server \
 	--mmproj /Volumes/DataMirror/Software/ai-models/models--unsloth--Qwen3.6-35B-A3B-MTP-GGUF/snapshots/5bc3e238d916f48a861bac2f8a1990a0e9b7e98d/mmproj-BF16.gguf \
 	--alias "unsloth/Qwen3.6-35B" \
 	--spec-type draft-mtp \
-	--spec-draft-n-max 4 \
+	--spec-draft-n-max 2 \
 	--temp 0.4 \
 	--top-k 20 \
 	--top-p 0.95 \

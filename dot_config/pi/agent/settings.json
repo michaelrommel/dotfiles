@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.80.6",
+  "lastChangelogVersion": "0.80.10",
   "defaultProvider": "llama.cpp",
   "defaultModel": "Qwen3.6-27B",
   "hideThinkingBlock": false,
@@ -24,7 +24,8 @@
       "extensions": [
         "-extensions/ollama-web-search.ts"
       ]
-    }
+    },
+    "npm:pi-mcp-adapter"
   ],
   "collapseChangelog": true,
   "quietStartup": true

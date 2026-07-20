@@ -5,12 +5,13 @@ llama-server \
 	--port 8081 \
 	-hf unsloth/Qwen3.6-27B-MTP-GGUF:UD-Q6_K_XL \
 	--spec-type draft-mtp \
-	--spec-draft-n-max 4 \
+	--spec-draft-n-max 2 \
 	--temp 0.6 \
 	--top-k 20 \
 	--top-p 0.95 \
 	--min-p 0.00 \
 	--threads 8 \
+	--threads-batch 16 \
 	--gpu-layers 99 \
 	--flash-attn on \
 	--cache-type-k q8_0 \
