@@ -12,5 +12,20 @@ else
 	TMUX_BIN=/bin/false
 fi
 
+# Starting a fresh session with no arguments leaves tmux to name it "0", which is
+# useless in the paf sidebar where sessions are the section headings. Ask for a
+# name instead. Everything else is passed straight through, so `tmx ls`,
+# `tmx new -s foo` and friends behave exactly as before.
+#
+# An empty answer keeps the stock behaviour. Attaching from inside tmux is left
+# alone, since nesting is deliberate when it happens.
+if [[ $# -eq 0 && -z "${TMUX:-}" && -t 0 ]]; then
+	read -r -p "Session name [0]: " session_name
+	if [[ -n "${session_name}" ]]; then
+		# -A attaches to an existing session of that name rather than failing.
+		exec "${TMUX_BIN}" new-session -A -s "${session_name}"
+	fi
+fi
+
 #shellcheck disable=2086,2048
 exec "${TMUX_BIN}" $*

@@ -147,6 +147,28 @@ fi
 umask 022
 set -o vi
 
+# Mirror the wezterm config to the Windows side.
+#
+# On WSL2 the wezterm GUI is a native Windows process, so it reads
+# %USERPROFILE%\.wezterm.lua and never sees the copy in ~/.config/wezterm. The
+# Linux file is the chezmoi managed source of truth, so push it across whenever
+# it is newer. Override the destination with WEZTERM_WIN_CONFIG if the Windows
+# user name ever changes.
+sync_wezterm_config() {
+	local src="${HOME}/.config/wezterm/wezterm.lua"
+	local dst="${WEZTERM_WIN_CONFIG:-/mnt/c/Users/rommminw/.wezterm.lua}"
+	[[ -r "${src}" ]] || return 0
+	[[ -d "${dst%/*}" ]] || return 0
+	if [[ ! -e "${dst}" || "${src}" -nt "${dst}" ]]; then
+		[[ ${DEBUG} == true ]] && echo "Syncing wezterm config to ${dst}"
+		cp -f "${src}" "${dst}"
+	fi
+}
+
+if [[ "${OSNAME}" == "Linux" && "${OSRELEASE}" =~ "-microsoft-" ]]; then
+	sync_wezterm_config
+fi
+
 # reset initialization lines (formatting and clear line, cursor to 1st col
 echo -n -e '\e[1G\e[2K\e[0m'
 

@@ -5,6 +5,12 @@ local mux = wezterm.mux
 local config = {}
 local winsize = {}
 
+-- Tells the paf daemon which wezterm binary can drive the running GUI.
+-- On Windows the GUI is a native process, so panes running inside WSL must call
+-- wezterm.exe; the Linux wezterm on the WSL PATH would spawn its own mux server
+-- instead. WSLENV is what carries the variable across the Windows/WSL boundary.
+local paf_env = {}
+
 local fontname = "VictorMono NF"
 local fontsize = 18
 
@@ -43,6 +49,12 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	-- config.default_domain = 'WSL:neoplain'
 	-- config.default_domain = 'SSH:WSL'
 	config.default_domain = "WSL:bookworm"
+	paf_env.PAF_WEZTERM_BIN = "wezterm.exe"
+	-- WezTerm already puts TERM, COLORTERM, TERM_PROGRAM and TERM_PROGRAM_VERSION
+	-- into WSLENV so they reach WSL. Assigning set_environment_variables replaces
+	-- that wholesale, so they must be listed again here or they stop crossing the
+	-- boundary and terminal capability detection inside WSL breaks.
+	paf_env.WSLENV = "TERM:COLORTERM:TERM_PROGRAM:TERM_PROGRAM_VERSION:PAF_WEZTERM_BIN"
 	config.ssh_backend = "LibSsh"
 	fontname = "VictorMono NF"
 	fontsize = 14
@@ -71,7 +83,10 @@ else
 		top = 0,
 		bottom = 0,
 	}
+	paf_env.PAF_WEZTERM_BIN = "wezterm"
 end
+
+config.set_environment_variables = paf_env
 
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.use_fancy_tab_bar = true
@@ -221,9 +236,82 @@ config.color_schemes = {
 	},
 }
 
+-- Locate the paf sidebar pane of a window.
+--
+-- Normally wezterm.GLOBAL remembers it from when the split was created. That
+-- breaks down if the sidebar was recreated by hand, so fall back to the narrowest
+-- pane of the active tab, which is the sidebar by construction, and remember it.
+local function paf_resolve_sidebar(window)
+	local id = wezterm.GLOBAL.paf_sidebar_pane
+	if id ~= nil then
+		-- mux.get_pane raises rather than returning nil once the pane is gone.
+		local ok, existing = pcall(mux.get_pane, id)
+		if ok and existing ~= nil then
+			return existing
+		end
+	end
+
+	local ok_tab, tab = pcall(function()
+		return window:active_tab()
+	end)
+	if not ok_tab or tab == nil then
+		return nil
+	end
+	local best, best_width = nil, nil
+	for _, info in ipairs(tab:panes_with_info()) do
+		if best_width == nil or info.width < best_width then
+			best, best_width = info.pane, info.width
+		end
+	end
+	-- Only adopt something that is plausibly a sidebar, never an ordinary split.
+	if best == nil or best_width == nil or best_width > 60 then
+		return nil
+	end
+	wezterm.GLOBAL.paf_sidebar_pane = best:pane_id()
+	return best
+end
+
+-- Jump between the paf sidebar and the pane you were working in.
+--
+-- Defined here rather than next to the other paf code further down, because
+-- config.keys is evaluated before that point and a local declared later would
+-- still be nil at this line.
+local paf_focus_sidebar = wezterm.action_callback(function(window, pane)
+	local sidebar = paf_resolve_sidebar(window)
+	if sidebar == nil then
+		return
+	end
+	-- Never jump to a sidebar living in some other window.
+	local ok_win, sidebar_window = pcall(function()
+		return sidebar:window()
+	end)
+	if ok_win and sidebar_window ~= nil and sidebar_window:window_id() ~= window:window_id() then
+		return
+	end
+
+	if pane:pane_id() ~= sidebar:pane_id() then
+		sidebar:activate()
+		return
+	end
+
+	-- Already in the sidebar, so go back to the other pane of this tab.
+	local ok_tab, tab = pcall(function()
+		return sidebar:tab()
+	end)
+	if not ok_tab or tab == nil then
+		return
+	end
+	for _, other in ipairs(tab:panes()) do
+		if other:pane_id() ~= sidebar:pane_id() then
+			other:activate()
+			return
+		end
+	end
+end)
+
 config.keys = {
-	{ key = "Tab", mods = "CTRL", action = act.ActivateTabRelative(1) },
-	{ key = "Tab", mods = "SHIFT|CTRL", action = act.ActivateTabRelative(-1) },
+	{ key = "Tab", mods = "CTRL", action = paf_focus_sidebar },
+	{ key = "Tab", mods = "SHIFT|CTRL", action = act.ActivateTabRelative(1) },
 	{ key = "-", mods = "CTRL", action = act.DecreaseFontSize },
 	{ key = "0", mods = "CTRL", action = act.ResetFontSize },
 	{ key = "=", mods = "CTRL", action = act.IncreaseFontSize },
@@ -415,6 +503,113 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, cfg, hover, max_width)
 	return title
 end)
 
+-- paf sidebar ---------------------------------------------------------------
+--
+-- Splits a fixed width sidebar off the left of a new window, runs the paf daemon
+-- in it, and leaves the shell on the right focused.
+--
+-- Only one sidebar may exist, because the daemon owns a TCP port and a second one
+-- refuses to start. The mux pane id is remembered in wezterm.GLOBAL, which every
+-- window of this gui process shares, and is re-checked against the mux so that
+-- closing the sidebar lets the next new window recreate it.
+local PAF_DAEMON = "/home/rommel/software/paf/target/release/paf-daemon"
+local PAF_SIDEBAR_COLS = 38
+
+
+local function paf_sidebar_alive()
+	local pane_id = wezterm.GLOBAL.paf_sidebar_pane
+	if pane_id == nil then
+		return false
+	end
+	-- mux.get_pane raises for an id that no longer exists rather than returning nil,
+	-- which is the normal case once the sidebar has been closed.
+	local ok, pane = pcall(mux.get_pane, pane_id)
+	return ok and pane ~= nil
+end
+
+local function paf_split_sidebar(pane)
+	-- Keep the pane alive after the daemon exits, so quitting it with q does not
+	-- tear the layout down.
+	local args = { "/usr/bin/zsh", "-lc", PAF_DAEMON .. "; exec /usr/bin/zsh -l" }
+
+	-- pane:split takes a plain number for size: values >= 1 are a cell count,
+	-- values < 1 are a fraction of the available space. The {Cells=n} table form
+	-- belongs to the SplitPane key assignment, not to this API.
+	local ok, sidebar = pcall(function()
+		return pane:split({
+			direction = "Left",
+			size = PAF_SIDEBAR_COLS,
+			args = args,
+		})
+	end)
+	if ok and sidebar ~= nil then
+		return sidebar
+	end
+	wezterm.log_error("paf: split failed: " .. tostring(sidebar))
+	return nil
+end
+
+local function paf_spawn_sidebar(pane)
+	if paf_sidebar_alive() then
+		return
+	end
+	local sidebar = paf_split_sidebar(pane)
+	if sidebar == nil then
+		wezterm.log_error("paf: could not create sidebar")
+		return
+	end
+	wezterm.GLOBAL.paf_sidebar_pane = sidebar:pane_id()
+	-- the shell on the right keeps the focus
+	pane:activate()
+end
+
+-- Never let a sidebar problem break the rest of the window setup.
+local function paf_spawn_sidebar_safely(pane)
+	local ok, err = pcall(paf_spawn_sidebar, pane)
+	if not ok then
+		wezterm.log_error("paf: sidebar setup failed: " .. tostring(err))
+	end
+end
+
+-- Hold the sidebar at its fixed width.
+--
+-- wezterm rescales panes proportionally when the window is resized, so a 35 column
+-- sidebar in a small window becomes much wider once the window is enlarged. Nudge
+-- it back whenever the window geometry changes.
+local function paf_pin_sidebar(window)
+	local sidebar = paf_resolve_sidebar(window)
+	if sidebar == nil then
+		return
+	end
+	-- Only touch the sidebar that belongs to the window being resized.
+	local ok_win, sidebar_window = pcall(function()
+		return sidebar:window()
+	end)
+	if ok_win and sidebar_window ~= nil and sidebar_window:window_id() ~= window:window_id() then
+		return
+	end
+	local dims = sidebar:get_dimensions()
+	if dims == nil or dims.cols == nil then
+		return
+	end
+	local delta = PAF_SIDEBAR_COLS - dims.cols
+	if delta == 0 then
+		return
+	end
+	if delta > 0 then
+		window:perform_action(act.AdjustPaneSize({ "Right", delta }), sidebar)
+	else
+		window:perform_action(act.AdjustPaneSize({ "Left", -delta }), sidebar)
+	end
+end
+
+wezterm.on("window-resized", function(window, _pane)
+	local ok, err = pcall(paf_pin_sidebar, window)
+	if not ok then
+		wezterm.log_error("paf: pinning sidebar failed: " .. tostring(err))
+	end
+end)
+
 wezterm.on("window-config-reloaded", function(window, pane)
 	local main = wezterm.gui.screens().main
 	-- approximately identify this gui window, by using the associated mux id
@@ -434,6 +629,7 @@ wezterm.on("window-config-reloaded", function(window, pane)
 		local x = (main.width - winsize.width * main.scale) / 2
 		local y = (main.height - winsize.height * main.scale) / 2
 		window:set_position(x, y)
+		paf_spawn_sidebar_safely(pane)
 	end
 end)
 
