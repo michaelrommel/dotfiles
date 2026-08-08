@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.80.10",
-  "defaultProvider": "llama.cpp",
-  "defaultModel": "Qwen3.6-27B",
+  "lastChangelogVersion": "0.84.1",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-opus-5",
   "hideThinkingBlock": false,
   "autocompleteMaxVisible": 10,
   "theme": "gruvbox-dark-hard",
@@ -25,7 +25,8 @@
         "-extensions/ollama-web-search.ts"
       ]
     },
-    "npm:pi-mcp-adapter"
+    "npm:pi-mcp-adapter",
+    "npm:@juicesharp/rpiv-ask-user-question"
   ],
   "collapseChangelog": true,
   "quietStartup": true
