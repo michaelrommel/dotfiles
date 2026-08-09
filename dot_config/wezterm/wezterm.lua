@@ -105,7 +105,7 @@ config.font_rules = {
 		italic = false,
 		font = wezterm.font({
 			family = fontname,
-			weight = "Medium",
+			weight = "DemiBold",
 		}),
 	},
 	{
@@ -130,7 +130,7 @@ config.font_rules = {
 		italic = true,
 		font = wezterm.font({
 			family = fontname,
-			weight = "Medium",
+			weight = "DemiBold",
 			style = "Italic",
 		}),
 	},
@@ -513,8 +513,7 @@ end)
 -- window of this gui process shares, and is re-checked against the mux so that
 -- closing the sidebar lets the next new window recreate it.
 local PAF_DAEMON = "/home/rommel/software/paf/target/release/paf-daemon"
-local PAF_SIDEBAR_COLS = 38
-
+local PAF_SIDEBAR_COLS = 28
 
 local function paf_sidebar_alive()
 	local pane_id = wezterm.GLOBAL.paf_sidebar_pane
