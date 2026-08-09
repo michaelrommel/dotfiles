@@ -1,36 +1,32 @@
 {
-  "lastChangelogVersion": "0.84.1",
-  "defaultProvider": "github-copilot",
-  "defaultModel": "claude-opus-5",
-  "hideThinkingBlock": false,
-  "autocompleteMaxVisible": 10,
-  "theme": "gruvbox-dark-hard",
-  "verbose": true,
-  "debug": {
-    "httpRequests": true,
-    "modelMessages": true
-  },
-  "retry": {
-    "provider": {
-      "timeoutMs": 3600000
-    }
-  },
-  "httpIdleTimeoutMs": 0,
-  "defaultThinkingLevel": "medium",
-  "packages": [
-    "npm:pi-mermaid",
-    {
-      "source": "git:git@github.com/mcollina/pi-ollama-web-search",
-      "extensions": [
-        "-extensions/ollama-web-search.ts"
-      ]
-    },
-    "npm:pi-mcp-adapter",
-    "npm:@juicesharp/rpiv-ask-user-question"
-  ],
-  "collapseChangelog": true,
-  "quietStartup": true,
-  "extensions": [
-    "/home/rommel/software/paf"
-  ]
+	"lastChangelogVersion": "0.84.1",
+	"defaultProvider": "github-copilot",
+	"defaultModel": "claude-opus-5",
+	"hideThinkingBlock": false,
+	"autocompleteMaxVisible": 10,
+	"theme": "gruvbox-dark-hard",
+	"verbose": true,
+	"debug": {
+		"httpRequests": true,
+		"modelMessages": true
+	},
+	"retry": {
+		"provider": {
+			"timeoutMs": 3600000
+		}
+	},
+	"httpIdleTimeoutMs": 0,
+	"defaultThinkingLevel": "medium",
+	"packages": [
+		"npm:pi-mermaid",
+		{
+			"source": "git:git@github.com/mcollina/pi-ollama-web-search",
+			"extensions": ["-extensions/ollama-web-search.ts"]
+		},
+		"npm:pi-mcp-adapter",
+		"npm:@juicesharp/rpiv-ask-user-question"
+	],
+	"collapseChangelog": true,
+	"quietStartup": true,
+	"extensions": ["~/software/paf"]
 }

@@ -512,7 +512,8 @@ end)
 -- refuses to start. The mux pane id is remembered in wezterm.GLOBAL, which every
 -- window of this gui process shares, and is re-checked against the mux so that
 -- closing the sidebar lets the next new window recreate it.
-local PAF_DAEMON = "/home/rommel/software/paf/target/release/paf-daemon"
+-- local PAF_DAEMON = "/home/rommel/software/paf/target/release/paf-daemon"
+local PAF_DAEMON = os.getenv("HOME") .. "/software/paf/target/release/paf-daemon"
 local PAF_SIDEBAR_COLS = 28
 
 local function paf_sidebar_alive()
@@ -529,7 +530,9 @@ end
 local function paf_split_sidebar(pane)
 	-- Keep the pane alive after the daemon exits, so quitting it with q does not
 	-- tear the layout down.
-	local args = { "/usr/bin/zsh", "-lc", PAF_DAEMON .. "; exec /usr/bin/zsh -l" }
+	-- local args = { "/usr/bin/zsh", "-lc", PAF_DAEMON .. "; exec /usr/bin/zsh -l" }
+	-- local args = { "/opt/homebrew/bin/zsh", "-lc", PAF_DAEMON .. "; exec /opt/homebrew/bin/zsh -l" }
+	local args = { "zsh", "-lc", PAF_DAEMON .. "; exec zsh -l" }
 
 	-- pane:split takes a plain number for size: values >= 1 are a cell count,
 	-- values < 1 are a fraction of the available space. The {Cells=n} table form
