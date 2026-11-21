@@ -1,4 +1,5 @@
 # user specific initialization
+# shellcheck disable=SC1091
 if [[ -f "${HOME}/.preinitialization.sh" ]]; then
 	source "${HOME}/.preinitialization.sh"
 else
@@ -165,7 +166,7 @@ zstyle ':completion:*:*:kill:*' insert-ids menu
 zstyle ':completion:*:*:git:*' group-order 'main commands' 'alias commands' 'external commands'
 
 # custome completions directory
-fpath=("${HOME}/.local/share/zsh/completions" ${fpath})
+fpath=("${HOME}/.local/share/zsh/completions" "${fpath[@]}")
 
 # automatically load bash completion functions
 autoload -U +X bashcompinit && bashcompinit
@@ -184,13 +185,14 @@ if [[ -d "${HOME}/.config/zsh/zsh-autosuggestions" ]]; then
 	export ZSH_AUTOSUGGEST_MANUAL_REBIND=true
 	export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=243"
 	bindkey '^ ' autosuggest-accept
-	# shellcheck disable=SC1091
+	# shellcheck disable=SC1091,SC1094
 	source "${ZDOTDIR}/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
 # Define a widget for file completion
 fzf-file-widget() {
-	local selected_file=$(printf "%s\n" *(DomN) |
+	local selected_file
+	selected_file=$(printf "%s\n" *(DomN) |
 		fzf --height 40% --reverse --no-sort --header "Select a file")
 	# Insert at cursor position if a selection was made
 	if [ -n "$selected_file" ]; then
@@ -208,13 +210,40 @@ bindkey '^F' fzf-file-widget
 # shellcheck disable=SC2086
 [[ -x "${HOME}/.cargo/bin/starship" || -x "/opt/homebrew/bin/starship" ]] && eval "$(starship init zsh)"
 
-ORIG_PROMPT="$PROMPT"
-# TRANSIENT_PROMPT="${PROMPT// prompt / prompt --profile transient }"
+# OSC 133 semantic prompt marks (prompt / input / output zones)
+# A = prompt start, P = prompt text start (k=i primary, k=s continuation),
+# B = prompt end / input start, C = output start, D = command finished
+# A is embedded in the prompt itself instead of being printed in precmd,
+# because zle clears the prompt line on (re)draw, which drops the mark in tmux
+_osc133_ps1_pre=$'%{\e]133;A;cl=m;aid='"$$"$'\a\e]133;P;k=i\a%}'
+_osc133_ps2_pre=$'%{\e]133;P;k=s\a%}'
+_osc133_post=$'%{\e]133;B\a%}'
+_osc133_state="" # "" = first prompt, 0 = no command ran, 1 = command ran
+
+function _osc133_precmd() {
+	local ret=$?
+	[[ -n $_osc133_state ]] && printf '\e]133;D;%s;aid=%s\a' "$ret" "$$"
+	_osc133_state=0
+}
+
+function _osc133_preexec() {
+	printf '\e]133;C;\a'
+	_osc133_state=1
+}
+
+# run first, so D/A are emitted before any other precmd output
+precmd_functions=(_osc133_precmd "${precmd_functions[@]}")
+add-zsh-hook preexec _osc133_preexec
+
+PROMPT2="${_osc133_ps2_pre}${PROMPT2}${_osc133_post}"
+ORIG_PROMPT="${_osc133_ps1_pre}${PROMPT}${_osc133_post}"
 TRANSIENT_PROMPT="%(?.%F{green}  .%F{red} %?  )%f%(#.#.>) "
 
 function transient-prompt-precmd() {
   PROMPT="$ORIG_PROMPT"
   # Ensure pressing Ctrl+C also collapses the prompt cleanly
+  # TRAPINT is invoked by zsh on SIGINT, so it is not unreachable
+  # shellcheck disable=SC2317,SC2329
   TRAPINT() {
     transient-prompt
     return $(( 128 + $1 ))
@@ -223,7 +252,7 @@ function transient-prompt-precmd() {
 }
 
 function transient-prompt() {
-  PROMPT="$SAVED_PROMPT"
+  PROMPT="${_osc133_ps1_pre}${SAVED_PROMPT}${_osc133_post}"
   zle .reset-prompt
 }
 
@@ -231,6 +260,7 @@ add-zsh-hook precmd transient-prompt-precmd
 add-zle-hook-widget zle-line-finish transient-prompt
 
 # my personal initialization script 2nd part
+# shellcheck disable=SC1091
 [[ -f "${HOME}/.postinitialization.sh" ]] && source "${HOME}/.postinitialization.sh"
 
 # now also emit the directory, that we are in for the terminal emulator
