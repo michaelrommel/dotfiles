@@ -33,6 +33,12 @@ if [[ "${OSNAME}" == "Darwin" ]]; then
 	alias cat='gcat'
 fi
 
+sshpaf() {
+	tmux set-option -w @paf-host "$1"
+	ssh -R 7878:127.0.0.1:7878 "$1"
+	tmux set-option -uw @paf-host      # no longer a doorway once ssh exits
+}
+
 logtail() {
 	tail -f "$@" | bat --paging=never -l log
 }

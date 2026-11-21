@@ -2,21 +2,16 @@
 add_newline = false
 
 format = """
-[](dark1)\
+[ ](bg:dark1)\
 $os\
 $env_var\
 $username\
 $hostname\
 $directory\
-[](fg:dark1)\
+[ ](bg:dark1)\
 $git_branch\
 $git_status\
 $git_state\
-$status\
-$character\
-[ ](fg:dark1)"""
-
-right_format = """
 $c\
 $cpp\
 $rust\
@@ -26,7 +21,10 @@ $python\
 $docker_context\
 $cmd_duration\
 $time\
-"""
+$line_break\
+$status\
+$character\
+[ > ](fg:light1)"""
 
 palette = 'gruvbox_dark'
 
@@ -141,11 +139,11 @@ format = '[$symbol]($style)'
 [git_branch]
 symbol = ""
 style = "bg:light3"
-format = '[[ $symbol $branch](fg:dark0 bg:light3)]($style)'
+format = '[[ $symbol $branch](fg:dark0 bg:light3)]($style)'
 
 [git_status]
 style = "bg:light3"
-format = '[[($all_status$ahead_behind )](fg:dark0_hard bg:light3)]($style)[](fg:light3 bg:dark0_hard)'
+format = '[[($all_status$ahead_behind )](fg:dark0_hard bg:light3)]($style)'
 conflicted = ' =$count'
 ahead = ' ⇡$ahead_count'
 behind = ' ⇣$behind_count'
@@ -160,77 +158,77 @@ deleted = ' x$count'
 
 [git_state]
 style = "fg:dark0_hard bg:light4"
-format = '[ $state( $progress_current/$progress_total) ]($style)[](fg:light4 bg:dark0_hard)'
+format = '[ $state( $progress_current/$progress_total) ]($style)'
 
 [c]
 symbol = " "
 style = "bg:none"
-format = '[[ $symbol](fg:dark4)[($version) ](fg:light2)]($style)'
+format = '[[ $symbol](fg:dark4 bg:dark0)[($version) ](fg:light2 bg:dark0)]($style)'
 
 [cpp]
 symbol = " "
 style = "bg:none"
-format = '[[ $symbol](fg:dark4)[($version) ](fg:light2)]($style)'
+format = '[[ $symbol](fg:dark4 bg:dark0)[($version) ](fg:light2 bg:dark0)]($style)'
 
 [golang]
 symbol = " "
 style = "bg:none"
-format = '[[ $symbol](fg:dark4)[($version) ](fg:light2)]($style)'
+format = '[[ $symbol](fg:dark4 bg:dark0)[($version) ](fg:light2 bg:dark0)]($style)'
 
 [nodejs]
 symbol = " "
 style = "bg:none"
-format = '[[ $symbol](fg:neutral_green)[($version) ](fg:light2)]($style)'
+format = '[[ $symbol](fg:neutral_green bg:dark0)[($version) ](fg:light2 bg:dark0)]($style)'
 
 [python]
 symbol = " "
 style = "bg:none"
-format = '[[ $symbol](fg:neutral_yellow)[(\($virtualenv\) )($version) ](fg:light2)]($style)'
+format = '[[ $symbol](fg:neutral_yellow bg:dark0)[(\($virtualenv\) )($version) ](fg:light2 bg:dark0)]($style)'
 
 [rust]
 symbol = " "
 style = "bg:none"
-format = '[[ $symbol](fg:neutral_orange)[($version) ](fg:light2)]($style)'
+format = '[[ $symbol](fg:neutral_orange bg:dark0)[($version) ](fg:light2 bg:dark0)]($style)'
 
 [docker_context]
 symbol = " "
 style = "bg:none"
-format = '[[ $symbol](fg:dark4)[( $context) ](fg:light2)]($style)'
+format = '[[ $symbol](fg:dark4 bg:dark0)[( $context) ](fg:light2 bg:dark0)]($style)'
 
 [cmd_duration]
 min_time = 0
 show_milliseconds = true
-format = '[[ ](fg:dark4)[$duration](fg:light2)]($style)'
+format = '[[  ](fg:dark4 bg:dark0)[$duration](fg:light2 bg:dark0)]($style)'
 style = 'bg:none'
 
 [time]
 disabled = false
 time_format = "%T"
 style = "bg:none"
-format = '[[  ](fg:dark4)[$time](fg:light2)]($style)'
+format = '[[  ](fg:dark4 bg:dark0)[$time ](fg:light2 bg:dark0)]($style)'
 
 [line_break]
-disabled = true
+disabled = false
 
 [status]
 disabled = false
-format = '[](fg:dark0_hard bg:dark1)[ ($common_meaning$signal_name$maybe_int )$symbol]($style)'
-symbol = ' '
-success_symbol = ' '
+format = '[ ($common_meaning$signal_name$maybe_int )$symbol]($style)'
+symbol = ''
+success_symbol = ''
 not_executable_symbol = ' '
 not_found_symbol = '󰍉 '
 sigint_symbol = ''
 signal_symbol = '󰈿'
-success_style = 'bold bg:dark1 fg:neutral_green'
-failure_style = 'bold bg:dark1 fg:neutral_red'
+success_style = 'bold bg:dark0_hard fg:neutral_green'
+failure_style = 'bold bg:dark0_hard fg:neutral_red'
 map_symbol = true
 
 [character]
 disabled = false
-format = '[$symbol](bg:dark1)'
+format = '[$symbol](bg:dark0_hard)'
 success_symbol = ''
 error_symbol = ''
-vimcmd_symbol = '[NORM](bold bg:dark1 fg:neutral_blue)'
-vimcmd_replace_one_symbol = '[RONE ](bold bg:dark1 fg:neutral_purple)'
-vimcmd_replace_symbol = '[REP ](bold bg:dark1 fg:neutral_purple)'
-vimcmd_visual_symbol = '[VIS ](bold bg:dark1 fg:neutral_yellow)'
+vimcmd_symbol = '[ NORM](bold bg:dark0_hard fg:neutral_blue)'
+vimcmd_replace_one_symbol = '[ RONE ](bold bg:dark0_hard fg:neutral_purple)'
+vimcmd_replace_symbol = '[ REP ](bold bg:dark0_hard fg:neutral_purple)'
+vimcmd_visual_symbol = '[ VIS ](bold bg:dark0_hard fg:neutral_yellow)'

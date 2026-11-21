@@ -15,7 +15,6 @@ import {
 	type Theme
 } from '@mariozechner/pi-coding-agent';
 import {
-	CURSOR_MARKER,
 	type EditorTheme,
 	type KeybindingsManager,
 	matchesKey,
@@ -51,12 +50,15 @@ const NORMAL_KEYS: Record<string, string | null> = {
 	a: null // append (insert + right)
 };
 
-// Cursor style sequences within rendered lines:
-// Normal mode: inverse video block (default editor style)
-// Insert mode: replace inverse block with bold + colored bright white underline
-const CURSOR_BLOCK_SEQ = '\x1b[7m'; // inverse video  → block
-// const CURSOR_INSERT_SEQ = '\x1b[1;4:2m\x1b[58:2::254:128:25m'; // bold + orange underline → bar
-const CURSOR_INSERT_SEQ = '\x1b[1;4:2m\x1b[58:2::250:189:47m'; // bold + yellow underline → bar
+// Hardware cursor shape sequences (DECSCUSR, "CSI Ps SP q").
+// With a real hardware cursor we no longer simulate the cursor inside the
+// rendered text; instead we tell the terminal which shape to draw.
+//   Normal mode -> steady block
+//   Insert mode -> steady bar (vertical line)
+//   Unfocused   -> reset to the terminal's default cursor
+const CURSOR_SHAPE_BLOCK = '\x1b[2 q'; // steady block
+const CURSOR_SHAPE_BAR = '\x1b[6 q'; // steady bar / line
+const CURSOR_SHAPE_DEFAULT = '\x1b[0 q'; // terminal default
 
 class ModalEditor extends CustomEditor {
 	private mode: 'normal' | 'insert' = 'insert';
@@ -73,11 +75,18 @@ class ModalEditor extends CustomEditor {
 		this.appTheme = appTheme;
 	}
 
+	// Switch mode and immediately re-assert the hardware cursor shape, so the
+	// terminal matches the new mode without waiting for the next render pass.
+	private setMode(mode: 'normal' | 'insert'): void {
+		this.mode = mode;
+		this.writeCursorShape();
+	}
+
 	handleInput(data: string): void {
 		// Escape toggles to normal mode, or passes through for app handling
 		if (matchesKey(data, 'escape')) {
 			if (this.mode === 'insert') {
-				this.mode = 'normal';
+				this.setMode('normal');
 			} else {
 				super.handleInput(data); // abort agent, etc.
 			}
@@ -98,7 +107,7 @@ class ModalEditor extends CustomEditor {
 				const { seq, insert } = COMBO_KEYS[combo]!;
 				super.handleInput(seq);
 				if (insert) {
-					this.mode = 'insert';
+					this.setMode('insert');
 				}
 			}
 			// unrecognized combo: silently discard
@@ -115,15 +124,15 @@ class ModalEditor extends CustomEditor {
 		if (data in NORMAL_KEYS) {
 			const seq = NORMAL_KEYS[data];
 			if (data === 'i') {
-				this.mode = 'insert';
+				this.setMode('insert');
 			} else if (data === 'a') {
-				this.mode = 'insert';
+				this.setMode('insert');
 				super.handleInput('\x1b[C'); // move right first
 			} else if (data === 'A') {
-				this.mode = 'insert';
+				this.setMode('insert');
 				super.handleInput('\x05'); // move to end of line first
 			} else if (data === 'C') {
-				this.mode = 'insert';
+				this.setMode('insert');
 				super.handleInput('\x0b'); // delete to end of line first
 			} else if (seq) {
 				super.handleInput(seq);
@@ -136,24 +145,35 @@ class ModalEditor extends CustomEditor {
 		super.handleInput(data);
 	}
 
+	// Emit the DECSCUSR sequence for the current mode/focus state.
+	//
+	// This is deliberately unguarded ("self-healing"): the hardware cursor shape
+	// is global terminal state that all sorts of things reset behind our back -
+	// subprocesses and tools (pagers, $EDITOR, git), Ctrl+Z suspend/resume,
+	// alt-screen switches, full repaints, resizes, and focus changes. A cache of
+	// "the last shape we wrote" drifts out of sync with the real terminal and
+	// then suppresses the write we actually needed, leaving the cursor shape and
+	// the mode label disagreeing. Re-asserting the correct shape on every render
+	// (and on every mode change) keeps the drift to at most one frame. The
+	// sequence is tiny and does not cause visible flicker on conforming
+	// terminals.
+	private writeCursorShape(): void {
+		const shape = !this.focused
+			? CURSOR_SHAPE_DEFAULT
+			: this.mode === 'normal'
+				? CURSOR_SHAPE_BLOCK
+				: CURSOR_SHAPE_BAR;
+		this.tui.terminal.write(shape);
+	}
+
 	render(width: number): string[] {
 		const lines = super.render(width);
-		if (lines.length === 0) return lines;
 
-		// In insert mode, replace the block cursor (inverse video) with an underline
-		// cursor, scoped to the exact cursor position via CURSOR_MARKER as anchor.
-		if (this.mode === 'insert') {
-			for (let i = 0; i < lines.length; i++) {
-				const markerIdx = lines[i]!.indexOf(CURSOR_MARKER);
-				if (markerIdx !== -1) {
-					lines[i] = lines[i]!.replace(
-						CURSOR_MARKER + CURSOR_BLOCK_SEQ,
-						CURSOR_MARKER + CURSOR_INSERT_SEQ
-					);
-					break;
-				}
-			}
-		}
+		// Re-assert the hardware cursor shape every frame so it can never stay
+		// stuck disagreeing with the mode label (see writeCursorShape).
+		this.writeCursorShape();
+
+		if (lines.length === 0) return lines;
 
 		// Add mode indicator to bottom border
 		const text = this.mode === 'normal' ? ' NORMAL ' : ' INSERT ';

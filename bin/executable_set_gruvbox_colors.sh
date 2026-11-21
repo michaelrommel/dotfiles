@@ -4,7 +4,7 @@
 #set -o xtrace
 
 # declare explicit arrays with name and position in the colour table
-a00=(234 "dark0_hard" "1D/20/21")
+a00=(234 "dark0_hard" "15/18/19")
 a01=(235 "dark0" "28/28/28")
 a02=(236 "dark0_soft" "32/30/2F")
 a03=(237 "dark1" "3c/38/36")

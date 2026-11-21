@@ -33,7 +33,7 @@ return {
 				json = { "prettier", "codespell" },
 				json5 = { "prettier", "codespell" },
 				lua = { "stylua" },
-				rust = { "rustfmt", "codespell" },
+				rust = { "rustfmt" },
 				shell = { "shfmt", "codespell" },
 				svelte = { "prettier", "codespell" },
 				typescript = { "prettier", "codespell" },

@@ -85,7 +85,7 @@ function _set_cwd_osc7() {
 }
 
 # execute functions whenever a directory change occurs
-autoload -Uz add-zsh-hook
+autoload -Uz add-zsh-hook add-zle-hook-widget
 add-zsh-hook -Uz chpwd _set_cwd_osc7
 
 # set the window title for the shell
@@ -207,6 +207,28 @@ bindkey '^F' fzf-file-widget
 # prompt customization
 # shellcheck disable=SC2086
 [[ -x "${HOME}/.cargo/bin/starship" || -x "/opt/homebrew/bin/starship" ]] && eval "$(starship init zsh)"
+
+ORIG_PROMPT="$PROMPT"
+# TRANSIENT_PROMPT="${PROMPT// prompt / prompt --profile transient }"
+TRANSIENT_PROMPT="%(?.%F{green}  .%F{red} %?  )%f%(#.#.>) "
+
+function transient-prompt-precmd() {
+  PROMPT="$ORIG_PROMPT"
+  # Ensure pressing Ctrl+C also collapses the prompt cleanly
+  TRAPINT() {
+    transient-prompt
+    return $(( 128 + $1 ))
+  }
+  SAVED_PROMPT="$(eval "printf '%s' \"${TRANSIENT_PROMPT}\"")"
+}
+
+function transient-prompt() {
+  PROMPT="$SAVED_PROMPT"
+  zle .reset-prompt
+}
+
+add-zsh-hook precmd transient-prompt-precmd
+add-zle-hook-widget zle-line-finish transient-prompt
 
 # my personal initialization script 2nd part
 [[ -f "${HOME}/.postinitialization.sh" ]] && source "${HOME}/.postinitialization.sh"

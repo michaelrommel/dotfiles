@@ -1,3 +1,9 @@
 {
-  "tui.editor.cursorLineEnd": ["end"]
+  "$schema": "https://pi.dev/schemas/keybindings.schema.json",
+  "tui.editor.cursorLineEnd": ["end"],
+  "tui.altScreen.halfPageUp": "ctrl+u",
+  "tui.altScreen.halfPageDown": "ctrl+d",
+  "tui.editor.deleteToLineStart": [],
+  "tui.editor.deleteCharForward": ["delete"],
+  "app.exit": []
 }

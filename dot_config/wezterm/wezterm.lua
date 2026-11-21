@@ -10,6 +10,7 @@ local winsize = {}
 -- wezterm.exe; the Linux wezterm on the WSL PATH would spawn its own mux server
 -- instead. WSLENV is what carries the variable across the Windows/WSL boundary.
 local paf_env = {}
+local home = os.getenv("HOME") or "/home/rommel"
 
 local fontname = "VictorMono NF"
 local fontsize = 18
@@ -55,6 +56,7 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
 	-- that wholesale, so they must be listed again here or they stop crossing the
 	-- boundary and terminal capability detection inside WSL breaks.
 	paf_env.WSLENV = "TERM:COLORTERM:TERM_PROGRAM:TERM_PROGRAM_VERSION:PAF_WEZTERM_BIN"
+
 	config.ssh_backend = "LibSsh"
 	fontname = "VictorMono NF"
 	fontsize = 14
@@ -513,7 +515,7 @@ end)
 -- window of this gui process shares, and is re-checked against the mux so that
 -- closing the sidebar lets the next new window recreate it.
 -- local PAF_DAEMON = "/home/rommel/software/paf/target/release/paf-daemon"
-local PAF_DAEMON = os.getenv("HOME") .. "/software/paf/target/release/paf-daemon"
+local PAF_DAEMON = home .. "/software/paf/target/release/paf-daemon"
 local PAF_SIDEBAR_COLS = 28
 
 local function paf_sidebar_alive()

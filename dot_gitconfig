@@ -16,7 +16,7 @@
 	navigate = true
 	dark = true
 	syntax-theme = gruvbox-dark-hard
-	side-by-side = true
+	side-by-side = false
 	minus-style = "syntax #281818"
 	plus-style = "syntax #102820"
 	features = decorations
@@ -45,8 +45,10 @@
 	whitespace = nowarn
 [merge]
 	conflictStyle = zdiff3
+	tool = vimdiff
 [mergetool]
 	keepBackup = false
+	prompt = false
 [difftool]
 	prompt = false
 [help]
@@ -69,5 +71,7 @@
 [pull]
 	rebase = false
 [user]
-	name = Michael Rommel
-	email = rommel@layer-7.net
+	name = "Rommel, Michael"
+	email = michael.rommel@siemens-healthineers.com
+	# name = Michael Rommel
+	# email = rommel@layer-7.net
